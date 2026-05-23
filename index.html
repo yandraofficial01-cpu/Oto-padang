@@ -192,353 +192,241 @@
     <img class="zoom-content" id="zoomImg" src="">
     <div class="zoom-info">Pinch untuk zoom • Tap & drag untuk geser</div>
   </div>
-    <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxJepUDL_XXA0EeIrz2hm4aRsrrelFLRx1kCLm7aIJkmkVFpo6ajWA2bCJppmMlNH9J/exec";
-    let allMobil = [];
-    let scale = 1, panning = false, pointX = 0, pointY = 0, start = {x:0, y:0};
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbyYEUbLRI5r3saUrxMGHXNhF8OIRAjoVI1yfgaH4qBwzDlxM9NscMEoqBUAPHzLV4o/exec'
+let allMobil = []
 
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      const newTheme = current === 'dark'? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      document.querySelector('.theme-toggle').textContent = newTheme === 'dark'? '☀️' : '🌙';
-    }
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.querySelector('.theme-toggle').textContent = savedTheme === 'dark'? '☀️' : '🌙';
+function toggleTheme(){
+  const current = document.documentElement.getAttribute('data-theme')
+  const newTheme = current === 'dark'? 'light' : 'dark'
+  document.documentElement.setAttribute('data-theme', newTheme)
+  localStorage.setItem('theme', newTheme)
+  document.querySelector('.theme-toggle').textContent = newTheme === 'dark'? '☀️' : '🌙'
+}
 
-    const safeString = (val) => String(val || '').trim().replace(/[\r\n]/g, '');
-    const isReady = (status) => safeString(status).toLowerCase() === 'ready';
-    const isHot = (hot) => safeString(hot).toLowerCase() === 'ya';
+const savedTheme = localStorage.getItem('theme') || 'light'
+document.documentElement.setAttribute('data-theme', savedTheme)
+document.querySelector('.theme-toggle').textContent = savedTheme === 'dark'? '☀️' : '🌙'
 
-    function filterMobil() {
-      const keyword = document.getElementById('searchInput').value.toLowerCase();
-      const filtered = allMobil.filter(m => {
-        const searchText = `${m.merk_tipe} ${m.tahun} ${m.transmisi} ${m.warna} ${m.bahan_bakar} ${m.plat}`.toLowerCase();
-        return searchText.includes(keyword);
-      });
-      renderMobil(filtered);
-    }
+const safeString = val => String(val || '').trim().replace(/[\r\n]/g,'')
+const isReady = status => safeString(status).toLowerCase() === 'ready'
+const isHot = hot => safeString(hot).toLowerCase() === 'ya'
 
-    async function loadMobil() {
-      try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
+function filterMobil(){
+  const keyword = document.getElementById('searchInput').value.toLowerCase()
+  const hasil = allMobil.filter(mobil => {
+    const text = (mobil.merk_tipe+' '+mobil.tahun+' '+mobil.transmisi+' '+mobil.warna+' '+mobil.bahan_bakar+' '+mobil.plat).toLowerCase()
+    return text.includes(keyword)
+  })
+  renderMobil(hasil)
+}
 
-        const safeData = data.map(car => {
-          const obj = {};
-          Object.keys(car).forEach(key => {
-            obj[key] = safeString(car[key]);
-          });
-          return obj;
-        });
+async function loadMobil(){
+  try {
+    const res = await fetch(API_URL)
+    const data = await res.json()
+    const cleanData = data.map(item => {
+      const obj = {}
+      Object.keys(item).forEach(key => { obj[key] = safeString(item[key]) })
+      return obj
+    })
+    allMobil = cleanData.filter(m => isReady(m.status)).sort((a,b) => {
+      if(isHot(a.hot) &&!isHot(b.hot)) return -1
+      if(!isHot(a.hot) && isHot(b.hot)) return 1
+      return 0
+    })
+    renderMobil(allMobil)
+  } catch(err) {
+    console.error(err)
+    document.getElementById('daftar-mobil').innerHTML = '<div class="card"><p style="padding:20px;">Gagal load data. Coba refresh atau cek koneksi.</p></div>'
+  }
+}
 
-        allMobil = safeData.filter(m => isReady(m.status))
-.sort((a, b) => {
-            if(isHot(a.hot) &&!isHot(b.hot)) return -1;
-            if(!isHot(a.hot) && isHot(b.hot)) return 1;
-            return 0;
-          });
+function renderMobil(dataMobil){
+  const container = document.getElementById('daftar-mobil')
+  if(dataMobil.length === 0){
+    container.innerHTML = '<div class="no-result">Mobil ga ketemu bro. Coba kata kunci lain.</div>'
+    return
+  }
 
-        renderMobil(allMobil);
+  container.innerHTML = dataMobil.map((mobil, i) => {
+    const fotos = [mobil.link_foto1, mobil.link_foto2, mobil.link_foto3, mobil.link_foto4, mobil.link_foto5, mobil.link_foto6]
+    .filter(f => safeString(f)!== '' &&!f.includes('GANTI_LINK'))
 
-      } catch (error) {
-        console.error(error);
-        document.getElementById('daftar-mobil').innerHTML = '<div class="card"><p style="padding:20px;">Gagal load data. Coba refresh atau cek koneksi.</p></div>';
-      }
-    }
+    const tahun = mobil.tahun || ''
+    const namaMobil = (safeString(mobil.merk_tipe).replace(tahun,'').trim() + ' ' + tahun).trim()
+    const namaPic = mobil.nama_pic || 'NAL'
+    const noWa = mobil.no_wa_showroom || '628979879518'
+    const textWa = `Halo ${namaPic}, mau tanya ${namaMobil} plat ${mobil.plat} harga Rp ${Number(mobil.harga_jual).toLocaleString('id-ID')}. Masih ada?`
+    const textShare = `Bro, cek mobil ini: ${namaMobil} harga Rp ${Number(mobil.harga_jual).toLocaleString('id-ID')}. Menurut lu gimana? ${window.location.href}`
+    const badgeHot = isHot(mobil.hot)
+    const pajak = mobil.pajak? new Date(mobil.pajak).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '-'
 
-    function renderMobil(mobilList) {
-      const container = document.getElementById('daftar-mobil');
-
-      if(mobilList.length === 0) {
-        container.innerHTML = '<div class="no-result">Mobil ga ketemu bro. Coba kata kunci lain.</div>';
-        return;
-      }
-
-      container.innerHTML = mobilList.map((mobil, index) => {
-        const fotoList = [mobil.link_foto1, mobil.link_foto2, mobil.link_foto3, mobil.link_foto4, mobil.link_foto5, mobil.link_foto6]
-.filter(f => safeString(f)!== '' &&!f.includes('GANTI_LINK'));
-
-        const tahun = mobil.tahun || '';
-        const namaMobilBersih = `${safeString(mobil.merk_tipe).replace(tahun,'').trim()} ${tahun}`.trim();
-        const namaPIC = mobil.nama_pic || 'NAL';
-        const noWA = mobil.no_wa_showroom || '628979879518';
-
-        const textShare = `Bro, cek mobil ini: ${namaMobilBersih} harga Rp ${Number(mobil.harga_jual).toLocaleString('id-ID')}. Menurut lu gimana? ${window.location.href}`;
-        const textTanya = `Halo ${namaPIC}, mau tanya ${namaMobilBersih} plat ${mobil.plat}. Masih ada?`;
-        const hotDeal = isHot(mobil.hot);
-        const tglPajak = mobil.pajak? new Date(mobil.pajak).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '-';
-
-        let galeriContent = '';
-        if(fotoList.length === 0){
-          galeriContent = `<div class="img-fallback">
-            <span style="font-size:3rem;">📷</span>
-            <span>FOTO SEGERA UPLOAD</span>
-          </div>`;
-        } else {
-          const galeriImg = fotoList.map((foto, i) =>
-            `<img src="${foto}" alt="${namaMobilBersih}" loading="lazy" referrerpolicy="no-referrer" onclick="openZoom('${foto}')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-             <div class="img-fallback" style="display:none;">
-                <span style="font-size:2rem;">⚠️</span>
-                <span>FOTO ${i+1} GAGAL LOAD</span>
-             </div>`
-          ).join('');
-
-          const galeriDots = fotoList.map((_, i) =>
-            `<span class="dot ${i === 0? 'active' : ''}" onclick="goToSlide(this, ${i})"></span>`
-          ).join('');
-
-          galeriContent = `
-            <div class="galeri-inner">
-              ${galeriImg}
-            </div>
-            ${fotoList.length > 1? `
-            <button onclick="gantiFoto(this.parentElement, -1)" class="nav-btn prev">‹</button>
-            <button onclick="gantiFoto(this.parentElement, 1)" class="nav-btn next">›</button>
-            <div class="dots">${galeriDots}</div>
-            ` : ''}
-          `;
-        }
-
-        return `
-        <div class="card mobil-card" style="animation-delay:${index * 0.1}s; ${hotDeal? 'border:2px solid var(--yellow);' : ''}">
-          ${hotDeal? '<div style="position:absolute; top:15px; left:15px; background:var(--yellow); color:#0f172a; padding:6px 12px; border-radius:20px; font-weight:800; font-size:0.8rem; z-index:10; animation:pulse-badge 2s infinite;">🔥 HOT DEAL</div>' : ''}
-          <div class="galeri" data-current="0" data-total="${fotoList.length}">
-            ${galeriContent}
-          </div>
-          <div class="content">
-            <p class="merk">${namaMobilBersih}</p>
-            <p class="harga">Rp ${Number(mobil.harga_jual).toLocaleString('id-ID')}</p>
-            <div class="spec-grid">
-              <div class="spec"><span>Kilometer</span><b>${mobil.km}rb KM</b></div>
-              <div class="spec"><span>Pajak</span><b>${tglPajak}</b></div>
-              <div class="spec"><span>Transmisi</span><b>${mobil.transmisi}</b></div>
-              <div class="spec"><span>Warna</span><b>${mobil.warna}</b></div>
-            </div>
-            <div class="kondisi">
-              <p class="plus"><b>+ Kelebihan:</b> ${mobil.kondisi_plus || '-'}</p>
-              ${mobil.kondisi_minus? `<p class="minus"><b>- Minus:</b> ${mobil.kondisi_minus}</p>` : ''}
-            </div>
-            <div class="btn-group">
-              <a href="https://wa.me/${noWA}?text=${encodeURIComponent(textTanya)}" class="wa-btn">Tanya ${namaPIC}</a>
-              <button onclick="shareMobil('${encodeURIComponent(textShare)}')" class="share-btn">Share ke Teman</button>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-
-      setTimeout(initSwipe, 100);
+    let galeri = ''
+    if(fotos.length === 0){
+      galeri = `<div class="img-fallback"><span style="font-size:3rem;">📷</span><span>FOTO SEGERA UPLOAD</span></div>`
+    } else {
+      const imgList = fotos.map((foto, idx) =>
+        `<img src="${foto}" alt="${namaMobil}" loading="lazy" referrerpolicy="no-referrer" onclick="openZoom('${foto}')" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+         <div class="img-fallback" style="display:none;"><span style="font-size:2rem;">⚠️</span><span>FOTO ${idx+1} GAGAL LOAD</span></div>`
+      ).join('')
+      const dots = fotos.map((_, idx) =>
+        `<span class="dot ${idx===0?'active':''}" onclick="goToSlide(this, ${idx})"></span>`
+      ).join('')
+      galeri = `
+        <div class="galeri-inner">${imgList}</div>
+        ${fotos.length > 1? `
+        <button onclick="gantiFoto(this.parentElement, -1)" class="nav-btn prev">‹</button>
+        <button onclick="gantiFoto(this.parentElement, 1)" class="nav-btn next">›</button>
+        <div class="dots">${dots}</div>` : ''}
+      `
     }
 
-    function gantiFoto(galeri, arah) {
-      const inner = galeri.querySelector('.galeri-inner');
-      const dots = galeri.querySelectorAll('.dot');
-      let current = parseInt(galeri.dataset.current);
-      const total = parseInt(galeri.dataset.total);
+    return `
+    <div class="card mobil-card" style="animation-delay:${i*0.1}s; ${badgeHot?'border:2px solid var(--yellow);':''}">
+      ${badgeHot? '<div style="position:absolute; top:15px; left:15px; background:var(--yellow); color:#0f172a; padding:6px 12px; border-radius:20px; font-weight:800; font-size:0.8rem; z-index:10; animation:pulse-badge 2s infinite;">🔥 HOT DEAL</div>' : ''}
+      <div class="galeri" data-current="0" data-total="${fotos.length}">
+        ${galeri}
+      </div>
+      <div class="content">
+        <p class="merk">${namaMobil}</p>
+        <p class="harga">Rp ${Number(mobil.harga_jual).toLocaleString('id-ID')}</p>
+        <div class="spec-grid">
+          <div class="spec"><span>Kilometer</span><b>${mobil.km}rb KM</b></div>
+          <div class="spec"><span>Pajak</span><b>${pajak}</b></div>
+          <div class="spec"><span>Transmisi</span><b>${mobil.transmisi}</b></div>
+          <div class="spec"><span>Warna</span><b>${mobil.warna}</b></div>
+        </div>
+        <div class="kondisi">
+          <p class="plus"><b>+ Kelebihan:</b> ${mobil.kondisi_plus || '-'}</p>
+          ${mobil.kondisi_minus? `<p class="minus"><b>- Minus:</b> ${mobil.kondisi_minus}</p>` : ''}
+        </div>
+        <div class="btn-group">
+          <a href="https://wa.me/${noWa}?text=${encodeURIComponent(textWa)}" class="wa-btn">Tanya ${namaPic}</a>
+          <button onclick="shareMobil('${encodeURIComponent(textShare)}')" class="share-btn">Share ke Teman</button>
+        </div>
+      </div>
+    </div>`
+  }).join('')
+  setTimeout(initSwipe, 100)
+}
 
-      current = (current + arah + total) % total;
-      inner.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
-      galeri.dataset.current = current;
-    }
+function gantiFoto(galeri, arah){
+  const inner = galeri.querySelector('.galeri-inner')
+  const dots = galeri.querySelectorAll('.dot')
+  let current = parseInt(galeri.dataset.current)
+  const total = parseInt(galeri.dataset.total)
+  current = (current + arah + total) % total
+  inner.style.transform = `translateX(-${current * 100}%)`
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === current))
+  galeri.dataset.current = current
+}
 
-    function goToSlide(dot, index) {
-      const galeri = dot.closest('.galeri');
-      const inner = galeri.querySelector('.galeri-inner');
-      const dots = galeri.querySelectorAll('.dot');
-      inner.style.transform = `translateX(-${index * 100}%)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === index));
-      galeri.dataset.current = index;
-    }
+function goToSlide(el, idx){
+  const galeri = el.closest('.galeri')
+  const inner = galeri.querySelector('.galeri-inner')
+  const dots = galeri.querySelectorAll('.dot')
+  inner.style.transform = `translateX(-${idx * 100}%)`
+  dots.forEach((dot, i) => dot.classList.toggle('active', i === idx))
+  galeri.dataset.current = idx
+}
 
-    function initSwipe() {
-      document.querySelectorAll('.galeri').forEach(galeri => {
-        let startX = 0;
-        let isDragging = false;
-        const inner = galeri.querySelector('.galeri-inner');
-        if(!inner) return;
+function initSwipe(){
+  document.querySelectorAll('.galeri').forEach(galeri => {
+    let startX = 0, isDragging = false
+    const inner = galeri.querySelector('.galeri-inner')
+    if(!inner) return
 
-        galeri.addEventListener('touchstart', e => {
-          startX = e.touches[0].clientX;
-          isDragging = true;
-          inner.style.transition = 'none';
-        }, {passive: true});
+    galeri.addEventListener('touchstart', e => {
+      startX = e.targetTouches[0].clientX
+      isDragging = true
+      inner.style.transition = 'none'
+    }, {passive:true})
 
-        galeri.addEventListener('touchmove', e => {
-          if(!isDragging) return;
-          const currentX = e.touches[0].clientX;
-          const diff = currentX - startX;
-          const current = parseInt(galeri.dataset.current);
-          inner.style.transform = `translateX(calc(-${current * 100}% + ${diff}px))`;
-        }, {passive: true});
+    galeri.addEventListener('touchmove', e => {
+      if(!isDragging) return
+      const diff = e.targetTouches[0].clientX - startX
+      const current = parseInt(galeri.dataset.current)
+      inner.style.transform = `translateX(calc(-${current*100}% + ${diff}px))`
+    }, {passive:true})
 
-        galeri.addEventListener('touchend', e => {
-          if(!isDragging) return;
-          isDragging = false;
-          inner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          const endX = e.changedTouches[0].clientX;
-          const diff = startX - endX;
-          const threshold = 50;
-          if (Math.abs(diff) > threshold) {
-            if (diff > 0) gantiFoto(galeri, 1);
-            else gantiFoto(galeri, -1);
-          } else {
-            const current = parseInt(galeri.dataset.current);
-            inner.style.transform = `translateX(-${current * 100}%)`;
-          }
-        });
-
-        galeri.addEventListener('mousedown', e => {
-          startX = e.clientX;
-          isDragging = true;
-          inner.style.transition = 'none';
-          e.preventDefault();
-        });
-
-        galeri.addEventListener('mousemove', e => {
-          if(!isDragging) return;
-          const currentX = e.clientX;
-          const diff = currentX - startX;
-          const current = parseInt(galeri.dataset.current);
-          inner.style.transform = `translateX(calc(-${current * 100}% + ${diff}px))`;
-        });
-
-        galeri.addEventListener('mouseup', e => {
-          if(!isDragging) return;
-          isDragging = false;
-          inner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-          const endX = e.clientX;
-          const diff = startX - endX;
-          const threshold = 50;
-          if (Math.abs(diff) > threshold) {
-            if (diff > 0) gantiFoto(galeri, 1);
-            else gantiFoto(galeri, -1);
-          } else {
-            const current = parseInt(galeri.dataset.current);
-            inner.style.transform = `translateX(-${current * 100}%)`;
-          }
-        });
-
-        galeri.addEventListener('mouseleave', () => {
-          if(isDragging) {
-            isDragging = false;
-            inner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            const current = parseInt(galeri.dataset.current);
-            inner.style.transform = `translateX(-${current * 100}%)`;
-          }
-        });
-      });
-    }
-
-    function shareMobil(text) {
-      const decodedText = decodeURIComponent(text);
-      if (navigator.share) {
-        navigator.share({ title: 'OTO PADANG', text: decodedText, url: window.location.href });
+    galeri.addEventListener('touchend', e => {
+      if(!isDragging) return
+      isDragging = false
+      inner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      const endX = e.changedTouches[0].clientX
+      const diff = startX - endX
+      const threshold = 50
+      if(Math.abs(diff) > threshold){
+        if(diff > 0) gantiFoto(galeri, 1)
+        else gantiFoto(galeri, -1)
       } else {
-        window.open(`https://wa.me/?text=${text}`, '_blank');
+        const current = parseInt(galeri.dataset.current)
+        inner.style.transform = `translateX(-${current * 100}%)`
       }
-    }
+    })
+  })
+}
 
-    function openZoom(src) {
-      const modal = document.getElementById('zoomModal');
-      const img = document.getElementById('zoomImg');
-      img.src = src;
-      modal.classList.add('active');
-      resetZoom();
-    }
+function shareMobil(text){
+  const decoded = decodeURIComponent(text)
+  navigator.share? navigator.share({title:'OTO PADANG', text:decoded, url:window.location.href}) : window.open('https://wa.me/?text='+text, '_blank')
+}
 
-    function closeZoom() {
-      document.getElementById('zoomModal').classList.remove('active');
-    }
+function openZoom(url){
+  const modal = document.getElementById('zoomModal')
+  const img = document.getElementById('zoomImg')
+  img.src = url
+  modal.classList.add('active')
+  resetZoom()
+}
 
-    function resetZoom() {
-      scale = 1;
-      pointX = 0;
-      pointY = 0;
-      setTransform();
-    }
+function closeZoom(){
+  document.getElementById('zoomModal').classList.remove('active')
+}
 
-    function setTransform() {
-      const img = document.getElementById('zoomImg');
-      img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-    }
+function resetZoom(){ scale=1, pointX=0, pointY=0, setTransform() }
+function setTransform(){
+  const img = document.getElementById('zoomImg')
+  img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`
+}
 
-    const zoomImg = document.getElementById('zoomImg');
-    const modal = document.getElementById('zoomModal');
+let scale=1, panning=false, pointX=0, pointY=0, start={x:0,y:0}
+const zoomImg = document.getElementById('zoomImg')
+const modal = document.getElementById('zoomModal')
 
-    zoomImg.addEventListener('wheel', e => {
-      e.preventDefault();
-      const xs = (e.clientX - pointX) / scale;
-      const ys = (e.clientY - pointY) / scale;
-      scale += e.deltaY * -0.001;
-      scale = Math.min(Math.max(1, scale), 5);
-      pointX = e.clientX - xs * scale;
-      pointY = e.clientY - ys * scale;
-      setTransform();
-    });
+zoomImg.addEventListener('wheel', e => {
+  e.preventDefault()
+  const xs = (e.clientX - pointX) / scale
+  const ys = (e.clientY - pointY) / scale
+  scale += e.deltaY * -0.001
+  scale = Math.min(Math.max(1, scale), 5)
+  pointX = e.clientX - xs * scale
+  pointY = e.clientY - ys * scale
+  setTransform()
+})
 
-    zoomImg.addEventListener('mousedown', e => {
-      e.preventDefault();
-      start = {x: e.clientX - pointX, y: e.clientY - pointY};
-      panning = true;
-    });
+zoomImg.addEventListener('mousedown', e => {
+  e.preventDefault()
+  start = {x: e.clientX - pointX, y: e.clientY - pointY}
+  panning = true
+})
 
-    zoomImg.addEventListener('mouseup', () => panning = false);
-    zoomImg.addEventListener('mouseleave', () => panning = false);
-    zoomImg.addEventListener('mousemove', e => {
-      if (!panning) return;
-      pointX = e.clientX - start.x;
-      pointY = e.clientY - start.y;
-      setTransform();
-    });
+zoomImg.addEventListener('mouseup', () => panning = false)
+zoomImg.addEventListener('mouseleave', () => panning = false)
+zoomImg.addEventListener('mousemove', e => {
+  if(!panning) return
+  pointX = e.clientX - start.x
+  pointY = e.clientY - start.y
+  setTransform()
+})
 
-      let evCache = [];
-    let prevDiff = -1;
+modal.addEventListener('click', e => {
+  if(e.target === modal) closeZoom()
+})
 
-    zoomImg.addEventListener('touchstart', e => {
-      if (e.targetTouches.length === 2) {
-        evCache = [];
-        for (let i = 0; i < e.targetTouches.length; i++) {
-          evCache.push(e.targetTouches[i]);
-        }
-      } else if (e.targetTouches.length === 1) {
-        start = {x: e.targetTouches[0].clientX - pointX, y: e.targetTouches[0].clientY - pointY};
-        panning = true;
-      }
-    });
-
-    zoomImg.addEventListener('touchmove', e => {
-      e.preventDefault();
-      if (e.targetTouches.length === 2 && evCache.length === 2) {
-        const curDiff = Math.hypot(e.targetTouches[0].clientX - e.targetTouches[1].clientX, e.targetTouches[0].clientY - e.targetTouches[1].clientY);
-        if (prevDiff > 0) {
-          const delta = curDiff - prevDiff;
-          scale += delta * 0.005;
-          scale = Math.min(Math.max(1, scale), 5);
-          setTransform();
-        }
-        prevDiff = curDiff;
-      } else if (e.targetTouches.length === 1 && panning) {
-        pointX = e.targetTouches[0].clientX - start.x;
-        pointY = e.targetTouches[0].clientY - start.y;
-        setTransform();
-      }
-    });
-
-    zoomImg.addEventListener('touchend', e => {
-      evCache = [];
-      prevDiff = -1;
-      if (e.touches.length === 0) panning = false;
-    });
-
-    modal.addEventListener('click', e => {
-      if (e.target === modal) closeZoom();
-    });
-
-    loadMobil();
-    setInterval(loadMobil, 300000);
-  </script>
+loadMobil()
+setInterval(loadMobil, 300000)
+</script>
 </body>
-</html>
+  </html>
