@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Mobil - Oto Padang</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
+ .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+    h2 { text-align: center; color: #1877f2; margin-bottom: 5px; }
+    #namaShowroom { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
+    input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+    button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; }
+    button:disabled { background: #ccc; }
+    #status { text-align: center; margin-top: 10px; font-size: 14px; }
+ .logout { background: #e41e3f; margin-top: 5px; }
+    label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
+ .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+ .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Input Mobil Baru</h2>
+    <p id="namaShowroom">Loading...</p>
+
+    <label>Merk *</label>
+    <input type="text" id="merk" placeholder="Toyota">
+    <label>Tipe *</label>
+    <input type="text" id="tipe" placeholder="Avanza">
+    <label>Tahun *</label>
+    <input type="number" id="tahun" placeholder="2022">
+    <label>Transmisi *</label>
+    <select id="transmisi"><option>Automatic</option><option>Manual</option></select>
+    <label>KM *</label>
+    <input type="number" id="km" placeholder="50000">
+    <label>Warna *</label>
+    <input type="text" id="warna" placeholder="Hitam">
+    <label>Harga Cash *</label>
+    <input type="number" id="harga_cash" placeholder="150000000">
+    <label>Harga Kredit</label>
+    <input type="number" id="harga_kredit" placeholder="170000000">
+    
+    <label>Upload Foto Mobil * Max 6 foto</label>
+    <input type="file" id="foto" accept="image/*" multiple>
+    <div class="preview" id="preview"></div>
+    
+    <label>Deskripsi</label>
+    <textarea id="deskripsi" placeholder="Mobil mulus, pajak panjang" rows="3"></textarea>
+    <label>No WA Sales *</label>
+    <input type="number" id="wa_sales" placeholder="81234567890">
+
+    <button id="btnSimpan" onclick="simpanMobil()">Simpan Mobil</button>
+    <button class="logout" onclick="logout()">Logout</button>
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const API_URL = 'PASTE_URL_APPS_SCRIPT_LU_DISINI';
+    const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
+    if (!showroom.id) window.location.href = 'login.html';
+    else document.getElementById('namaShowroom').innerText = showroom.nama;
+
+    // Preview foto
+    document.getElementById('foto').onchange = function(e) {
+      const preview = document.getElementById('preview');
+      preview.innerHTML = '';
+      if (this.files.length > 6) {
+        alert('Maksimal 6 foto bro!');
+        this.value = '';
+        return;
+      }
+      [...this.files].forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => preview.innerHTML += `<img src="${e.target.result}">`;
+        reader.readAsDataURL(file);
+      });
+    };
+
+    async function simpanMobil() {
+      const btn = document.getElementById('btnSimpan');
+      const status = document.getElementById('status');
+      const files = document.getElementById('foto').files;
+      
+      if (files.length === 0) return status.innerText = 'Pilih foto dulu!', status.style.color = 'red';
+      if (files.length > 6) return status.innerText = 'Max 6 foto!', status.style.color = 'red';
+      
+      btn.disabled = true; btn.innerText = 'Menyimpan...'; status.innerText = '';
+
+      // Convert semua foto ke base64
+      const fotos_base64 = await Promise.all([...files].map(file => {
+        return new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.readAsDataURL(file);
+        });
+      }));
+
+      const formData = new FormData();
+      formData.append('action', 'tambahMobil');
+      formData.append('showroom_id', showroom.id);
+      formData.append('merk', document.getElementById('merk').value);
+      formData.append('tipe', document.getElementById('tipe').value);
+      formData.append('tahun', document.getElementById('tahun').value);
+      formData.append('transmisi', document.getElementById('transmisi').value);
+      formData.append('km', document.getElementById('km').value);
+      formData.append('warna', document.getElementById('warna').value);
+      formData.append('harga_cash', document.getElementById('harga_cash').value);
+      formData.append('harga_kredit', document.getElementById('harga_kredit').value);
+      formData.append('deskripsi', document.getElementById('deskripsi').value);
+      formData.append('wa_sales', document.getElementById('wa_sales').value);
+      formData.append('fotos_base64', JSON.stringify(fotos_base64)); // Kirim 6 foto sekaligus
+
+      fetch(API_URL, { method: 'POST', body: formData })
+     .then(res => res.json())
+     .then(data => {
+          if (data.status === 'success') {
+            status.innerText = 'Berhasil disimpan 6 foto!';
+            status.style.color = 'green';
+            document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            document.getElementById('preview').innerHTML = '';
+          } else {
+            status.innerText = 'Gagal: ' + data.message;
+            status.style.color = 'red';
+          }
+          btn.disabled = false; btn.innerText = 'Simpan Mobil';
+        })
+     .catch(err => {
+          status.innerText = 'Gagal konek ke server. Backend belum dibikin bro';
+          status.style.color = 'red';
+          btn.disabled = false; btn.innerText = 'Simpan Mobil';
+        });
+    }
+
+    function logout() {
+      localStorage.removeItem('showroom');
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

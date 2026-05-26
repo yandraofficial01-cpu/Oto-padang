@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Showroom - OTO PADANG</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { 
+      font-family: 'Segoe UI', Arial, sans-serif; 
+      background: linear-gradient(135deg, #1877f2 0%, #0a5dc9 100%);
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+      margin: 0; 
+      padding: 20px;
+    }
+  .box { 
+      background: white; 
+      padding: 35px 30px; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2); 
+      width: 100%; 
+      max-width: 360px; 
+      text-align: center; 
+    }
+    .logo {
+      font-size: 32px;
+      margin-bottom: 5px;
+    }
+    .welcome {
+      color: #1877f2;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0 0 5px 0;
+    }
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin: 0 0 25px 0;
+    }
+    h2 { 
+      color: #1c1e21; 
+      margin: 0 0 20px 0; 
+      font-size: 22px;
+    }
+    input { 
+      width: 100%; 
+      padding: 14px; 
+      margin: 10px 0; 
+      border: 1px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 15px;
+      transition: border 0.3s;
+    }
+    input:focus {
+      outline: none;
+      border: 1px solid #1877f2;
+    }
+    button { 
+      width: 100%; 
+      padding: 14px; 
+      background: #1877f2; 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      font-weight: bold; 
+      font-size: 16px;
+      margin-top: 15px; 
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0d65d9;
+    }
+    #status { 
+      color: red; 
+      margin-top: 12px; 
+      font-size: 14px; 
+      height: 20px; 
+    }
+    .footer {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="logo">🚗</div>
+    <p class="welcome">Welcome Partner</p>
+    <p class="subtitle">OTO PADANG</p>
+    
+    <h2>Login Showroom</h2>
+    <input type="email" id="email" placeholder="Email" value="jaya@motor.com">
+    <input type="password" id="password" placeholder="Password" value="123456">
+    <button onclick="login()">Masuk</button>
+    <p id="status"></p>
+    
+    <div class="footer">© 2026 OTO PADANG - Portal Mitra</div>
+  </div>
+
+  <script>
+    function login() {
+      // DUMMY LOGIN - BYPASS APAPUN LANGSUNG MASUK
+      const showroom = {
+        id: "SR001",
+        nama: "Jaya Motor"
+      };
+      localStorage.setItem('showroom', JSON.stringify(showroom));
+      window.location.href = 'input-mobil.html';
+    }
+  </script>
+</body>
+</html>
