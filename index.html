@@ -2,12 +2,59 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>OTO PADANG - Kurator Mobil Bekas Sumbar</title>
+  <title>OTO PADANG - Kurator Mobil Bekas Terpercaya Sumatera Barat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- SEO DASAR -->
+  <meta name="description" content="OTO PADANG - Platform kurator mobil bekas terpercaya di Sumatera Barat. Jual beli Avanza, Innova, Xenia, Rush, Terios dengan harga terbaik & bergaransi.">
+  <meta name="keywords" content="mobil bekas padang, jual beli mobil sumbar, showroom mobil padang, avanza bekas, innova bekas, rush bekas">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="OTO PADANG">
+  <link rel="canonical" href="https://oto-padang.vercel.app/">
+
+  <!-- OPEN GRAPH / FACEBOOK / WA -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oto-padang.vercel.app/">
+  <meta property="og:title" content="OTO PADANG - Kurator Mobil Bekas Terpercaya Sumbar">
+  <meta property="og:description" content="Platform jual beli mobil bekas terpercaya di Sumatera Barat. Harga terbaik, unit berkualitas, proses mudah.">
+  <meta property="og:image" content="https://oto-padang.vercel.app/banner-oto-padang.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="id_ID">
+
+  <!-- TWITTER -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://oto-padang.vercel.app/">
+  <meta name="twitter:title" content="OTO PADANG - Kurator Mobil Bekas Terpercaya Sumbar">
+  <meta name="twitter:description" content="Platform jual beli mobil bekas terpercaya di Sumatera Barat. Harga terbaik, unit berkualitas.">
+  <meta name="twitter:image" content="https://oto-padang.vercel.app/banner-oto-padang.jpg">
+
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <!-- JSON-LD SCHEMA BUAT GOOGLE -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDealer",
+    "name": "OTO PADANG",
+    "description": "Kurator Mobil Bekas Terpercaya Sumatera Barat",
+    "url": "https://oto-padang.vercel.app",
+    "logo": "https://oto-padang.vercel.app/logo.png",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "Sumatera Barat",
+      "addressCountry": "ID"
+    },
+    "priceRange": "$$",
+    "areaServed": "Sumatera Barat"
+  }
+  </script>
+
   <style>
     :root{
       --bg:#0a0a0a; --card:#1c1c1e; --text:#fff; --text2:#888; --border:#2c2c2e;
-      --primary:#007aff; --green:#30d158; --hot:#ff3b30; --wa:#25D366; 
+      --primary:#007aff; --green:#30d158; --hot:#ff3b30; --wa:#25D366;
       --fb:#1877F2; --ig:#E4405F; --tiktok:#000; --tw:#1DA1F2;
     }
     [data-theme="light"]{
@@ -21,17 +68,20 @@
 .banner-text h1{font-size:28px;font-weight:800;color:#fff;margin-bottom:4px}
 .banner-text p{color:rgba(255,255,255,.8);font-size:14px}
 
-.header-actions{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.header-actions{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
 .search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:16px}
 .search::placeholder{color:var(--text2)}
 .theme-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-size:20px;color:var(--text)}
 
-.filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
-.filter button{background:var(--card);color:var(--text);border:1px solid var(--border);padding:10px 18px;border-radius:20px;cursor:pointer;font-weight:600;transition:all.2s;text-decoration:none}
-.filter button:hover{transform:translateY(-2px)}
-.filter button.active{background:var(--primary);border-color:var(--primary);color:#fff}
-.filter a.showroom-link{background:linear-gradient(135deg,#ff9500,#ff3b30);color:#fff;border:none;padding:10px 18px;border-radius:20px;font-weight:700;text-decoration:none;display:inline-block;box-shadow:0 4px 12px rgba(255,149,0,.3)}
-.filter a.showroom-link:hover{transform:translateY(-2px)}
+/* DROPDOWN */
+.dropdown{position:relative}
+.dropdown-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+.dropdown-btn:hover{background:var(--border)}
+.dropdown-menu{position:absolute;top:50px;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;min-width:220px;display:none;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,.4);max-height:300px;overflow-y:auto}
+.dropdown-menu.show{display:block}
+.dropdown-menu a{display:block;width:100%;text-align:left;padding:12px 16px;color:var(--text);text-decoration:none;font-weight:600}
+.dropdown-menu a:hover{background:var(--bg)}
+.dropdown-menu.empty{padding:12px 16px;color:var(--text2);font-size:14px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
 .card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease}
@@ -110,10 +160,24 @@
 
   <div class="header-actions">
     <input type="text" class="search" id="search" placeholder="🔍 Cari Avanza, 2019, Manual..." oninput="filterData()">
+
+    <!-- DROPDOWN DAFTAR SHOWROOM BUAT PEMBELI -->
+    <div class="dropdown">
+      <button class="dropdown-btn" onclick="toggleDropdown('daftarShowroomMenu')">🏪 Daftar Showroom ▼</button>
+      <div class="dropdown-menu" id="daftarShowroomMenu"></div>
+    </div>
+
+    <!-- DROPDOWN MENU ADMIN - CUMA LOGIN AJA -->
+    <div class="dropdown">
+      <button class="dropdown-btn" onclick="toggleDropdown('showroomMenu')">🔐 Login Showroom ▼</button>
+      <div class="dropdown-menu" id="showroomMenu">
+        <a href="login.html">🔐 Login Showroom</a>
+      </div>
+    </div>
+
     <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
   </div>
 
-  <div class="filter" id="filter-lokasi"></div>
   <div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
 
   <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
@@ -138,10 +202,24 @@
 const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
 const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 let semuaMobilGlobal = [];
-let lokasiAktif = 'all';
 let semuaShowroomGlobal = [];
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
+
+// DROPDOWN TOGGLE
+function toggleDropdown(id){
+  document.querySelectorAll('.dropdown-menu').forEach(m => {
+    if(m.id!== id) m.classList.remove('show');
+  });
+  document.getElementById(id).classList.toggle('show');
+}
+
+// TUTUP DROPDOWN KLIK LUAR
+window.onclick = function(e) {
+  if (!e.target.matches('.dropdown-btn')) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+  }
+}
 
 async function ambilDataSheet(gid) {
   const url = `${BASE_JSON}&gid=${gid}`;
@@ -150,7 +228,7 @@ async function ambilDataSheet(gid) {
   const text = await res.text();
   const json = JSON.parse(text.substr(47).slice(0, -2));
   const headers = json.table.cols.map(c => c.label? c.label.toLowerCase().replace(/\s/g,'').trim() : '');
-  
+
   return json.table.rows.map(r => {
     let obj = {};
     headers.forEach((h,i) => {
@@ -184,7 +262,7 @@ function fixImgurUrl(url) {
 async function init() {
   try {
     semuaShowroomGlobal = (await ambilDataSheet('72239375')).filter(s => s.nama_showroom);
-    
+
     const promisesMobil = semuaShowroomGlobal.filter(s => {
       return s.sheet_gid!== undefined && s.sheet_gid!== null && s.sheet_gid.toString().trim()!== '';
     }).map(async (showroom) => {
@@ -194,13 +272,13 @@ async function init() {
     });
 
     const semuaData = await Promise.all(promisesMobil);
-    
+
     semuaMobilGlobal = semuaData.flat().filter(m => {
       const status = m.status? m.status.toString().toUpperCase().trim() : '';
       return status === 'READY';
     });
-    
-    renderFilter(semuaShowroomGlobal);
+
+    renderDaftarShowroom(semuaShowroomGlobal);
     renderMobil(semuaMobilGlobal);
     loadTheme();
   } catch(e) {
@@ -209,50 +287,33 @@ async function init() {
   }
 }
 
-function renderFilter(showroomList) {
-  const div = document.getElementById('filter-lokasi');
-  const lokasi = [...new Set(showroomList.filter(c => c.lokasi).map(c => c.lokasi))];
-  
-  let html = `<button class="active" onclick="setLokasi('all',this)">Semua Lokasi</button>`;
-  html += lokasi.map(l => `<button onclick="setLokasi('${l}',this)">${l}</button>`).join('');
-  
-  div.innerHTML = html;
-}
+// RENDER DROPDOWN DAFTAR SHOWROOM BUAT PEMBELI
+function renderDaftarShowroom(showroomList) {
+  const div = document.getElementById('daftarShowroomMenu');
+  const showroomAdaDomain = showroomList.filter(s => s.domain_showroom);
 
-function setLokasi(lok, btn) {
-  lokasiAktif = lok;
-  document.querySelectorAll('.filter button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filterData();
+  if(showroomAdaDomain.length === 0){
+    div.innerHTML = `<div class="empty">Belum ada showroom</div>`;
+    return;
+  }
+
+  div.innerHTML = showroomAdaDomain.map(s =>
+    `<a href="${s.domain_showroom}" target="_blank">🏪 ${s.nama_showroom}</a>`
+  ).join('');
 }
 
 function filterData() {
   const keyword = document.getElementById('search').value.toLowerCase();
   let data = semuaMobilGlobal;
 
-  if(lokasiAktif!== 'all') data = data.filter(m => m.lokasi === lokasiAktif);
   if(keyword) data = data.filter(m =>
     `${m.merk} ${m.tipenya} ${m.tahun}`.toLowerCase().includes(keyword) ||
     (m.transmisi || '').toLowerCase().includes(keyword) ||
-    (m.deskripsi || '').toLowerCase().includes(keyword)
+    (m.deskripsi || '').toLowerCase().includes(keyword) ||
+    (m.nama_showroom || '').toLowerCase().includes(keyword)
   );
-  
-  renderMobil(data);
-  renderTombolShowroom();
-}
 
-function renderTombolShowroom(){
-  const div = document.getElementById('filter-lokasi');
-  // Hapus tombol showroom lama
-  div.querySelectorAll('.showroom-link').forEach(el => el.remove());
-  
-  // Tambah tombol showroom kalo filter lokasi aktif
-  if(lokasiAktif!== 'all'){
-    const showroom = semuaShowroomGlobal.find(s => s.lokasi === lokasiAktif && s.domain_showroom);
-    if(showroom){
-      div.innerHTML += `<a href="${showroom.domain_showroom}" target="_blank" class="showroom-link">🏪 Lihat Semua Mobil ${showroom.nama_showroom}</a>`;
-    }
-  }
+  renderMobil(data);
 }
 
 function renderMobil(data) {
@@ -274,10 +335,10 @@ function renderMobil(data) {
 
     const btnKeShowroom = m.domain_showroom? `
       <a href="${m.domain_showroom}" target="_blank" class="showroom-btn">
-        🏪 Lihat Semua Mobil ${m.nama_showroom}
+        🏪 Kunjungi ${m.nama_showroom}
       </a>
     ` : '';
-    
+
     return `
     <div class="card">
       <div class="slider" id="${sliderId}" data-current="0">
@@ -311,9 +372,8 @@ function renderMobil(data) {
       </div>
     </div>
   `}).join('');
-  
+
   initSwipeSlider();
-  renderTombolShowroom();
 }
 
 function openShareModal(data) {
@@ -323,7 +383,7 @@ function openShareModal(data) {
   const waLink = `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title} kode:${data.id}`;
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
-  
+
   grid.innerHTML = `
     <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item">
       <div class="share-icon wa">💬</div>
@@ -350,7 +410,7 @@ function openShareModal(data) {
       <div class="share-label">Copy Link</div>
     </a>
   `;
-  
+
   modal.classList.add('active');
 }
 
@@ -394,11 +454,11 @@ function slide(sliderId, dir) {
   const dots = slider.querySelectorAll('.dot');
   const total = slides.children.length;
   let current = parseInt(slider.dataset.current || 0);
-  
+
   current = (current + dir + total) % total;
   slides.style.transform = `translateX(-${current * 100}%)`;
   slider.dataset.current = current;
-  
+
   dots.forEach((d,i) => d.classList.toggle('active', i === current));
 }
 
@@ -406,7 +466,7 @@ function goSlide(sliderId, idx) {
   const slider = document.getElementById(sliderId);
   const slides = slider.querySelector('.slides');
   const dots = slider.querySelectorAll('.dot');
-  
+
   slides.style.transform = `translateX(-${idx * 100}%)`;
   slider.dataset.current = idx;
   dots.forEach((d,i) => d.classList.toggle('active', i === idx));
@@ -416,15 +476,15 @@ function initSwipeSlider() {
   document.querySelectorAll('.slider').forEach(slider => {
     const slides = slider.querySelector('.slides');
     if(slides.children.length <= 1) return;
-    
+
     let startX = 0, currentX = 0, isDragging = false;
-    
+
     const start = e => {
       startX = e.touches? e.touches[0].clientX : e.clientX;
       isDragging = true;
       slides.style.transition = 'none';
     };
-    
+
     const move = e => {
       if(!isDragging) return;
       currentX = e.touches? e.touches[0].clientX : e.clientX;
@@ -433,12 +493,12 @@ function initSwipeSlider() {
       const offset = -current * 100 + (diff / slider.offsetWidth) * 100;
       slides.style.transform = `translateX(${offset}%)`;
     };
-    
+
     const end = e => {
       if(!isDragging) return;
       isDragging = false;
       slides.style.transition = 'transform.4s ease';
-      
+
       const diff = currentX - startX;
       if(Math.abs(diff) > 50) {
         if(diff > 0) slide(slider.id, -1);
@@ -448,7 +508,7 @@ function initSwipeSlider() {
         slides.style.transform = `translateX(-${current * 100}%)`;
       }
     };
-    
+
     slider.addEventListener('touchstart', start, {passive: true});
     slider.addEventListener('touchmove', move, {passive: true});
     slider.addEventListener('touchend', end);
@@ -493,7 +553,7 @@ function updateLightboxCounter() {
 function initPinchZoom() {
   const img = document.getElementById('lightboxImg');
   let scale = 1, startDistance = 0, lastScale = 1;
-  
+
   img.addEventListener('touchstart', e => {
     if(e.touches.length === 2) {
       startDistance = Math.hypot(
@@ -502,7 +562,7 @@ function initPinchZoom() {
       );
     }
   });
-  
+
   img.addEventListener('touchmove', e => {
     if(e.touches.length === 2) {
       e.preventDefault();
@@ -515,7 +575,7 @@ function initPinchZoom() {
       img.style.transform = `scale(${scale})`;
     }
   });
-  
+
   img.addEventListener('touchend', e => {
     if(e.touches.length < 2) lastScale = scale;
   });
@@ -539,4 +599,4 @@ function loadTheme() {
 init();
 </script>
 </body>
-</html>
+  </html>
