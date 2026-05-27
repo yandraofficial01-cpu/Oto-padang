@@ -6,19 +6,20 @@
   <title>Input Mobil - Oto Padang</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-  .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+ .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
     h2 { text-align: center; color: #1877f2; margin-bottom: 5px; }
     #namaShowroom { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
     input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; }
     button:disabled { background: #ccc; }
     #status { text-align: center; margin-top: 10px; font-size: 14px; }
-  .logout { background: #e41e3f; margin-top: 5px; }
+ .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
-  .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-  .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
-  .row { display: flex; gap: 10px; }
-  .row input,.row select { flex: 1; }
+ .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+ .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+ .row { display: flex; gap: 10px; }
+ .row div { flex: 1; }
+ .required::after { content: " *"; color: red; }
   </style>
 </head>
 <body>
@@ -28,33 +29,36 @@
 
     <div class="row">
       <div>
-        <label>Merk *</label>
+        <label class="required">Merk</label>
         <input type="text" id="merk" placeholder="Toyota" required>
       </div>
       <div>
-        <label>Tipe *</label>
+        <label class="required">Tipe</label>
         <input type="text" id="tipe" placeholder="Avanza" required>
       </div>
     </div>
 
     <div class="row">
       <div>
-        <label>Tahun *</label>
+        <label class="required">Tahun</label>
         <input type="number" id="tahun" placeholder="2022" required>
       </div>
       <div>
-        <label>Transmisi *</label>
-        <select id="transmisi"><option>Automatic</option><option>Manual</option></select>
+        <label class="required">Transmisi</label>
+        <select id="transmisi">
+          <option>Automatic</option>
+          <option>Manual</option>
+        </select>
       </div>
     </div>
 
     <div class="row">
       <div>
-        <label>KM *</label>
+        <label class="required">KM</label>
         <input type="number" id="km" placeholder="50000" required>
       </div>
       <div>
-        <label>Warna *</label>
+        <label class="required">Warna</label>
         <input type="text" id="warna" placeholder="Hitam" required>
       </div>
     </div>
@@ -75,7 +79,7 @@
       </div>
     </div>
 
-    <label>Harga Cash *</label>
+    <label class="required">Harga Cash</label>
     <input type="number" id="harga_cash" placeholder="150000000" required>
 
     <div class="row">
@@ -102,14 +106,15 @@
     <label>Lokasi Showroom</label>
     <input type="text" id="lokasi_showroom" placeholder="Padang Timur">
 
-    <label>Upload Foto Mobil * Max 6 foto</label>
+    <label class="required">Upload Foto Mobil - Max 6 foto</label>
     <input type="file" id="foto" accept="image/*" multiple>
     <div class="preview" id="preview"></div>
 
     <label>Deskripsi</label>
     <textarea id="deskripsi" placeholder="Mobil mulus, pajak panjang" rows="3"></textarea>
-    <label>No WA Sales *</label>
-    <input type="number" id="wa_sales" placeholder="81234567890" required>
+
+    <label class="required">No WA Sales</label>
+    <input type="number" id="no_wa_sales" placeholder="81234567890" required>
 
     <button id="btnSimpan" onclick="simpanMobil()">Simpan Mobil</button>
     <button class="logout" onclick="logout()">Logout</button>
@@ -117,10 +122,15 @@
   </div>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwJ19uhNBC1OMFoEhkvAMyOWQT5FxOreVwE0KTHLdOM_8SuoGLmKMEfuZqhSRN0Uivb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz1mztyULVm8TARrw-vBftAAoMAgfals394laiMWmT5XBC70LzK6xF2IE8ZfJtMxFI7/exec';
     const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
-    if (!showroom.id) window.location.href = 'login.html';
-    else document.getElementById('namaShowroom').innerText = showroom.nama;
+
+    if (!showroom.id) {
+      window.location.href = 'login.html';
+    } else {
+      document.getElementById('namaShowroom').innerText = showroom.nama;
+      document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
+    }
 
     let compressedFiles = [];
 
@@ -188,14 +198,21 @@
       const status = document.getElementById('status');
 
       // Validasi wajib
-      if (!document.getElementById('merk').value ||!document.getElementById('tipe').value ||!document.getElementById('tahun').value ||!document.getElementById('km').value ||!document.getElementById('warna').value ||!document.getElementById('harga_cash').value ||!document.getElementById('wa_sales').value) {
+      if (!document.getElementById('merk').value ||!document.getElementById('tipe').value ||!document.getElementById('tahun').value ||!document.getElementById('km').value ||!document.getElementById('warna').value ||!document.getElementById('harga_cash').value ||!document.getElementById('no_wa_sales').value) {
         status.innerText = 'Isi semua kolom yang ada tanda * bro!';
         status.style.color = 'red';
         return;
       }
-      if (compressedFiles.length === 0) return status.innerText = 'Pilih foto dulu bro!', status.style.color = 'red';
+      if (compressedFiles.length === 0) {
+        status.innerText = 'Pilih foto dulu bro!';
+        status.style.color = 'red';
+        return;
+      }
 
-      btn.disabled = true; btn.innerText = 'Menyimpan...'; status.innerText = 'Upload ke Drive...';
+      btn.disabled = true;
+      btn.innerText = 'Menyimpan...';
+      status.innerText = 'Upload ke Drive...';
+      status.style.color = '#1877f2';
 
       const fotos_base64 = await Promise.all(compressedFiles.map(file => {
         return new Promise(resolve => {
@@ -209,7 +226,7 @@
       formData.append('action', 'tambahMobil');
       formData.append('email_pengisi', showroom.email || '');
       formData.append('nama_showroom', showroom.nama || '');
-      formData.append('showroom_id', showroom.id);
+      formData.append('slug_showroom', showroom.id);
       formData.append('merk', document.getElementById('merk').value);
       formData.append('tipe', document.getElementById('tipe').value);
       formData.append('tahun', document.getElementById('tahun').value);
@@ -224,30 +241,34 @@
       formData.append('tenor', document.getElementById('tenor').value);
       formData.append('lokasi_showroom', document.getElementById('lokasi_showroom').value);
       formData.append('deskripsi', document.getElementById('deskripsi').value);
-      formData.append('wa_sales', document.getElementById('wa_sales').value);
+      formData.append('no_wa_sales', document.getElementById('no_wa_sales').value);
+      formData.append('status_mobil', 'Tersedia');
       formData.append('fotos_base64', JSON.stringify(fotos_base64));
 
       fetch(API_URL, { method: 'POST', body: formData })
-.then(res => res.json())
-.then(data => {
+     .then(res => res.json())
+     .then(data => {
           if (data.status === 'sukses') {
-            status.innerText = 'Berhasil! Data lengkap tersimpan';
+            status.innerText = 'Berhasil! Data tersimpan ke Sheet';
             status.style.color = 'green';
             document.querySelectorAll('input, textarea, select').forEach(el => {
-              if(el.id!== 'transmisi' && el.id!== 'bahan_bakar' && el.id!== 'tenor') el.value = '';
+              if(el.id!== 'transmisi' && el.id!== 'bahan_bakar' && el.id!== 'tenor' && el.id!== 'lokasi_showroom') el.value = '';
             });
             document.getElementById('preview').innerHTML = '';
+            document.getElementById('foto').value = '';
             compressedFiles = [];
           } else {
             status.innerText = 'Gagal: ' + data.message;
             status.style.color = 'red';
           }
-          btn.disabled = false; btn.innerText = 'Simpan Mobil';
+          btn.disabled = false;
+          btn.innerText = 'Simpan Mobil';
         })
-.catch(err => {
+     .catch(err => {
           status.innerText = 'Gagal konek ke server: ' + err.message;
           status.style.color = 'red';
-          btn.disabled = false; btn.innerText = 'Simpan Mobil';
+          btn.disabled = false;
+          btn.innerText = 'Simpan Mobil';
         });
     }
 
