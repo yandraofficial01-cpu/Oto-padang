@@ -12,14 +12,18 @@
     input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     button:disabled { background: #ccc; cursor: not-allowed; }
-    #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; }
+    #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; padding: 8px; border-radius: 6px; }
+    .sukses { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+    .info { background: #cce5ff; color: #004085; }
    .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
    .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-   .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; }
+   .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
    .row { display: flex; gap: 10px; }
    .row div { flex: 1; }
    .required::after { content: " *"; color: red; }
+   .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
   </style>
 </head>
 <body>
@@ -42,11 +46,12 @@
       <div class="row">
         <div>
           <label class="required">Tahun</label>
-          <input type="number" name="tahun" placeholder="2022" required>
+          <input type="number" name="tahun" placeholder="2022" min="1990" max="2026" required>
         </div>
         <div>
           <label class="required">Transmisi</label>
-          <select name="transmisi">
+          <select name="transmisi" required>
+            <option value="">Pilih</option>
             <option>Automatic</option>
             <option>Manual</option>
           </select>
@@ -56,7 +61,7 @@
       <div class="row">
         <div>
           <label class="required">KM</label>
-          <input type="number" name="km" placeholder="50000" required>
+          <input type="number" name="km" placeholder="50000" min="0" required>
         </div>
         <div>
           <label class="required">Warna</label>
@@ -81,7 +86,7 @@
       </div>
 
       <label class="required">Harga Cash</label>
-      <input type="number" name="harga_cash" placeholder="150000000" required>
+      <input type="number" name="harga_cash" placeholder="150000000" min="1000000" required>
 
       <div class="row">
         <div>
@@ -109,6 +114,7 @@
 
       <label class="required">Upload Foto Mobil - Max 6 foto</label>
       <input type="file" id="foto" name="foto" accept="image/*" multiple required>
+      <div class="count-foto" id="countFoto">Belum ada foto dipilih</div>
       <div class="preview" id="preview"></div>
 
       <label>Deskripsi</label>
@@ -121,7 +127,7 @@
     </form>
     
     <button class="logout" onclick="logout()">Logout</button>
-    <p id="status"></p>
+    <div id="status"></div>
   </div>
 
   <script>
@@ -135,16 +141,25 @@
       document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
     }
 
-    // Preview foto
+    // Preview foto + counter
     document.getElementById('foto').onchange = function(e) {
       const preview = document.getElementById('preview');
+      const countFoto = document.getElementById('countFoto');
       preview.innerHTML = '';
+      
+      if (this.files.length === 0) {
+        countFoto.innerText = 'Belum ada foto dipilih';
+        return;
+      }
       
       if (this.files.length > 6) {
         alert('Maksimal 6 foto bro!');
         this.value = '';
+        countFoto.innerText = 'Belum ada foto dipilih';
         return;
       }
+      
+      countFoto.innerText = `${this.files.length} foto dipilih`;
       
       [...this.files].forEach(file => {
         const img = document.createElement('img');
@@ -158,35 +173,50 @@
       e.preventDefault();
       const btn = document.getElementById('btnSimpan');
       const status = document.getElementById('status');
+      const fileInput = document.getElementById('foto');
       
+      // VALIDASI WAJIB FOTO - INI YANG BIKIN GAK ZONK
+      if (fileInput.files.length === 0) {
+        status.className = 'error';
+        status.innerText = 'PILIH FOTO DULU BRO! Minimal 1, maksimal 6';
+        return;
+      }
+
       btn.disabled = true;
       btn.innerText = 'Menyimpan...';
-      status.innerText = 'Upload ke Drive...';
-      status.style.color = '#1877f2';
+      status.className = 'info';
+      status.innerText = `Upload ${fileInput.files.length} foto ke Drive... Tunggu ya`;
 
       const formData = new FormData(e.target);
       formData.append('slug_showroom', showroom.id);
       formData.append('email_pengisi', showroom.email);
-      formData.append('nama_showroom', showroom.nama);
-      formData.append('status_mobil', 'Tersedia');
 
       try {
         const res = await fetch(API_URL, { method: 'POST', body: formData });
-        const data = await res.json();
+        const text = await res.text();
+        
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch(err) {
+          throw new Error('Server error: ' + text.substring(0,100));
+        }
         
         if (data.status === 'sukses') {
+          status.className = 'sukses';
           status.innerText = `Berhasil! ID: ${data.id} | Foto: ${data.foto}`;
-          status.style.color = 'green';
           e.target.reset();
           document.getElementById('preview').innerHTML = '';
+          document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
           document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
         } else {
+          status.className = 'error';
           status.innerText = 'Gagal: ' + data.pesan;
-          status.style.color = 'red';
         }
       } catch(err) {
+        status.className = 'error';
         status.innerText = 'Gagal konek: ' + err.message;
-        status.style.color = 'red';
+        console.error(err);
       } finally {
         btn.disabled = false;
         btn.innerText = 'Simpan Mobil';
