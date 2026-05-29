@@ -27,6 +27,19 @@
   </style>
 </head>
 <body>
+ <div id="debug" style="background:#ffeb3b;padding:12px;font-family:monospace;font-size:12px;border:2px solid #000;margin-bottom:10px;"></div>
+<script>
+  const data = JSON.parse(localStorage.getItem('showroomData') || '{}');
+  const debugBox = document.getElementById('debug');
+  debugBox.innerHTML = 'DEBUG: ' + JSON.stringify(data);
+  if(data.id) {
+    debugBox.style.background = '#4caf50'; 
+    debugBox.style.color = 'white';
+  } else {
+    debugBox.style.background = '#f44336';
+    debugBox.style.color = 'white';
+  }
+</script>
   <div class="box">
     <h2>Input Mobil Baru</h2>
     <p id="namaShowroom">Loading...</p>
