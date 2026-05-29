@@ -16,7 +16,7 @@
       margin: 0;
       padding: 20px;
     }
-   .box {
+ .box {
       background: white;
       padding: 35px 30px;
       border-radius: 16px;
@@ -25,9 +25,9 @@
       max-width: 360px;
       text-align: center;
     }
-   .logo { font-size: 32px; margin-bottom: 5px; }
-   .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
-   .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
+ .logo { font-size: 32px; margin-bottom: 5px; }
+ .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
+ .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
     h2 { color: #1c1e21; margin: 0 0 20px 0; font-size: 22px; }
     input {
       width: 100%; padding: 14px; margin: 10px 0;
@@ -44,9 +44,9 @@
     button:hover { background: #0d65d9; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { margin-top: 12px; font-size: 14px; height: 20px; }
-   .error { color: red; }
-   .sukses { color: green; }
-   .footer { margin-top: 25px; font-size: 12px; color: #999; }
+ .error { color: red; }
+ .sukses { color: green; }
+ .footer { margin-top: 25px; font-size: 12px; color: #999; }
   </style>
 </head>
 <body>
@@ -65,7 +65,6 @@
   </div>
 
   <script>
-    // DATABASE SHOWROOM - id HARUS SAMA DENGAN slug_showroom DI SHEET PAKET_SHOWROOM
     const DATA_SHOWROOM = {
       "admin@putraoto.com": {
         id: "putra-oto-solok",
@@ -83,9 +82,14 @@
       }
     };
 
-    // Kalo udah login, langsung lempar ke form
-    if (localStorage.getItem('showroomData')) {
-      window.location.href = 'input-mobil.html';
+    // Kalo udah login, langsung lempar ke form - VERSI ANTI CORRUPT
+    try {
+      const showroomData = JSON.parse(localStorage.getItem('showroom') || '{}');
+      if (showroomData.id) {
+        window.location.href = 'input-mobil.html';
+      }
+    } catch(e) {
+      localStorage.removeItem('showroom');
     }
 
     function login() {
@@ -125,8 +129,7 @@
         return;
       }
 
-      // SUKSES LOGIN - SIMPAN KE LOCALSTORAGE DENGAN KEY 'showroomData'
-      localStorage.setItem('showroomData', JSON.stringify({
+      localStorage.setItem('showroom', JSON.stringify({
         id: showroom.id,
         nama: showroom.nama,
         email: showroom.email,
