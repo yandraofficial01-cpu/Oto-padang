@@ -13,9 +13,9 @@
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; padding: 8px; border-radius: 6px; }
-   .sukses { background: #d4edda; color: #155724; }
-   .error { background: #f8d7da; color: #721c24; }
-   .info { background: #cce5ff; color: #004085; }
+  .sukses { background: #d4edda; color: #155724; }
+  .error { background: #f8d7da; color: #721c24; }
+  .info { background: #cce5ff; color: #004085; }
   .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
   .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
@@ -134,7 +134,7 @@
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
     const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
 
-    // CEK LOGIN + CEK ID
+    // CEK LOGIN + CEK ID WAJIB ADA
     if (!showroom.id) {
       alert('Sesi habis atau belum login. Silakan login ulang.');
       window.location.href = 'login.html';
@@ -193,6 +193,13 @@
         return;
       }
 
+      // CEK ULANG SHOWROOM.ID SEBELUM KIRIM
+      if (!showroom.id) {
+        status.className = 'error';
+        status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
+        return;
+      }
+
       btn.disabled = true;
       btn.innerText = 'Convert foto...';
       status.className = 'info';
@@ -203,7 +210,7 @@
         const formEl = e.target;
         const data = Object.fromEntries(new FormData(formEl).entries());
 
-        // 2. TAMBAHIN DATA WAJIB DARI LOCALSTORAGE
+        // 2. WAJIB: TAMBAHIN DATA DARI LOCALSTORAGE
         data.slug_showroom = showroom.id;
         data.email_pengisi = showroom.email;
         data.nama_showroom = showroom.nama;
