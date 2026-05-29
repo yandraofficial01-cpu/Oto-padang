@@ -16,7 +16,7 @@
       margin: 0;
       padding: 20px;
     }
- .box {
+.box {
       background: white;
       padding: 35px 30px;
       border-radius: 16px;
@@ -25,9 +25,9 @@
       max-width: 360px;
       text-align: center;
     }
-   .logo { font-size: 32px; margin-bottom: 5px; }
-   .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
-   .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
+  .logo { font-size: 32px; margin-bottom: 5px; }
+  .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
+  .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
     h2 { color: #1c1e21; margin: 0 0 20px 0; font-size: 22px; }
     input {
       width: 100%; padding: 14px; margin: 10px 0;
@@ -43,8 +43,10 @@
     }
     button:hover { background: #0d65d9; }
     button:disabled { background: #ccc; cursor: not-allowed; }
-    #status { color: red; margin-top: 12px; font-size: 14px; height: 20px; }
-   .footer { margin-top: 25px; font-size: 12px; color: #999; }
+    #status { margin-top: 12px; font-size: 14px; height: 20px; }
+   .error { color: red; }
+   .sukses { color: green; }
+  .footer { margin-top: 25px; font-size: 12px; color: #999; }
   </style>
 </head>
 <body>
@@ -63,10 +65,10 @@
   </div>
 
   <script>
-    // DATABASE SHOWROOM - HARUS SAMA KEK DI SHEET PAKET_SHOWROOM
+    // DATABASE SHOWROOM - INI HARUS SAMA DENGAN slug_showroom DI SHEET PAKET_SHOWROOM
     const DATA_SHOWROOM = {
       "admin@putraoto.com": {
-        id: "putra-oto-solok",
+        id: "putra-oto-solok", // PENTING: ini yg dikirim ke GAS
         nama: "Putra Oto Solok",
         email: "admin@putraoto.com",
         lokasi: "Solok, Sumbar",
@@ -81,43 +83,57 @@
       }
     };
 
+    // Kalo udah login, langsung lempar ke form
+    if (localStorage.getItem('showroom')) {
+      window.location.href = 'input-mobil.html';
+    }
+
     function login() {
-      const email = document.getElementById('email').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
       const pass = document.getElementById('password').value;
       const status = document.getElementById('status');
       const btn = document.getElementById('btnLogin');
 
+      status.className = '';
       status.innerText = '';
       btn.disabled = true;
       btn.innerText = 'Mengecek...';
 
-      // Cek apakah email ada di database
+      if (!email ||!pass) {
+        status.className = 'error';
+        status.innerText = 'Email & password wajib diisi';
+        btn.disabled = false;
+        btn.innerText = 'Masuk';
+        return;
+      }
+
       const showroom = DATA_SHOWROOM[email];
 
       if (!showroom) {
+        status.className = 'error';
         status.innerText = 'Email tidak terdaftar';
         btn.disabled = false;
         btn.innerText = 'Masuk';
         return;
       }
 
-      // Cek password
       if (showroom.pass!== pass) {
+        status.className = 'error';
         status.innerText = 'Password salah';
         btn.disabled = false;
         btn.innerText = 'Masuk';
         return;
       }
 
-      // SUKSES LOGIN
+      // SUKSES LOGIN - SIMPAN KE LOCALSTORAGE
       localStorage.setItem('showroom', JSON.stringify({
-        id: showroom.id,
+        id: showroom.id, // INI YANG BIKIN GAK ERROR "slug_showroom wajib dikirim"
         nama: showroom.nama,
         email: showroom.email,
         lokasi: showroom.lokasi
       }));
 
-      status.style.color = 'green';
+      status.className = 'sukses';
       status.innerText = 'Login berhasil...';
       setTimeout(() => {
         window.location.href = 'input-mobil.html';
