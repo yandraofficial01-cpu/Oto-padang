@@ -24,14 +24,10 @@
   .row div { flex: 1; }
   .required::after { content: " *"; color: red; }
   .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
-  .debug { background: #d4edda; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-family: monospace; font-size: 12px; word-break: break-all; }
   </style>
 </head>
 <body>
   <div class="box">
-    <!-- DEBUG BOX BIAR KETAUAN -->
-    <div class="debug" id="debugBox">DEBUG: {}</div>
-    
     <h2>Input Mobil Baru</h2>
     <p id="namaShowroom">Loading...</p>
 
@@ -136,12 +132,7 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
-    
-    // FIX 1: BACA DARI 'showroomData' BUKAN 'showroom'
-    const showroom = JSON.parse(localStorage.getItem('showroomData') || '{}');
-    
-    // TAMPILIN DEBUG BIAR KETAUAN
-    document.getElementById('debugBox').innerText = 'DEBUG: ' + JSON.stringify(showroom);
+    const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
 
     // CEK LOGIN + CEK ID WAJIB ADA
     if (!showroom.id) {
@@ -179,98 +170,118 @@
       });
     };
 
-    // Fungsi convert file ke base64
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-      });
-    }
+    // KOMPRES + CONVERT KE BASE64 - BIAR GAK GEDE
+    async function convertFileToBase64(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
 
-    // Submit form
-    document.getElementById('formMobil').onsubmit = async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById('btnSimpan');
-      const status = document.getElementById('status');
-      const fileInput = document.getElementById('foto');
+                    // Max 1200px biar ukuran kecil
+                    const MAX_WIDTH = 1200;
+                    if (width > MAX_WIDTH) {
+                        height = height * (MAX_WIDTH / width);
+                        width = MAX_WIDTH;
+                    }
 
-      if (fileInput.files.length === 0) {
-        status.className = 'error';
-        status.innerText = 'PILIH FOTO DULU BRO! Minimal 1, maksimal 6';
-        return;
-      }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
 
-      // CEK ULANG SHOWROOM.ID SEBELUM KIRIM
-      if (!showroom.id) {
-        status.className = 'error';
-        status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.innerText = 'Convert foto...';
-      status.className = 'info';
-      status.innerText = `Proses ${fileInput.files.length} foto... Tunggu ya`;
-
-      try {
-        // 1. Ambil semua data form jadi object
-        const formEl = e.target;
-        const data = Object.fromEntries(new FormData(formEl).entries());
-
-        // 2. WAJIB: TAMBAHIN DATA DARI LOCALSTORAGE
-        data.slug_showroom = showroom.id;
-        data.email_pengisi = showroom.email;
-        data.nama_showroom = showroom.nama;
-
-        // 3. Convert semua file ke base64
-        btn.innerText = 'Upload ke Drive...';
-        status.innerText = `Upload ${fileInput.files.length} foto ke Google Drive...`;
-
-        const files = await Promise.all(
-          [...fileInput.files].map(async (file) => ({
-            name: file.name,
-            mimeType: file.type,
-            base64: await fileToBase64(file)
-          }))
-        );
-
-        // 4. Gabung jadi 1 payload JSON
-        const payload = { data, files };
-
-        // 5. Kirim ke GAS
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(payload)
+                    // Kompres ke 70% quality
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
+                    resolve(compressedBase64);
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         });
-
-        const result = await res.json();
-
-        if (result.status === 'sukses') {
-          status.className = 'sukses';
-          status.innerText = `Berhasil! ID: ${result.id} | Foto: ${result.foto}`;
-          formEl.reset();
-          document.getElementById('preview').innerHTML = '';
-          document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
-          document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
-        } else {
-          status.className = 'error';
-          status.innerText = 'Gagal: ' + result.pesan;
-        }
-      } catch(err) {
-        status.className = 'error';
-        status.innerText = 'Gagal konek: ' + err.message;
-        console.error(err);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = 'Simpan Mobil';
-      }
     }
 
-    // FIX 2: LOGOUT HAPUS 'showroomData' BUKAN 'showroom'
+    // Submit form - UPLOAD NYICIL 1-1
+    document.getElementById('formMobil').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSimpan');
+        const status = document.getElementById('status');
+        const fileInput = document.getElementById('foto');
+
+        if (fileInput.files.length === 0) {
+            status.className = 'error';
+            status.innerText = 'PILIH FOTO DULU BRO! Minimal 1, maksimal 6';
+            return;
+        }
+
+        if (!showroom.id) {
+            status.className = 'error';
+            status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = 'Proses...';
+        status.className = 'info';
+
+        try {
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            delete data.foto;
+            data.slug_showroom = showroom.id;
+            data.email_pengisi = showroom.email;
+            data.nama_showroom = showroom.nama;
+
+            let idMobil = null;
+
+            // KIRIM 1 PER 1 BIAR GAK TIMEOUT
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                status.innerText = `Kompres & upload foto ${i+1}/${fileInput.files.length}...`;
+
+                const base64 = await convertFileToBase64(file);
+
+                const payload = {
+                    data: i === 0 ? data : {}, // data cuma dikirim di foto pertama
+                    idMobil: idMobil, // buat nempel ke baris yg sama
+                    file: {
+                        name: file.name,
+                        mimeType: 'image/jpeg', // udah di-compress jadi jpeg
+                        base64: base64
+                    }
+                };
+
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+                const hasil = await res.json();
+
+                if (hasil.status === 'gagal') throw new Error(hasil.pesan);
+                if (i === 0) idMobil = hasil.id; // simpen id dari foto pertama
+            }
+
+            status.className = 'sukses';
+            status.innerText = `Berhasil! ID: ${idMobil} | Foto: ${fileInput.files.length}`;
+            e.target.reset();
+            document.getElementById('preview').innerHTML = '';
+            document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
+            document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
+
+        } catch (err) {
+            status.className = 'error';
+            status.innerText = 'Gagal: ' + err.message;
+            console.error(err);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = 'Simpan Mobil';
+        }
+    }
+
     function logout() {
-      localStorage.removeItem('showroomData');
+      localStorage.removeItem('showroom');
       window.location.href = 'login.html';
     }
   </script>
