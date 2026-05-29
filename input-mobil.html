@@ -168,6 +168,16 @@
       });
     };
 
+    // Fungsi convert file ke base64
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result.split(',')[1]); // Ambil base64 aja
+        reader.onerror = error => reject(error);
+      });
+    }
+
     // Submit form
     document.getElementById('formMobil').onsubmit = async (e) => {
       e.preventDefault();
@@ -175,7 +185,6 @@
       const status = document.getElementById('status');
       const fileInput = document.getElementById('foto');
       
-      // VALIDASI WAJIB FOTO - INI YANG BIKIN GAK ZONK
       if (fileInput.files.length === 0) {
         status.className = 'error';
         status.innerText = 'PILIH FOTO DULU BRO! Minimal 1, maksimal 6';
@@ -183,35 +192,51 @@
       }
 
       btn.disabled = true;
-      btn.innerText = 'Menyimpan...';
+      btn.innerText = 'Convert foto...';
       status.className = 'info';
-      status.innerText = `Upload ${fileInput.files.length} foto ke Drive... Tunggu ya`;
-
-      const formData = new FormData(e.target);
-      formData.append('slug_showroom', showroom.id);
-      formData.append('email_pengisi', showroom.email);
+      status.innerText = `Proses ${fileInput.files.length} foto... Tunggu ya`;
 
       try {
-        const res = await fetch(API_URL, { method: 'POST', body: formData });
-        const text = await res.text();
+        // 1. Ambil semua data form jadi object
+        const formEl = e.target;
+        const data = Object.fromEntries(new FormData(formEl).entries());
+        data.slug_showroom = showroom.id;
+        data.email_pengisi = showroom.email;
+        data.nama_showroom = showroom.nama;
+
+        // 2. Convert semua file ke base64
+        btn.innerText = 'Upload ke Drive...';
+        status.innerText = `Upload ${fileInput.files.length} foto ke Google Drive...`;
         
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch(err) {
-          throw new Error('Server error: ' + text.substring(0,100));
-        }
+        const files = await Promise.all(
+          [...fileInput.files].map(async (file) => ({
+            name: file.name,
+            mimeType: file.type,
+            base64: await fileToBase64(file)
+          }))
+        );
+
+        // 3. Gabung jadi 1 payload JSON
+        const payload = { data, files };
+
+        // 4. Kirim ke GAS
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload) // Kirim JSON, bukan FormData
+        });
         
-        if (data.status === 'sukses') {
+        const result = await res.json();
+        
+        if (result.status === 'sukses') {
           status.className = 'sukses';
-          status.innerText = `Berhasil! ID: ${data.id} | Foto: ${data.foto}`;
-          e.target.reset();
+          status.innerText = `Berhasil! ID: ${result.id} | Foto: ${result.foto}`;
+          formEl.reset();
           document.getElementById('preview').innerHTML = '';
           document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
           document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
         } else {
           status.className = 'error';
-          status.innerText = 'Gagal: ' + data.pesan;
+          status.innerText = 'Gagal: ' + result.pesan;
         }
       } catch(err) {
         status.className = 'error';
