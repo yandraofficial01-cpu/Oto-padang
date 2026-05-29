@@ -24,23 +24,14 @@
   .row div { flex: 1; }
   .required::after { content: " *"; color: red; }
   .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
+  .debug { background: #d4edda; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-family: monospace; font-size: 12px; word-break: break-all; }
   </style>
 </head>
 <body>
- <div id="debug" style="background:#ffeb3b;padding:12px;font-family:monospace;font-size:12px;border:2px solid #000;margin-bottom:10px;"></div>
-<script>
-  const data = JSON.parse(localStorage.getItem('showroomData') || '{}');
-  const debugBox = document.getElementById('debug');
-  debugBox.innerHTML = 'DEBUG: ' + JSON.stringify(data);
-  if(data.id) {
-    debugBox.style.background = '#4caf50'; 
-    debugBox.style.color = 'white';
-  } else {
-    debugBox.style.background = '#f44336';
-    debugBox.style.color = 'white';
-  }
-</script>
   <div class="box">
+    <!-- DEBUG BOX BIAR KETAUAN -->
+    <div class="debug" id="debugBox">DEBUG: {}</div>
+    
     <h2>Input Mobil Baru</h2>
     <p id="namaShowroom">Loading...</p>
 
@@ -145,7 +136,12 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
-    const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
+    
+    // FIX 1: BACA DARI 'showroomData' BUKAN 'showroom'
+    const showroom = JSON.parse(localStorage.getItem('showroomData') || '{}');
+    
+    // TAMPILIN DEBUG BIAR KETAUAN
+    document.getElementById('debugBox').innerText = 'DEBUG: ' + JSON.stringify(showroom);
 
     // CEK LOGIN + CEK ID WAJIB ADA
     if (!showroom.id) {
@@ -272,8 +268,9 @@
       }
     }
 
+    // FIX 2: LOGOUT HAPUS 'showroomData' BUKAN 'showroom'
     function logout() {
-      localStorage.removeItem('showroom');
+      localStorage.removeItem('showroomData');
       window.location.href = 'login.html';
     }
   </script>
