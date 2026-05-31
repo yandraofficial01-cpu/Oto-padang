@@ -6,29 +6,31 @@
   <title>Input Mobil - Oto Padang</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-.box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+  .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
     h2 { text-align: center; color: #1877f2; margin-bottom: 5px; }
     #namaShowroom { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
     input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; padding: 8px; border-radius: 6px; }
-.sukses { background: #d4edda; color: #155724; }
-.error { background: #f8d7da; color: #721c24; }
-.info { background: #cce5ff; color: #004085; }
-.logout { background: #e41e3f; margin-top: 5px; }
+  .sukses { background: #d4edda; color: #155724; }
+  .error { background: #f8d7da; color: #721c24; }
+  .info { background: #cce5ff; color: #004085; }
+  .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
-.preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-.preview-item { position: relative; aspect-ratio: 1; }
-.preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
-.preview.hapus { position: absolute; top: -6px; right: -6px; background: #e41e3f; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; }
-.preview.loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
-.row { display: flex; gap: 10px; }
-.row div { flex: 1; }
-.required::after { content: " *"; color: red; }
-.count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; font-weight: bold; }
+  .preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .preview-item { position: relative; aspect-ratio: 1; }
+  .preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
+  .preview.hapus { position: absolute; top: -6px; right: -6px; background: #e41e3f; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; }
+  .preview.loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
+  .row { display: flex; gap: 10px; }
+  .row div { flex: 1; }
+  .required::after { content: " *"; color: red; }
+  .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; font-weight: bold; }
     input[type=file]{display:none}
-.btn-upload { background: #28a745; }
+  .btn-upload { background: #28a745; }
+  .progress-bar { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+  .progress-fill { height: 100%; background: #1877f2; width: 0%; transition: width 0.3s; }
   </style>
 </head>
 <body>
@@ -124,6 +126,7 @@
         📷 Upload Foto 1
       </button>
       <div class="count-foto" id="countFoto">0/6 foto</div>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
       <div class="preview" id="preview"></div>
 
       <label>Deskripsi</label>
@@ -141,9 +144,10 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
-    const IMGUR_CLIENT_ID = '546c25a59c58ad7';
     const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
-    let fotoUrls = [];
+    let fotoFiles = []; // SIMPEN FILE ASLI
+    let idMobil = ''; // ID DARI SERVER PAS UPLOAD FOTO PERTAMA
+    let fotoUrls = []; // LINK IMGUR DARI SERVER
 
     if (!showroom.id) {
       alert('Sesi habis atau belum login. Silakan login ulang.');
@@ -153,6 +157,7 @@
       document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
     }
 
+    // UPLOAD NYICIL 1-1 KE APPS SCRIPT
     document.getElementById('inputFoto').onchange = async function(e) {
       const file = e.target.files[0];
       if (!file) return;
@@ -179,9 +184,12 @@
 
       try {
         const base64 = await compressImage(file);
-        const url = await uploadKeImgur(base64);
+        const hasil = await uploadKeAppsScript(base64, file.name, file.type);
 
-        fotoUrls.push(url);
+        if (hasil.status === 'gagal') throw new Error(hasil.pesan);
+
+        idMobil = hasil.id; // SIMPEN ID BUAT FOTO BERIKUTNYA
+        fotoUrls.push(hasil.url);
         loadingDiv.remove();
         renderPreview();
 
@@ -226,6 +234,7 @@
     }
 
     function hapusFoto(index) {
+      if (!confirm('Yakin mau hapus foto ini? Data di Sheet gak ikut kehapus ya bro.')) return;
       fotoUrls.splice(index, 1);
       renderPreview();
       const btnPilih = document.getElementById('btnPilihFoto');
@@ -259,72 +268,58 @@
       });
     }
 
-    async function uploadKeImgur(base64) {
-      const res = await fetch('https://api.imgur.com/3/image', {
+    // KIRIM BASE64 KE APPS SCRIPT, BIAR APPS SCRIPT YANG UPLOAD KE IMGUR
+    async function uploadKeAppsScript(base64, name, mimeType) {
+      const formData = new FormData(document.getElementById('formMobil'));
+      const data = Object.fromEntries(formData.entries());
+
+      data.no_wa_sales = fixNomorWA(data.no_wa_sales);
+      data.slug_showroom = showroom.id;
+      data.email_pengisi = showroom.email;
+
+      const payload = {
+        data: idMobil? {} : data, // Kirim data lengkap cuma di foto pertama
+        file: {
+          name: name,
+          mimeType: mimeType,
+          base64: base64
+        },
+        idMobil: idMobil // Kosong pas foto pertama, ada isi pas foto ke-2 dst
+      };
+
+      const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Authorization': 'Client-ID ' + IMGUR_CLIENT_ID },
-        body: new URLSearchParams({ image: base64, type: 'base64' })
+        body: JSON.stringify(payload)
       });
-      const data = await res.json();
-      if(!data.success) throw new Error(data.data.error || 'Upload gagal');
-      return data.data.link;
+      return await res.json();
     }
 
     document.getElementById('formMobil').onsubmit = async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('btnSimpan');
       const status = document.getElementById('status');
 
-      if (fotoUrls.length === 0) {
+      if (!idMobil) {
         status.className = 'error';
-        status.innerText = 'Upload minimal 1 foto dulu bro!';
+        status.innerText = 'Upload minimal 1 foto dulu bro! Data mobil kesimpen pas upload foto pertama.';
         return;
       }
 
-      btn.disabled = true;
-      btn.innerText = 'Menyimpan...';
-      status.className = 'info';
-      status.innerText = 'Simpan ke database...';
+      status.className = 'sukses';
+      status.innerText = `Mobil udah kesimpen! ID: ${idMobil}`;
 
-      try {
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-
-        data.no_wa_sales = fixNomorWA(data.no_wa_sales);
-        data.slug_showroom = showroom.id;
-        data.email_pengisi = showroom.email;
-        data.nama_showroom = showroom.nama;
-
-        for(let i = 0; i < 6; i++) {
-          data[`foto_${i+1}`] = fotoUrls[i] || '';
-        }
-
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          body: JSON.stringify(data)
-        });
-        const hasil = await res.json();
-
-        if (hasil.status === 'gagal') throw new Error(hasil.pesan);
-
-        status.className = 'sukses';
-        status.innerText = `Berhasil! ID: ${hasil.id}`;
+      // Reset form
+      setTimeout(() => {
         e.target.reset();
         document.getElementById('preview').innerHTML = '';
         document.getElementById('countFoto').innerText = '0/6 foto';
         document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
         fotoUrls = [];
+        idMobil = '';
         document.getElementById('btnPilihFoto').innerText = '📷 Upload Foto 1';
         document.getElementById('btnPilihFoto').disabled = false;
-
-      } catch (err) {
-        console.error('ERROR:', err);
-        status.className = 'error';
-        status.innerText = 'Gagal: ' + err.message;
-      } finally {
-        btn.disabled = false;
-        btn.innerText = 'Simpan Mobil';
-      }
+        status.innerText = '';
+        status.className = '';
+      }, 2000);
     }
 
     function fixNomorWA(nomor) {
