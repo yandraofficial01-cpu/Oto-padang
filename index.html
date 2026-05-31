@@ -91,10 +91,10 @@
 .slider{position:relative;width:100%;height:240px;background:#000;overflow:hidden;touch-action:pan-y}
 .slides{display:flex;height:100%;transition:transform.4s ease;will-change:transform}
 .slides img{width:100%;height:100%;object-fit:cover;flex-shrink:0;user-select:none;-webkit-user-drag:none;cursor:pointer}
-.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;backdrop-filter:blur(5px);z-index:2}
+.slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;backdrop-filter:blur(5px);z-index:4}
 .slider-btn:hover{background:rgba(0,0,0,.8)}
 .prev{left:12px}.next{right:12px}
-.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:2}
+.dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:4}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer}
 .dot.active{background:#fff}
 
@@ -102,6 +102,53 @@
 .badge{background:var(--primary);padding:6px 12px;border-radius:8px;font-size:12px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;font-weight:700;color:#fff}
 .badge.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);box-shadow:0 4px 12px rgba(255,59,48,.4);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+
+/* FRAME EMAS KELILING FOTO BUAT HOT DEAL */
+.card.hot-item.slider {
+  position: relative;
+}
+.card.hot-item.slider::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: -3px; right: -3px; bottom: -3px;
+  background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700, #FF8C00);
+  background-size: 400% 400%;
+  border-radius: 20px;
+  z-index: 1;
+  animation: goldGlow 3s ease infinite;
+}
+@keyframes goldGlow {
+  0%,100% { background-position: 0% 50%; opacity: 1; }
+  50% { background-position: 100% 50%; opacity: 0.7; }
+}
+.card.hot-item.slider.slides {
+  position: relative;
+  z-index: 2;
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+/* BADGE PREMIUM NEMPEL DI FOTO */
+.badge.hot-premium {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: linear-gradient(135deg, #FFD700, #FF8C00);
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  z-index: 3;
+  box-shadow: 0 4px 16px rgba(255, 215, 0,.6);
+  border: 2px solid rgba(255,255,255,.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,.2);
+  animation: badgePulse 2s infinite;
+}
+@keyframes badgePulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
 
 .card h3{font-size:22px;margin-bottom:8px}
 .harga{color:var(--green);font-weight:800;font-size:26px;margin:12px 0}
@@ -123,7 +170,7 @@
 .lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center}
 .lightbox.active{display:flex}
 .lightbox-img{max-width:90%;max-height:90%;object-fit:contain;transition:transform.2s;touch-action:none}
-.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px)}
+.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px)}
 .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:28px;cursor:pointer;backdrop-filter:blur(10px)}
 .lightbox-prev{left:20px}.lightbox-next{right:20px}
 .lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:20px;font-size:14px}
@@ -161,13 +208,11 @@
   <div class="header-actions">
     <input type="text" class="search" id="search" placeholder="🔍 Cari Avanza, 2019, Manual..." oninput="filterData()">
 
-    <!-- DROPDOWN DAFTAR SHOWROOM BUAT PEMBELI -->
     <div class="dropdown">
       <button class="dropdown-btn" onclick="toggleDropdown('daftarShowroomMenu')">🏪 Daftar Showroom ▼</button>
       <div class="dropdown-menu" id="daftarShowroomMenu"></div>
     </div>
 
-    <!-- DROPDOWN MENU ADMIN - CUMA LOGIN AJA -->
     <div class="dropdown">
       <button class="dropdown-btn" onclick="toggleDropdown('showroomMenu')">🔐 Login Showroom ▼</button>
       <div class="dropdown-menu" id="showroomMenu">
@@ -196,9 +241,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toast">Link berhasil disalin!</div>
-
-<script>
+  <div class="toast" id="toast">Link berhasil disalin!</div><script>
 const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
 const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 let semuaMobilGlobal = [];
@@ -206,7 +249,10 @@ let semuaShowroomGlobal = [];
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
 
-// DROPDOWN TOGGLE
+function safeString(val) {
+  return val? val.toString().trim() : '';
+}
+
 function toggleDropdown(id){
   document.querySelectorAll('.dropdown-menu').forEach(m => {
     if(m.id!== id) m.classList.remove('show');
@@ -214,7 +260,6 @@ function toggleDropdown(id){
   document.getElementById(id).classList.toggle('show');
 }
 
-// TUTUP DROPDOWN KLIK LUAR
 window.onclick = function(e) {
   if (!e.target.matches('.dropdown-btn')) {
     document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
@@ -241,24 +286,18 @@ async function ambilDataSheet(gid) {
   });
 }
 
-// FIX 1: BISA BACA GOOGLE DRIVE + IMGUR
 function fixImgurUrl(url) {
   if(!url) return '';
-
-  // Google Drive: https://drive.google.com/file/d/FILE_ID/view
   if(url.includes('drive.google.com')) {
     const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if(match && match[1]) {
       return `https://drive.google.com/uc?export=view&id=${match[1]}`;
     }
   }
-
-  // Imgur: https://imgur.com/abc jadi i.imgur.com/abc.jpg
   if(url.includes('imgur.com/') &&!url.includes('i.imgur.com')) {
     const id = url.split('/').pop().split('.')[0];
     return `https://i.imgur.com/${id}.jpg`;
   }
-
   return url;
 }
 
@@ -271,12 +310,11 @@ function getAllImages(mobil) {
   return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=OTO+PADANG'];
 }
 
-// FIX 2: BENERIN SEMUA FORMAT NOMOR WA
 function fixNomorWA(nomor) {
   if(!nomor) return '';
-  let wa = nomor.toString().replace(/[^0-9]/g, ''); // hapus +, -, spasi
-  if(wa.startsWith('0')) wa = '62' + wa.substring(1); // 08xxx jadi 628xxx
-  if(wa.startsWith('8')) wa = '62' + wa; // 8xxx jadi 628xxx
+  let wa = nomor.toString().replace(/[^0-9]/g, '');
+  if(wa.startsWith('0')) wa = '62' + wa.substring(1);
+  if(wa.startsWith('8')) wa = '62' + wa;
   if(!wa.startsWith('62')) wa = '62' + wa;
   return wa;
 }
@@ -311,7 +349,6 @@ async function init() {
   }
 }
 
-// RENDER DROPDOWN DAFTAR SHOWROOM BUAT PEMBELI
 function renderDaftarShowroom(showroomList) {
   const div = document.getElementById('daftarShowroomMenu');
   const showroomAdaDomain = showroomList.filter(s => s.domain_showroom);
@@ -349,7 +386,6 @@ function renderMobil(data) {
     const sliderId = `slider-${m.timestamp || idx}-${idx}`;
     const imgData = JSON.stringify(images).replace(/"/g, '&quot;');
 
-    // Pake no_wa_sales kalo ada, kalo gak ada pake wa_admin
     const nomorWA = m.no_wa_sales? fixNomorWA(m.no_wa_sales) : m.wa_admin;
 
     const waButton = nomorWA?
@@ -371,9 +407,15 @@ function renderMobil(data) {
       </a>
     ` : '';
 
+    // CEK APAKAH HOT DEAL
+    const isHot = safeString(m.tag).toLowerCase() === 'hot';
+    const hotClass = isHot? 'hot-item' : '';
+    const badgeHotPremium = isHot? `<div class="badge hot-premium">👑 HOT DEAL</div>` : '';
+
     return `
-    <div class="card">
+    <div class="card ${hotClass}">
       <div class="slider" id="${sliderId}" data-current="0">
+        ${badgeHotPremium}
         <div class="slides">
           ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightbox(${imgData}, ${i})' onerror="this.src='https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'">`).join('')}
         </div>
