@@ -241,28 +241,48 @@ async function ambilDataSheet(gid) {
   });
 }
 
-function getAllImages(mobil) {
-  const urls = [];
-  // FIX: pake foto_1, foto_2, dst sesuai sheet lu
-  for(let i = 1; i <= 6; i++) {
-    const key = `foto_${i}`;
-    if(mobil[key]) urls.push(fixImgurUrl(mobil[key]));
-  }
-  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=OTO+PADANG'];
-}
-
+// FIX 1: BISA BACA GOOGLE DRIVE + IMGUR
 function fixImgurUrl(url) {
   if(!url) return '';
+
+  // Google Drive: https://drive.google.com/file/d/FILE_ID/view
+  if(url.includes('drive.google.com')) {
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if(match && match[1]) {
+      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+  }
+
+  // Imgur: https://imgur.com/abc jadi i.imgur.com/abc.jpg
   if(url.includes('imgur.com/') &&!url.includes('i.imgur.com')) {
     const id = url.split('/').pop().split('.')[0];
     return `https://i.imgur.com/${id}.jpg`;
   }
+
   return url;
+}
+
+function getAllImages(mobil) {
+  const urls = [];
+  for(let i = 1; i <= 6; i++) {
+    const key = `foto_${i}`;
+    if(mobil[key] && mobil[key]!== '') urls.push(fixImgurUrl(mobil[key]));
+  }
+  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=OTO+PADANG'];
+}
+
+// FIX 2: BENERIN SEMUA FORMAT NOMOR WA
+function fixNomorWA(nomor) {
+  if(!nomor) return '';
+  let wa = nomor.toString().replace(/[^0-9]/g, ''); // hapus +, -, spasi
+  if(wa.startsWith('0')) wa = '62' + wa.substring(1); // 08xxx jadi 628xxx
+  if(wa.startsWith('8')) wa = '62' + wa; // 8xxx jadi 628xxx
+  if(!wa.startsWith('62')) wa = '62' + wa;
+  return wa;
 }
 
 async function init() {
   try {
-    // FIX: GID PAKET_SHOWROOM = 490587314
     semuaShowroomGlobal = (await ambilDataSheet('490587314')).filter(s => s.nama_showroom);
 
     const promisesMobil = semuaShowroomGlobal.filter(s => {
@@ -270,12 +290,12 @@ async function init() {
     }).map(async (showroom) => {
       const gid = showroom.sheet_gid.toString().trim();
       const mobil = await ambilDataSheet(gid);
-      return mobil.filter(m => m.merk).map(m => ({...m,...showroom}));
+      const wa_admin_bener = fixNomorWA(showroom.wa_admin);
+      return mobil.filter(m => m.merk).map(m => ({...m,...showroom, wa_admin: wa_admin_bener}));
     });
 
     const semuaData = await Promise.all(promisesMobil);
 
-    // FIX: Pake status_anak atau status_induk = READY
     semuaMobilGlobal = semuaData.flat().filter(m => {
       const statusAnak = m.status_anak? m.status_anak.toString().toLowerCase().trim() : '';
       const statusInduk = m.status_induk? m.status_induk.toString().toLowerCase().trim() : '';
@@ -328,12 +348,20 @@ function renderMobil(data) {
     const images = getAllImages(m);
     const sliderId = `slider-${m.timestamp || idx}-${idx}`;
     const imgData = JSON.stringify(images).replace(/"/g, '&quot;');
+
+    // Pake no_wa_sales kalo ada, kalo gak ada pake wa_admin
+    const nomorWA = m.no_wa_sales? fixNomorWA(m.no_wa_sales) : m.wa_admin;
+
+    const waButton = nomorWA?
+      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">💬 Chat WA ${m.nama_showroom}</a>` :
+      `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
+
     const shareData = {
       id: m.timestamp,
       title: `${m.merk} ${m.tipe} ${m.tahun}`,
       harga: `Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}`,
       showroom: m.nama_showroom,
-      wa: m.wa_admin,
+      wa: nomorWA,
       img: images[0]
     };
 
@@ -347,7 +375,7 @@ function renderMobil(data) {
     <div class="card">
       <div class="slider" id="${sliderId}" data-current="0">
         <div class="slides">
-          ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightbox(${imgData}, ${i})' onerror="this.src='https://via.placeholder.com/400x240/ff3b30/fff?text=ERROR'">`).join('')}
+          ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightbox(${imgData}, ${i})' onerror="this.src='https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'">`).join('')}
         </div>
         ${images.length > 1? `
           <button class="slider-btn prev" onclick="slide('${sliderId}', -1)">‹</button>
@@ -369,7 +397,7 @@ function renderMobil(data) {
         </div>
         <p class="desc">${m.deskripsi || ''}</p>
         <div class="btn-group">
-          <a href="https://wa.me/${m.wa_admin}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">💬 Chat WA ${m.nama_showroom}</a>
+          ${waButton}
           <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>📤</button>
         </div>
         ${btnKeShowroom}
@@ -384,7 +412,7 @@ function openShareModal(data) {
   const modal = document.getElementById('shareModal');
   const grid = document.getElementById('shareGrid');
   const text = `${data.title} - ${data.harga} | ${data.showroom}`;
-  const waLink = `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}`;
+  const waLink = data.wa? `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}` : '#';
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
 
@@ -414,7 +442,6 @@ function openShareModal(data) {
       <div class="share-label">Copy Link</div>
     </a>
   `;
-
   modal.classList.add('active');
 }
 
