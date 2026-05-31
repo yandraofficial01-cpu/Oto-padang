@@ -18,15 +18,17 @@
 .info { background: #cce5ff; color: #004085; }
 .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
-.preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-.preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
+.preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+.preview-item { position: relative; aspect-ratio: 1; }
+.preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
+.preview.hapus { position: absolute; top: -6px; right: -6px; background: #e41e3f; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; }
+.preview.loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
 .row { display: flex; gap: 10px; }
 .row div { flex: 1; }
 .required::after { content: " *"; color: red; }
-.count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
+.count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; font-weight: bold; }
     input[type=file]{display:none}
-.progress-bar { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-.progress-fill { height: 100%; background: #1877f2; width: 0%; transition: width 0.3s; }
+.btn-upload { background: #28a745; }
   </style>
 </head>
 <body>
@@ -57,6 +59,7 @@
             <option value="">Pilih</option>
             <option>Automatic</option>
             <option>Manual</option>
+            <option>CVT</option>
           </select>
         </div>
       </div>
@@ -115,11 +118,12 @@
       <label>Lokasi Showroom</label>
       <input type="text" name="lokasi_showroom" id="lokasi_showroom" placeholder="Padang Timur">
 
-      <label class="required">Upload Foto Mobil - Max 6 foto</label>
-      <input type="file" id="foto" name="foto" accept="image/*" multiple required>
-      <button type="button" style="background:#28a745" onclick="document.getElementById('foto').click()">📷 Pilih Foto dari Galeri</button>
-      <div class="count-foto" id="countFoto">Belum ada foto dipilih</div>
-      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+      <label class="required">Foto Mobil - Upload 1 per 1</label>
+      <input type="file" id="inputFoto" accept="image/*">
+      <button type="button" class="btn-upload" id="btnPilihFoto" onclick="document.getElementById('inputFoto').click()">
+        📷 Upload Foto 1
+      </button>
+      <div class="count-foto" id="countFoto">0/6 foto</div>
       <div class="preview" id="preview"></div>
 
       <label>Deskripsi</label>
@@ -137,11 +141,10 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
-    const IMGUR_CLIENT_ID = '546c25a59c58ad7'; // Client ID gratis, bebas pake
+    const IMGUR_CLIENT_ID = '546c25a59c58ad7';
     const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
-    let fotoFiles = [];
+    let fotoUrls = [];
 
-    // CEK LOGIN
     if (!showroom.id) {
       alert('Sesi habis atau belum login. Silakan login ulang.');
       window.location.href = 'login.html';
@@ -150,30 +153,86 @@
       document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
     }
 
-    // Preview foto + simpen file
-    document.getElementById('foto').onchange = function(e) {
-      const files = Array.from(e.target.files);
-      const preview = document.getElementById('preview');
-      const countFoto = document.getElementById('countFoto');
+    document.getElementById('inputFoto').onchange = async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
 
-      if (fotoFiles.length + files.length > 6) {
+      if (fotoUrls.length >= 6) {
         alert('Maksimal 6 foto bro!');
         this.value = '';
         return;
       }
 
-      files.forEach(file => {
-        fotoFiles.push(file);
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        preview.appendChild(img);
-      });
+      const btnPilih = document.getElementById('btnPilihFoto');
+      const status = document.getElementById('status');
+      const preview = document.getElementById('preview');
 
-      countFoto.innerText = `${fotoFiles.length}/6 foto dipilih`;
-      this.value = ''; // Reset biar bisa pilih file yg sama lagi
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'preview-item';
+      loadingDiv.innerHTML = '<div class="loading">Upload...</div>';
+      preview.appendChild(loadingDiv);
+
+      btnPilih.disabled = true;
+      btnPilih.innerText = 'Uploading...';
+      status.className = 'info';
+      status.innerText = `Upload foto ${fotoUrls.length + 1}...`;
+
+      try {
+        const base64 = await compressImage(file);
+        const url = await uploadKeImgur(base64);
+
+        fotoUrls.push(url);
+        loadingDiv.remove();
+        renderPreview();
+
+        status.className = 'sukses';
+        status.innerText = `Foto ${fotoUrls.length} berhasil!`;
+
+        if(fotoUrls.length < 6) {
+          btnPilih.innerText = `📷 Upload Foto ${fotoUrls.length + 1}`;
+        } else {
+          btnPilih.innerText = '✅ Maksimal 6 Foto';
+          btnPilih.disabled = true;
+        }
+
+        setTimeout(() => {
+          status.innerText = '';
+          status.className = '';
+        }, 2000);
+
+      } catch (err) {
+        console.error('Upload error:', err);
+        loadingDiv.remove();
+        status.className = 'error';
+        status.innerText = 'Gagal: ' + err.message;
+      } finally {
+        btnPilih.disabled = fotoUrls.length >= 6;
+        if(fotoUrls.length < 6) btnPilih.innerText = `📷 Upload Foto ${fotoUrls.length + 1}`;
+        this.value = '';
+      }
     };
 
-    // KOMPRES FOTO BIAR CEPET UPLOAD
+    function renderPreview() {
+      const preview = document.getElementById('preview');
+      const countFoto = document.getElementById('countFoto');
+
+      countFoto.innerText = `${fotoUrls.length}/6 foto`;
+      preview.innerHTML = fotoUrls.map((url, i) => `
+        <div class="preview-item">
+          <img src="${url}">
+          <button type="button" class="hapus" onclick="hapusFoto(${i})">×</button>
+        </div>
+      `).join('');
+    }
+
+    function hapusFoto(index) {
+      fotoUrls.splice(index, 1);
+      renderPreview();
+      const btnPilih = document.getElementById('btnPilihFoto');
+      btnPilih.disabled = false;
+      btnPilih.innerText = `📷 Upload Foto ${fotoUrls.length + 1}`;
+    }
+
     async function compressImage(file) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -200,107 +259,68 @@
       });
     }
 
-    // UPLOAD KE IMGUR - RETURN LINK LANGSUNG
     async function uploadKeImgur(base64) {
       const res = await fetch('https://api.imgur.com/3/image', {
         method: 'POST',
-        headers: { 'Authorization': `Client-ID ${IMGUR_CLIENT_ID}` },
+        headers: { 'Authorization': 'Client-ID ' + IMGUR_CLIENT_ID },
         body: new URLSearchParams({ image: base64, type: 'base64' })
       });
       const data = await res.json();
-      if(!data.success) throw new Error('Upload Imgur gagal');
-      return data.data.link; // Hasil: https://i.imgur.com/xxx.jpg
+      if(!data.success) throw new Error(data.data.error || 'Upload gagal');
+      return data.data.link;
     }
 
-    // Submit form
     document.getElementById('formMobil').onsubmit = async (e) => {
       e.preventDefault();
       const btn = document.getElementById('btnSimpan');
       const status = document.getElementById('status');
-      const progressBar = document.getElementById('progressBar');
-      const progressFill = document.getElementById('progressFill');
 
-      if (fotoFiles.length === 0) {
+      if (fotoUrls.length === 0) {
         status.className = 'error';
-        status.innerText = 'PILIH FOTO DULU BRO! Minimal 1';
-        return;
-      }
-
-      if (!showroom.id) {
-        status.className = 'error';
-        status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
+        status.innerText = 'Upload minimal 1 foto dulu bro!';
         return;
       }
 
       btn.disabled = true;
-      btn.innerText = 'Proses...';
+      btn.innerText = 'Menyimpan...';
       status.className = 'info';
-      progressBar.style.display = 'block';
+      status.innerText = 'Simpan ke database...';
 
       try {
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
-        delete data.foto;
 
-        // Fix nomor WA jadi 62xxx
         data.no_wa_sales = fixNomorWA(data.no_wa_sales);
-
-        // UPLOAD SEMUA FOTO KE IMGUR DULU
-        const urlsFoto = [];
-        for (let i = 0; i < fotoFiles.length; i++) {
-          status.innerText = `Upload foto ${i+1}/${fotoFiles.length} ke Imgur...`;
-          progressFill.style.width = `${((i+1)/fotoFiles.length)*50}%`; // 50% buat upload
-
-          const base64 = await compressImage(fotoFiles[i]);
-          const url = await uploadKeImgur(base64);
-          urlsFoto.push(url);
-        }
-
-        // Masukkin link Imgur ke foto_1 sampe foto_6
-        for(let i = 0; i < 6; i++) {
-          data[`foto_${i+1}`] = urlsFoto[i] || '';
-        }
-
         data.slug_showroom = showroom.id;
         data.email_pengisi = showroom.email;
         data.nama_showroom = showroom.nama;
-        data.status_anak = 'READY';
-        data.status_induk = 'READY';
-        data.timestamp = Date.now().toString();
 
-        status.innerText = 'Simpan ke database...';
-        progressFill.style.width = '75%';
+        for(let i = 0; i < 6; i++) {
+          data[`foto_${i+1}`] = fotoUrls[i] || '';
+        }
 
         const res = await fetch(API_URL, {
           method: 'POST',
-          body: JSON.stringify({
-            action: 'insert',
-            data: data
-          })
+          body: JSON.stringify(data)
         });
         const hasil = await res.json();
 
         if (hasil.status === 'gagal') throw new Error(hasil.pesan);
 
-        progressFill.style.width = '100%';
         status.className = 'sukses';
-        status.innerText = `Berhasil! Mobil udah tayang`;
+        status.innerText = `Berhasil! ID: ${hasil.id}`;
         e.target.reset();
         document.getElementById('preview').innerHTML = '';
-        document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
+        document.getElementById('countFoto').innerText = '0/6 foto';
         document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
-        fotoFiles = [];
-
-        setTimeout(() => {
-          progressBar.style.display = 'none';
-          progressFill.style.width = '0%';
-        }, 2000);
+        fotoUrls = [];
+        document.getElementById('btnPilihFoto').innerText = '📷 Upload Foto 1';
+        document.getElementById('btnPilihFoto').disabled = false;
 
       } catch (err) {
+        console.error('ERROR:', err);
         status.className = 'error';
         status.innerText = 'Gagal: ' + err.message;
-        console.error(err);
-        progressBar.style.display = 'none';
       } finally {
         btn.disabled = false;
         btn.innerText = 'Simpan Mobil';
