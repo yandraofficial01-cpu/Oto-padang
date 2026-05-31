@@ -6,24 +6,27 @@
   <title>Input Mobil - Oto Padang</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-  .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+.box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
     h2 { text-align: center; color: #1877f2; margin-bottom: 5px; }
     #namaShowroom { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
     input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; padding: 8px; border-radius: 6px; }
-  .sukses { background: #d4edda; color: #155724; }
-  .error { background: #f8d7da; color: #721c24; }
-  .info { background: #cce5ff; color: #004085; }
-  .logout { background: #e41e3f; margin-top: 5px; }
+.sukses { background: #d4edda; color: #155724; }
+.error { background: #f8d7da; color: #721c24; }
+.info { background: #cce5ff; color: #004085; }
+.logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
-  .preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
-  .preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
-  .row { display: flex; gap: 10px; }
-  .row div { flex: 1; }
-  .required::after { content: " *"; color: red; }
-  .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
+.preview { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; }
+.preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd; }
+.row { display: flex; gap: 10px; }
+.row div { flex: 1; }
+.required::after { content: " *"; color: red; }
+.count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; }
+    input[type=file]{display:none}
+.progress-bar { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+.progress-fill { height: 100%; background: #1877f2; width: 0%; transition: width 0.3s; }
   </style>
 </head>
 <body>
@@ -72,7 +75,7 @@
       <div class="row">
         <div>
           <label>Nopol</label>
-          <input type="text" name="nopol" placeholder="BA 1234 XX">
+          <input type="text" name="no_plat" placeholder="BA 1234 XX">
         </div>
         <div>
           <label>Bahan Bakar</label>
@@ -114,14 +117,16 @@
 
       <label class="required">Upload Foto Mobil - Max 6 foto</label>
       <input type="file" id="foto" name="foto" accept="image/*" multiple required>
+      <button type="button" style="background:#28a745" onclick="document.getElementById('foto').click()">📷 Pilih Foto dari Galeri</button>
       <div class="count-foto" id="countFoto">Belum ada foto dipilih</div>
+      <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
       <div class="preview" id="preview"></div>
 
       <label>Deskripsi</label>
       <textarea name="deskripsi" placeholder="Mobil mulus, pajak panjang" rows="3"></textarea>
 
       <label class="required">No WA Sales</label>
-      <input type="number" name="no_wa_sales" placeholder="81234567890" required>
+      <input type="text" name="no_wa_sales" placeholder="08123456789" required>
 
       <button type="submit" id="btnSimpan">Simpan Mobil</button>
     </form>
@@ -132,9 +137,11 @@
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbxIHPtVMgNH15qWC6DILtSYxFglgNWFa58E_c9tD98TRgORN74HC0BkqvD1de8XPKac/exec';
+    const IMGUR_CLIENT_ID = '546c25a59c58ad7'; // Client ID gratis, bebas pake
     const showroom = JSON.parse(localStorage.getItem('showroom') || '{}');
+    let fotoFiles = [];
 
-    // CEK LOGIN + CEK ID WAJIB ADA
+    // CEK LOGIN
     if (!showroom.id) {
       alert('Sesi habis atau belum login. Silakan login ulang.');
       window.location.href = 'login.html';
@@ -143,141 +150,169 @@
       document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
     }
 
-    // Preview foto + counter
+    // Preview foto + simpen file
     document.getElementById('foto').onchange = function(e) {
+      const files = Array.from(e.target.files);
       const preview = document.getElementById('preview');
       const countFoto = document.getElementById('countFoto');
-      preview.innerHTML = '';
 
-      if (this.files.length === 0) {
-        countFoto.innerText = 'Belum ada foto dipilih';
-        return;
-      }
-
-      if (this.files.length > 6) {
+      if (fotoFiles.length + files.length > 6) {
         alert('Maksimal 6 foto bro!');
         this.value = '';
-        countFoto.innerText = 'Belum ada foto dipilih';
         return;
       }
 
-      countFoto.innerText = `${this.files.length} foto dipilih`;
-
-      [...this.files].forEach(file => {
+      files.forEach(file => {
+        fotoFiles.push(file);
         const img = document.createElement('img');
         img.src = URL.createObjectURL(file);
         preview.appendChild(img);
       });
+
+      countFoto.innerText = `${fotoFiles.length}/6 foto dipilih`;
+      this.value = ''; // Reset biar bisa pilih file yg sama lagi
     };
 
-    // KOMPRES + CONVERT KE BASE64 - BIAR GAK GEDE
-    async function convertFileToBase64(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-
-                    // Max 1200px biar ukuran kecil
-                    const MAX_WIDTH = 1200;
-                    if (width > MAX_WIDTH) {
-                        height = height * (MAX_WIDTH / width);
-                        width = MAX_WIDTH;
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Kompres ke 70% quality
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
-                    resolve(compressedBase64);
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        });
+    // KOMPRES FOTO BIAR CEPET UPLOAD
+    async function compressImage(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+            const MAX_WIDTH = 1200;
+            if (width > MAX_WIDTH) {
+              height = height * (MAX_WIDTH / width);
+              width = MAX_WIDTH;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.7).split(',')[1]);
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
-    // Submit form - UPLOAD NYICIL 1-1
+    // UPLOAD KE IMGUR - RETURN LINK LANGSUNG
+    async function uploadKeImgur(base64) {
+      const res = await fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: { 'Authorization': `Client-ID ${IMGUR_CLIENT_ID}` },
+        body: new URLSearchParams({ image: base64, type: 'base64' })
+      });
+      const data = await res.json();
+      if(!data.success) throw new Error('Upload Imgur gagal');
+      return data.data.link; // Hasil: https://i.imgur.com/xxx.jpg
+    }
+
+    // Submit form
     document.getElementById('formMobil').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('btnSimpan');
-        const status = document.getElementById('status');
-        const fileInput = document.getElementById('foto');
+      e.preventDefault();
+      const btn = document.getElementById('btnSimpan');
+      const status = document.getElementById('status');
+      const progressBar = document.getElementById('progressBar');
+      const progressFill = document.getElementById('progressFill');
 
-        if (fileInput.files.length === 0) {
-            status.className = 'error';
-            status.innerText = 'PILIH FOTO DULU BRO! Minimal 1, maksimal 6';
-            return;
+      if (fotoFiles.length === 0) {
+        status.className = 'error';
+        status.innerText = 'PILIH FOTO DULU BRO! Minimal 1';
+        return;
+      }
+
+      if (!showroom.id) {
+        status.className = 'error';
+        status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Proses...';
+      status.className = 'info';
+      progressBar.style.display = 'block';
+
+      try {
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        delete data.foto;
+
+        // Fix nomor WA jadi 62xxx
+        data.no_wa_sales = fixNomorWA(data.no_wa_sales);
+
+        // UPLOAD SEMUA FOTO KE IMGUR DULU
+        const urlsFoto = [];
+        for (let i = 0; i < fotoFiles.length; i++) {
+          status.innerText = `Upload foto ${i+1}/${fotoFiles.length} ke Imgur...`;
+          progressFill.style.width = `${((i+1)/fotoFiles.length)*50}%`; // 50% buat upload
+
+          const base64 = await compressImage(fotoFiles[i]);
+          const url = await uploadKeImgur(base64);
+          urlsFoto.push(url);
         }
 
-        if (!showroom.id) {
-            status.className = 'error';
-            status.innerText = 'ID Showroom kosong. Logout & Login ulang bro!';
-            return;
+        // Masukkin link Imgur ke foto_1 sampe foto_6
+        for(let i = 0; i < 6; i++) {
+          data[`foto_${i+1}`] = urlsFoto[i] || '';
         }
 
-        btn.disabled = true;
-        btn.innerText = 'Proses...';
-        status.className = 'info';
+        data.slug_showroom = showroom.id;
+        data.email_pengisi = showroom.email;
+        data.nama_showroom = showroom.nama;
+        data.status_anak = 'READY';
+        data.status_induk = 'READY';
+        data.timestamp = Date.now().toString();
 
-        try {
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-            delete data.foto;
-            data.slug_showroom = showroom.id;
-            data.email_pengisi = showroom.email;
-            data.nama_showroom = showroom.nama;
+        status.innerText = 'Simpan ke database...';
+        progressFill.style.width = '75%';
 
-            let idMobil = null;
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'insert',
+            data: data
+          })
+        });
+        const hasil = await res.json();
 
-            // KIRIM 1 PER 1 BIAR GAK TIMEOUT
-            for (let i = 0; i < fileInput.files.length; i++) {
-                const file = fileInput.files[i];
-                status.innerText = `Kompres & upload foto ${i+1}/${fileInput.files.length}...`;
+        if (hasil.status === 'gagal') throw new Error(hasil.pesan);
 
-                const base64 = await convertFileToBase64(file);
+        progressFill.style.width = '100%';
+        status.className = 'sukses';
+        status.innerText = `Berhasil! Mobil udah tayang`;
+        e.target.reset();
+        document.getElementById('preview').innerHTML = '';
+        document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
+        document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
+        fotoFiles = [];
 
-                const payload = {
-                    data: i === 0 ? data : {}, // data cuma dikirim di foto pertama
-                    idMobil: idMobil, // buat nempel ke baris yg sama
-                    file: {
-                        name: file.name,
-                        mimeType: 'image/jpeg', // udah di-compress jadi jpeg
-                        base64: base64
-                    }
-                };
+        setTimeout(() => {
+          progressBar.style.display = 'none';
+          progressFill.style.width = '0%';
+        }, 2000);
 
-                const res = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                const hasil = await res.json();
+      } catch (err) {
+        status.className = 'error';
+        status.innerText = 'Gagal: ' + err.message;
+        console.error(err);
+        progressBar.style.display = 'none';
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Simpan Mobil';
+      }
+    }
 
-                if (hasil.status === 'gagal') throw new Error(hasil.pesan);
-                if (i === 0) idMobil = hasil.id; // simpen id dari foto pertama
-            }
-
-            status.className = 'sukses';
-            status.innerText = `Berhasil! ID: ${idMobil} | Foto: ${fileInput.files.length}`;
-            e.target.reset();
-            document.getElementById('preview').innerHTML = '';
-            document.getElementById('countFoto').innerText = 'Belum ada foto dipilih';
-            document.getElementById('lokasi_showroom').value = showroom.lokasi || '';
-
-        } catch (err) {
-            status.className = 'error';
-            status.innerText = 'Gagal: ' + err.message;
-            console.error(err);
-        } finally {
-            btn.disabled = false;
-            btn.innerText = 'Simpan Mobil';
-        }
+    function fixNomorWA(nomor) {
+      let wa = nomor.toString().replace(/[^0-9]/g, '');
+      if(wa.startsWith('0')) wa = '62' + wa.substring(1);
+      if(wa.startsWith('8')) wa = '62' + wa;
+      if(!wa.startsWith('62')) wa = '62' + wa;
+      return wa;
     }
 
     function logout() {
