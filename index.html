@@ -243,8 +243,9 @@ async function ambilDataSheet(gid) {
 
 function getAllImages(mobil) {
   const urls = [];
+  // FIX: pake foto_1, foto_2, dst sesuai sheet lu
   for(let i = 1; i <= 6; i++) {
-    const key = i === 1? 'gambar_url' : `gambar_url_${i}`;
+    const key = `foto_${i}`;
     if(mobil[key]) urls.push(fixImgurUrl(mobil[key]));
   }
   return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=OTO+PADANG'];
@@ -261,23 +262,24 @@ function fixImgurUrl(url) {
 
 async function init() {
   try {
-    // GANTI GID INI SESUAI TAB PAKET_SHOWROOM LU
-    semuaShowroomGlobal = (await ambilDataSheet('490587314').filter(s => s.nama_showroom);
+    // FIX: GID PAKET_SHOWROOM = 490587314
+    semuaShowroomGlobal = (await ambilDataSheet('490587314')).filter(s => s.nama_showroom);
 
     const promisesMobil = semuaShowroomGlobal.filter(s => {
       return s.sheet_gid!== undefined && s.sheet_gid!== null && s.sheet_gid.toString().trim()!== '';
     }).map(async (showroom) => {
       const gid = showroom.sheet_gid.toString().trim();
       const mobil = await ambilDataSheet(gid);
-      return mobil.filter(m => m.id).map(m => ({...m,...showroom}));
+      return mobil.filter(m => m.merk).map(m => ({...m,...showroom}));
     });
 
     const semuaData = await Promise.all(promisesMobil);
 
-    // INI YANG GUA UBAH: DARI 'READY' JADI 'aktif'
+    // FIX: Pake status_anak atau status_induk = READY
     semuaMobilGlobal = semuaData.flat().filter(m => {
-      const status = m.status? m.status.toString().toLowerCase().trim() : '';
-      return status === 'aktif';
+      const statusAnak = m.status_anak? m.status_anak.toString().toLowerCase().trim() : '';
+      const statusInduk = m.status_induk? m.status_induk.toString().toLowerCase().trim() : '';
+      return statusAnak === 'ready' || statusInduk === 'ready';
     });
 
     renderDaftarShowroom(semuaShowroomGlobal);
@@ -309,7 +311,7 @@ function filterData() {
   let data = semuaMobilGlobal;
 
   if(keyword) data = data.filter(m =>
-    `${m.merk} ${m.tipenya} ${m.tahun}`.toLowerCase().includes(keyword) ||
+    `${m.merk} ${m.tipe} ${m.tahun}`.toLowerCase().includes(keyword) ||
     (m.transmisi || '').toLowerCase().includes(keyword) ||
     (m.deskripsi || '').toLowerCase().includes(keyword) ||
     (m.nama_showroom || '').toLowerCase().includes(keyword)
@@ -320,16 +322,16 @@ function filterData() {
 
 function renderMobil(data) {
   const div = document.getElementById('list-mobil');
-  if(data.length === 0) return div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Cek Console F12. Pastikan kolom status = aktif</div>';
+  if(data.length === 0) return div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Cek Console F12. Pastikan kolom status_anak = READY</div>';
 
   div.innerHTML = data.map((m, idx) => {
     const images = getAllImages(m);
-    const sliderId = `slider-${m.id}-${idx}`;
+    const sliderId = `slider-${m.timestamp || idx}-${idx}`;
     const imgData = JSON.stringify(images).replace(/"/g, '&quot;');
     const shareData = {
-      id: m.id,
-      title: `${m.merk} ${m.tipenya} ${m.tahun}`,
-      harga: `Rp ${Number(m.harga_jual || 0).toLocaleString('id-ID')}`,
+      id: m.timestamp,
+      title: `${m.merk} ${m.tipe} ${m.tahun}`,
+      harga: `Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}`,
       showroom: m.nama_showroom,
       wa: m.wa_admin,
       img: images[0]
@@ -356,18 +358,18 @@ function renderMobil(data) {
         ` : ''}
       </div>
       <div class="card-body">
-        <div class="badge ${m.hot === 'YA'? 'hot' : ''}">
-          ${m.hot === 'YA'? '🔥' : '🏪'} ${m.nama_showroom} ${m.hot === 'YA'? 'HOT' : ''}
+        <div class="badge">
+          🏪 ${m.nama_showroom}
         </div>
-        <h3>${m.merk} ${m.tipenya} ${m.tahun}</h3>
-        <div class="harga">Rp ${Number(m.harga_jual || 0).toLocaleString('id-ID')}</div>
+        <h3>${m.merk} ${m.tipe} ${m.tahun}</h3>
+        <div class="harga">Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}</div>
         <div class="spec">
           <span>⚙️ ${m.transmisi}</span><span>⛽ ${m.bahan_bakar}</span>
           <span>🎨 ${m.warna}</span><span>🛣️ ${Number(m.km || 0).toLocaleString('id-ID')} KM</span>
         </div>
         <p class="desc">${m.deskripsi || ''}</p>
         <div class="btn-group">
-          <a href="https://wa.me/${m.wa_admin}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipenya} ${m.tahun} kode:${m.id}" class="wa-btn" target="_blank">💬 Chat WA ${m.nama_showroom}</a>
+          <a href="https://wa.me/${m.wa_admin}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">💬 Chat WA ${m.nama_showroom}</a>
           <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>📤</button>
         </div>
         ${btnKeShowroom}
@@ -382,7 +384,7 @@ function openShareModal(data) {
   const modal = document.getElementById('shareModal');
   const grid = document.getElementById('shareGrid');
   const text = `${data.title} - ${data.harga} | ${data.showroom}`;
-  const waLink = `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title} kode:${data.id}`;
+  const waLink = `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}`;
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
 
