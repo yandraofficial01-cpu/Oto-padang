@@ -261,6 +261,7 @@ function fixImgurUrl(url) {
 
 async function init() {
   try {
+    // GANTI GID INI SESUAI TAB PAKET_SHOWROOM LU
     semuaShowroomGlobal = (await ambilDataSheet('72239375')).filter(s => s.nama_showroom);
 
     const promisesMobil = semuaShowroomGlobal.filter(s => {
@@ -273,9 +274,10 @@ async function init() {
 
     const semuaData = await Promise.all(promisesMobil);
 
+    // INI YANG GUA UBAH: DARI 'READY' JADI 'aktif'
     semuaMobilGlobal = semuaData.flat().filter(m => {
-      const status = m.status? m.status.toString().toUpperCase().trim() : '';
-      return status === 'READY';
+      const status = m.status? m.status.toString().toLowerCase().trim() : '';
+      return status === 'aktif';
     });
 
     renderDaftarShowroom(semuaShowroomGlobal);
@@ -318,7 +320,7 @@ function filterData() {
 
 function renderMobil(data) {
   const div = document.getElementById('list-mobil');
-  if(data.length === 0) return div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Cek Console F12. Pastikan kolom status = READY</div>';
+  if(data.length === 0) return div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Cek Console F12. Pastikan kolom status = aktif</div>';
 
   div.innerHTML = data.map((m, idx) => {
     const images = getAllImages(m);
