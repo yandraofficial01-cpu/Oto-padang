@@ -16,7 +16,7 @@
       margin: 0;
       padding: 20px;
     }
- .box {
+.box {
       background: white;
       padding: 35px 30px;
       border-radius: 16px;
@@ -25,9 +25,9 @@
       max-width: 360px;
       text-align: center;
     }
- .logo { font-size: 32px; margin-bottom: 5px; }
- .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
- .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
+.logo { font-size: 32px; margin-bottom: 5px; }
+.welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
+.subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
     h2 { color: #1c1e21; margin: 0 0 20px 0; font-size: 22px; }
     input {
       width: 100%; padding: 14px; margin: 10px 0;
@@ -44,9 +44,23 @@
     button:hover { background: #0d65d9; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { margin-top: 12px; font-size: 14px; height: 20px; }
- .error { color: red; }
- .sukses { color: green; }
- .footer { margin-top: 25px; font-size: 12px; color: #999; }
+.error { color: red; }
+.sukses { color: green; }
+.footer { margin-top: 25px; font-size: 12px; color: #999; }
+.back-link {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+    }
+.back-link a {
+      color: #1877f2;
+      font-size: 14px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+.back-link a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -60,6 +74,10 @@
     <input type="password" id="password" placeholder="Password" value="123456">
     <button id="btnLogin" onclick="login()">Masuk</button>
     <p id="status"></p>
+
+    <div class="back-link">
+      <a href="/">← Kembali ke Beranda Oto Padang</a>
+    </div>
 
     <div class="footer">© 2026 OTO PADANG - Portal Mitra</div>
   </div>
