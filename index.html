@@ -113,10 +113,10 @@
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 
 /* FRAME EMAS KELILING FOTO BUAT HOT DEAL */
-.card.hot-item.slider {
+.card.hot-item .slider {
   position: relative;
 }
-.card.hot-item.slider::before {
+.card.hot-item .slider::before {
   content: '';
   position: absolute;
   top: -3px; left: -3px; right: -3px; bottom: -3px;
@@ -130,7 +130,7 @@
   0%,100% { background-position: 0% 50%; opacity: 1; }
   50% { background-position: 100% 50%; opacity: 0.7; }
 }
-.card.hot-item.slider.slides {
+.card.hot-item .slider .slides {
   position: relative;
   z-index: 2;
   border-radius: 17px;
@@ -396,8 +396,19 @@ function renderMobil(data) {
 
     const nomorWA = m.no_wa_sales? fixNomorWA(m.no_wa_sales) : m.wa_admin;
 
+    // INI YG UDAH ADA TRACKING GA4
     const waButton = nomorWA?
-      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">💬 Chat WA ${m.nama_showroom}</a>` :
+      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}"
+          class="wa-btn"
+          target="_blank"
+          onclick="gtag('event', 'klik_wa', {
+            'showroom': '${m.nama_showroom}',
+            'mobil': '${m.merk} ${m.tipe} ${m.tahun}',
+            'harga': '${m.harga_cash}',
+            'tahun': '${m.tahun}'
+          })">
+          💬 Chat WA ${m.nama_showroom}
+       </a>` :
       `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
 
     const shareData = {
@@ -410,7 +421,7 @@ function renderMobil(data) {
     };
 
     const btnKeShowroom = m.domain_showroom? `
-      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn">
+      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn" onclick="gtag('event', 'klik_showroom', {'showroom': '${m.nama_showroom}'})">
         🏪 Kunjungi ${m.nama_showroom}
       </a>
     ` : '';
@@ -466,28 +477,35 @@ function openShareModal(data) {
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
 
+  // TRACKING SHARE
+  gtag('event', 'share', {
+    'method': 'modal_open',
+    'content_type': 'mobil',
+    'item_id': data.title
+  });
+
   grid.innerHTML = `
-    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item">
+    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'})">
       <div class="share-icon wa">💬</div>
       <div class="share-label">WhatsApp</div>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item">
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'})">
       <div class="share-icon fb">f</div>
       <div class="share-label">Facebook</div>
     </a>
-    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item">
+    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'})">
       <div class="share-icon tw">𝕏</div>
       <div class="share-label">Twitter</div>
     </a>
-    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}');return false;" class="share-item">
+    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); gtag('event', 'share', {'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon ig">📷</div>
       <div class="share-label">Instagram</div>
     </a>
-    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}');return false;" class="share-item">
+    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); gtag('event', 'share', {'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon tt">♪</div>
       <div class="share-label">TikTok</div>
     </a>
-    <a href="#" onclick="copyLink('${waLink}');return false;" class="share-item">
+    <a href="#" onclick="copyLink('${waLink}'); gtag('event', 'share', {'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon copy">🔗</div>
       <div class="share-label">Copy Link</div>
     </a>
@@ -610,6 +628,7 @@ function openLightbox(images, index) {
   lightbox.classList.add('active');
   updateLightboxCounter();
   initPinchZoom();
+  gtag('event', 'view_item', {'event_category': 'engagement'});
 }
 
 function closeLightbox(e) {
@@ -669,6 +688,7 @@ function toggleTheme() {
   body.setAttribute('data-theme', newTheme);
   btn.textContent = newTheme === 'dark'? '☀️' : '🌙';
   localStorage.setItem('theme', newTheme);
+  gtag('event', 'toggle_theme', {'theme': newTheme});
 }
 
 function loadTheme() {
