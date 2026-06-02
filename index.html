@@ -5,6 +5,14 @@
   <title>OTO PADANG - Kurator Mobil Bekas Terpercaya Sumatera Barat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W5C3TD5R');</script>
+  <!-- End Google Tag Manager -->
+
   <!-- SEO DASAR -->
   <meta name="description" content="OTO PADANG - Platform kurator mobil bekas terpercaya di Sumatera Barat. Jual beli Avanza, Innova, Xenia, Rush, Terios dengan harga terbaik & bergaransi.">
   <meta name="keywords" content="mobil bekas padang, jual beli mobil sumbar, showroom mobil padang, avanza bekas, innova bekas, rush bekas">
@@ -51,15 +59,6 @@
   }
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K2LYKV3WN7"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-K2LYKV3WN7');
-  </script>
-
   <style>
     :root{
       --bg:#0a0a0a; --card:#1c1c1e; --text:#fff; --text2:#888; --border:#2c2c2e;
@@ -97,6 +96,7 @@
 .card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+/* FIX BORDER EMAS CUMA KELILING - ADA SPASI */
 .card.hot-item {
   padding: 3px;
   background: linear-gradient(45deg, var(--gold1), var(--gold2), var(--gold1), var(--gold3));
@@ -157,21 +157,14 @@
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px;color:var(--text2);margin:16px 0}
 .spec span{background:var(--bg);padding:8px 12px;border-radius:10px}
 
-.card.hot-item .spec span{
-  background: rgba(0,0,0,.6);
-  color: #fff;
-  font-weight: 700;
-  border: 1px solid rgba(255,215,0,.3);
-  backdrop-filter: blur(10px);
-}
-
 .desc{font-size:14px;color:var(--text2);line-height:1.6;margin:12px 0}
-.card.hot-item .desc{color:#ddd;font-weight:500}
 
 .btn-group{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}
-.wa-btn{background:var(--wa);color:#fff;padding:16px;border-radius:14px;text-align:center;display:block;text-decoration:none;font-weight:700;transition:all.2s}
+.wa-btn{background:var(--wa);color:#fff;padding:16px;border-radius:14px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:700;transition:all.2s}
 .wa-btn:hover{transform:scale(1.02);box-shadow:0 8px 20px rgba(37,211,102,.3)}
-.share-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:16px;border-radius:14px;cursor:pointer;font-size:20px;transition:all.2s}
+.wa-btn svg{width:20px;height:20px;flex-shrink:0}
+
+.share-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:16px;border-radius:14px;cursor:pointer;font-size:14px;font-weight:600;transition:all.2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .share-btn:hover{background:var(--border);transform:scale(1.05)}
 
 .showroom-btn{background:linear-gradient(135deg,#007aff,#5e5ce6);color:#fff;padding:14px;border-radius:12px;text-align:center;display:block;text-decoration:none;font-weight:700;margin-top:10px;transition:all.2s}
@@ -182,7 +175,7 @@
 .lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
 .lightbox.active{display:flex}
 .lightbox-img{max-width:90%;max-height:90%;object-fit:contain;transition:transform.05s linear;touch-action:none;transform-origin:center;will-change:transform}
-.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
+.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
 .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:28px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
 .lightbox-prev{left:20px}.lightbox-next{right:20px}
 .lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:20px;font-size:14px;z-index:10001}
@@ -207,7 +200,13 @@
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);color:var(--text);padding:14px 24px;border-radius:12px;border:1px solid var(--border);font-weight:600;z-index:10001;opacity:0;transition:all.3s}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
   </style>
-</head><body data-theme="dark">
+</head>
+<body data-theme="dark">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5C3TD5R"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
   <div class="banner">
     <div class="logo">OP</div>
     <div class="banner-text">
@@ -406,13 +405,9 @@ function renderMobil(data) {
       `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}"
           class="wa-btn"
           target="_blank"
-          onclick="gtag('event', 'klik_wa', {
-            'showroom': '${m.nama_showroom}',
-            'mobil': '${m.merk} ${m.tipe} ${m.tahun}',
-            'harga': '${m.harga_cash}',
-            'tahun': '${m.tahun}'
-          })">
-          💬 Chat WA ${m.nama_showroom}
+          onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_wa', 'showroom_name': '${m.nama_showroom}', 'mobil': '${m.merk} ${m.tipe} ${m.tahun}', 'harga': '${m.harga_cash}', 'tahun': '${m.tahun}'});">
+          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
+          Chat WA ${m.nama_showroom}
        </a>` :
       `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
 
@@ -426,7 +421,7 @@ function renderMobil(data) {
     };
 
     const btnKeShowroom = m.domain_showroom? `
-      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn" onclick="gtag('event', 'klik_showroom', {'showroom': '${m.nama_showroom}'})">
+      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn" onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_showroom', 'showroom_name': '${m.nama_showroom}'});">
         🏪 Kunjungi ${m.nama_showroom}
       </a>
     ` : '';
@@ -464,7 +459,10 @@ function renderMobil(data) {
         <p class="desc">${m.deskripsi || ''}</p>
         <div class="btn-group">
           ${waButton}
-          <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>📤</button>
+          <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Bagikan
+          </button>
         </div>
         ${btnKeShowroom}
       </div>
@@ -523,34 +521,31 @@ function openShareModal(data) {
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
 
-  gtag('event', 'share', {
-    'method': 'modal_open',
-    'content_type': 'mobil',
-    'item_id': data.title
-  });
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push({'event': 'share', 'method': 'modal_open', 'content_type': 'mobil', 'item_id': data.title});
 
   grid.innerHTML = `
-    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'})">
+    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'});">
       <div class="share-icon wa">💬</div>
       <div class="share-label">WhatsApp</div>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'})">
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'});">
       <div class="share-icon fb">f</div>
       <div class="share-label">Facebook</div>
     </a>
-    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="gtag('event', 'share', {'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'})">
+    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'});">
       <div class="share-icon tw">𝕏</div>
       <div class="share-label">Twitter</div>
     </a>
-    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); gtag('event', 'share', {'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon ig">📷</div>
       <div class="share-label">Instagram</div>
     </a>
-    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); gtag('event', 'share', {'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); dataLayer.push({'event': 'share', 'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon tt">♪</div>
       <div class="share-label">TikTok</div>
     </a>
-    <a href="#" onclick="copyLink('${waLink}'); gtag('event', 'share', {'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="#" onclick="copyLink('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
       <div class="share-icon copy">🔗</div>
       <div class="share-label">Copy Link</div>
     </a>
@@ -712,7 +707,8 @@ function openLightbox(images, index) {
   lightbox.classList.add('active');
   updateLightboxCounter();
   initZoomPan();
-  gtag('event', 'view_item', {'event_category': 'engagement'});
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push({'event': 'view_item', 'event_category': 'engagement'});
 }
 
 function closeLightbox() {
@@ -805,7 +801,8 @@ function toggleTheme() {
   body.setAttribute('data-theme', newTheme);
   btn.textContent = newTheme === 'dark'? '☀️' : '🌙';
   localStorage.setItem('theme', newTheme);
-  gtag('event', 'toggle_theme', {'theme': newTheme});
+  window.dataLayer = window.dataLayer || [];
+  dataLayer.push({'event': 'toggle_theme', 'theme': newTheme});
 }
 
 function loadTheme() {
