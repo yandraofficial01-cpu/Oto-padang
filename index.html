@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>OTO PADANG - Kurator Mobil Bekas Terpercaya Sumatera Barat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 
   <!-- SEO DASAR -->
   <meta name="description" content="OTO PADANG - Platform kurator mobil bekas terpercaya di Sumatera Barat. Jual beli Avanza, Innova, Xenia, Rush, Terios dengan harga terbaik & bergaransi.">
@@ -65,6 +65,7 @@
       --bg:#0a0a0a; --card:#1c1c1e; --text:#fff; --text2:#888; --border:#2c2c2e;
       --primary:#007aff; --green:#30d158; --hot:#ff3b30; --wa:#25D366;
       --fb:#1877F2; --ig:#E4405F; --tiktok:#000; --tw:#1DA1F2;
+      --gold1:#FFD700; --gold2:#FFA500; --gold3:#FF8C00;
     }
     [data-theme="light"]{
       --bg:#f5f5f7; --card:#fff; --text:#1d1d1f; --text2:#6e6e73; --border:#d2d2d7;
@@ -82,7 +83,6 @@
 .search::placeholder{color:var(--text2)}
 .theme-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-size:20px;color:var(--text)}
 
-/* DROPDOWN */
 .dropdown{position:relative}
 .dropdown-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
 .dropdown-btn:hover{background:var(--border)}
@@ -93,13 +93,32 @@
 .dropdown-menu.empty{padding:12px 16px;color:var(--text2);font-size:14px}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
-.card{background:var(--card);border-radius:20px;overflow:hidden;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease}
+.card{background:var(--card);border-radius:20px;overflow:visible;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease;position:relative}
 .card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.slider{position:relative;width:100%;height:240px;background:#000;overflow:hidden;touch-action:pan-y}
-.slides{display:flex;height:100%;transition:transform.4s ease;will-change:transform}
-.slides img{width:100%;height:100%;object-fit:cover;flex-shrink:0;user-select:none;-webkit-user-drag:none;cursor:pointer}
+.card.hot-item {
+  padding: 3px;
+  background: linear-gradient(45deg, var(--gold1), var(--gold2), var(--gold1), var(--gold3));
+  background-size: 400% 400%;
+  animation: goldGlow 3s ease infinite;
+  border: none;
+  box-shadow: 0 0 30px rgba(255,215,0,.4);
+}
+@keyframes goldGlow {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.card.hot-item .card-inner {
+  background: var(--card);
+  border-radius: 17px;
+  overflow: hidden;
+}
+
+.slider{position:relative;width:100%;height:240px;background:#1c1c1e;overflow:hidden;touch-action:pan-y}
+.slides{display:flex;height:100%;transition:transform.3s cubic-bezier(.25,.46,.45,.94);will-change:transform}
+.slides img{width:100%;height:100%;object-fit:cover;flex-shrink:0;user-select:none;-webkit-user-drag:none;cursor:pointer;background:var(--bg)}
+.slides.dragging{transition:none}
 .slider-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;backdrop-filter:blur(5px);z-index:4}
 .slider-btn:hover{background:rgba(0,0,0,.8)}
 .prev{left:12px}.next{right:12px}
@@ -112,37 +131,11 @@
 .badge.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);box-shadow:0 4px 12px rgba(255,59,48,.4);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 
-/* FRAME EMAS KELILING FOTO BUAT HOT DEAL */
-.card.hot-item .slider {
-  position: relative;
-}
-.card.hot-item .slider::before {
-  content: '';
-  position: absolute;
-  top: -3px; left: -3px; right: -3px; bottom: -3px;
-  background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700, #FF8C00);
-  background-size: 400% 400%;
-  border-radius: 20px;
-  z-index: 1;
-  animation: goldGlow 3s ease infinite;
-}
-@keyframes goldGlow {
-  0%,100% { background-position: 0% 50%; opacity: 1; }
-  50% { background-position: 100% 50%; opacity: 0.7; }
-}
-.card.hot-item .slider .slides {
-  position: relative;
-  z-index: 2;
-  border-radius: 17px;
-  overflow: hidden;
-}
-
-/* BADGE PREMIUM NEMPEL DI FOTO */
 .badge.hot-premium {
   position: absolute;
   top: 12px;
   left: 12px;
-  background: linear-gradient(135deg, #FFD700, #FF8C00);
+  background: linear-gradient(135deg, var(--gold1), var(--gold3));
   color: #000;
   padding: 8px 14px;
   border-radius: 10px;
@@ -163,7 +156,17 @@
 .harga{color:var(--green);font-weight:800;font-size:26px;margin:12px 0}
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:14px;color:var(--text2);margin:16px 0}
 .spec span{background:var(--bg);padding:8px 12px;border-radius:10px}
+
+.card.hot-item .spec span{
+  background: rgba(0,0,0,.6);
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid rgba(255,215,0,.3);
+  backdrop-filter: blur(10px);
+}
+
 .desc{font-size:14px;color:var(--text2);line-height:1.6;margin:12px 0}
+.card.hot-item .desc{color:#ddd;font-weight:500}
 
 .btn-group{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}
 .wa-btn{background:var(--wa);color:#fff;padding:16px;border-radius:14px;text-align:center;display:block;text-decoration:none;font-weight:700;transition:all.2s}
@@ -176,13 +179,13 @@
 
 .loading,.no-result{text-align:center;padding:40px;color:var(--text2);grid-column:1/-1}
 
-.lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center}
+.lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
 .lightbox.active{display:flex}
-.lightbox-img{max-width:90%;max-height:90%;object-fit:contain;transition:transform.2s;touch-action:none}
-.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px)}
-.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:28px;cursor:pointer;backdrop-filter:blur(10px)}
+.lightbox-img{max-width:90%;max-height:90%;object-fit:contain;transition:transform.05s linear;touch-action:none;transform-origin:center;will-change:transform}
+.lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:28px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
 .lightbox-prev{left:20px}.lightbox-next{right:20px}
-.lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:20px;font-size:14px}
+.lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:20px;font-size:14px;z-index:10001}
 
 .share-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:flex-end;justify-content:center}
 .share-modal.active{display:flex}
@@ -233,11 +236,11 @@
 
   <div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
 
-  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-    <button class="lightbox-close" onclick="closeLightbox(event)">×</button>
-    <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1, event)">‹</button>
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1)">‹</button>
     <img class="lightbox-img" id="lightboxImg" src="">
-    <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1, event)">›</button>
+    <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1)">›</button>
     <div class="lightbox-counter" id="lightboxCounter"></div>
   </div>
 
@@ -296,6 +299,7 @@ async function ambilDataSheet(gid) {
 
 function fixImgurUrl(url) {
   if(!url) return '';
+  url = url.trim();
   if(url.includes('drive.google.com')) {
     const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if(match && match[1]) {
@@ -313,9 +317,12 @@ function getAllImages(mobil) {
   const urls = [];
   for(let i = 1; i <= 6; i++) {
     const key = `foto_${i}`;
-    if(mobil[key] && mobil[key]!== '') urls.push(fixImgurUrl(mobil[key]));
+    const raw = mobil[key];
+    if(raw && typeof raw === 'string' && raw.trim().length > 10 && raw.trim().toLowerCase().startsWith('http')) {
+      urls.push(fixImgurUrl(raw.trim()));
+    }
   }
-  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=OTO+PADANG'];
+  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'];
 }
 
 function fixNomorWA(nomor) {
@@ -391,12 +398,10 @@ function renderMobil(data) {
 
   div.innerHTML = data.map((m, idx) => {
     const images = getAllImages(m);
-    const sliderId = `slider-${m.timestamp || idx}-${idx}`;
-    const imgData = JSON.stringify(images).replace(/"/g, '&quot;');
+    const sliderId = `slider-${(m.timestamp || Date.now())}-${idx}`;
 
     const nomorWA = m.no_wa_sales? fixNomorWA(m.no_wa_sales) : m.wa_admin;
 
-    // INI YG UDAH ADA TRACKING GA4
     const waButton = nomorWA?
       `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}"
           class="wa-btn"
@@ -426,23 +431,23 @@ function renderMobil(data) {
       </a>
     ` : '';
 
-    // CEK APAKAH HOT DEAL
     const isHot = safeString(m.tag).toLowerCase() === 'hot';
     const hotClass = isHot? 'hot-item' : '';
     const badgeHotPremium = isHot? `<div class="badge hot-premium">👑 HOT DEAL</div>` : '';
 
     return `
     <div class="card ${hotClass}">
+      ${hotClass? '<div class="card-inner">' : ''}
       <div class="slider" id="${sliderId}" data-current="0">
         ${badgeHotPremium}
         <div class="slides">
-          ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightbox(${imgData}, ${i})' onerror="this.src='https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'">`).join('')}
+          ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightboxFromSlider("${sliderId}", ${i})' onerror="removeBrokenSlide('${sliderId}', this)">`).join('')}
         </div>
         ${images.length > 1? `
-          <button class="slider-btn prev" onclick="slide('${sliderId}', -1)">‹</button>
-          <button class="slider-btn next" onclick="slide('${sliderId}', 1)">›</button>
+          <button class="slider-btn prev" onclick="slide('${sliderId}', -1, event)">‹</button>
+          <button class="slider-btn next" onclick="slide('${sliderId}', 1, event)">›</button>
           <div class="dots">
-            ${images.map((_,i) => `<span class="dot ${i===0?'active':''}" onclick="goSlide('${sliderId}', ${i})"></span>`).join('')}
+            ${images.map((_,i) => `<span class="dot ${i===0?'active':''}" onclick="goSlide('${sliderId}', ${i}, event)"></span>`).join('')}
           </div>
         ` : ''}
       </div>
@@ -463,10 +468,51 @@ function renderMobil(data) {
         </div>
         ${btnKeShowroom}
       </div>
+      ${hotClass? '</div>' : ''}
     </div>
   `}).join('');
 
   initSwipeSlider();
+}
+
+function removeBrokenSlide(sliderId, imgEl) {
+  const slider = document.getElementById(sliderId);
+  if(!slider) return;
+
+  const slides = slider.querySelector('.slides');
+  const dotsContainer = slider.querySelector('.dots');
+  const imgIdx = Array.from(slides.children).indexOf(imgEl);
+
+  imgEl.remove();
+
+  if(dotsContainer && dotsContainer.children[imgIdx]) {
+    dotsContainer.children[imgIdx].remove();
+  }
+
+  let current = parseInt(slider.dataset.current || 0);
+  const newTotal = slides.children.length;
+
+  if(newTotal === 0) {
+    slides.innerHTML = `<img src="https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image">`;
+    slider.querySelector('.slider-btn.prev')?.remove();
+    slider.querySelector('.slider-btn.next')?.remove();
+    dotsContainer?.remove();
+    return;
+  }
+
+  if(current >= newTotal) {
+    current = newTotal - 1;
+    slider.dataset.current = current;
+    slides.style.transform = `translateX(-${current * 100}%)`;
+  }
+
+  dotsContainer?.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+
+  if(newTotal <= 1) {
+    slider.querySelector('.slider-btn.prev')?.remove();
+    slider.querySelector('.slider-btn.next')?.remove();
+    dotsContainer?.remove();
+  }
 }
 
 function openShareModal(data) {
@@ -477,7 +523,6 @@ function openShareModal(data) {
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
 
-  // TRACKING SHARE
   gtag('event', 'share', {
     'method': 'modal_open',
     'content_type': 'mobil',
@@ -547,25 +592,40 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
 
-function slide(sliderId, dir) {
+function slide(sliderId, dir, e) {
+  if(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   const slider = document.getElementById(sliderId);
   const slides = slider.querySelector('.slides');
   const dots = slider.querySelectorAll('.dot');
   const total = slides.children.length;
   let current = parseInt(slider.dataset.current || 0);
 
-  current = (current + dir + total) % total;
-  slides.style.transform = `translateX(-${current * 100}%)`;
-  slider.dataset.current = current;
+  let newCurrent = current + dir;
+  if(dir > 0) newCurrent = Math.min(current + 1, total - 1);
+  if(dir < 0) newCurrent = Math.max(current - 1, 0);
 
-  dots.forEach((d,i) => d.classList.toggle('active', i === current));
+  if(newCurrent === current) return;
+
+  slides.style.transform = `translateX(-${newCurrent * 100}%)`;
+  slider.dataset.current = newCurrent;
+
+  dots.forEach((d,i) => d.classList.toggle('active', i === newCurrent));
 }
 
-function goSlide(sliderId, idx) {
+function goSlide(sliderId, idx, e) {
+  if(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
   const slider = document.getElementById(sliderId);
   const slides = slider.querySelector('.slides');
   const dots = slider.querySelectorAll('.dot');
+  const total = slides.children.length;
 
+  idx = Math.max(0, Math.min(idx, total - 1));
   slides.style.transform = `translateX(-${idx * 100}%)`;
   slider.dataset.current = idx;
   dots.forEach((d,i) => d.classList.toggle('active', i === idx));
@@ -576,30 +636,48 @@ function initSwipeSlider() {
     const slides = slider.querySelector('.slides');
     if(slides.children.length <= 1) return;
 
-    let startX = 0, currentX = 0, isDragging = false;
+    let startX = 0, startY = 0, currentX = 0, isDragging = false, isScrolling = null, startTime = 0;
 
     const start = e => {
+      if(e.touches && e.touches.length > 1) return;
       startX = e.touches? e.touches[0].clientX : e.clientX;
+      startY = e.touches? e.touches[0].clientY : e.clientY;
+      startTime = Date.now();
       isDragging = true;
-      slides.style.transition = 'none';
+      isScrolling = null;
+      slides.classList.add('dragging');
     };
 
     const move = e => {
       if(!isDragging) return;
       currentX = e.touches? e.touches[0].clientX : e.clientX;
-      const diff = currentX - startX;
+      const currentY = e.touches? e.touches[0].clientY : e.clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+
+      if(isScrolling === null) {
+        isScrolling = Math.abs(diffX) < Math.abs(diffY);
+      }
+      if(isScrolling) return;
+
+      e.preventDefault();
       const current = parseInt(slider.dataset.current || 0);
-      const offset = -current * 100 + (diff / slider.offsetWidth) * 100;
+      const offset = -current * 100 + (diffX / slider.offsetWidth) * 100;
       slides.style.transform = `translateX(${offset}%)`;
     };
 
     const end = e => {
       if(!isDragging) return;
       isDragging = false;
-      slides.style.transition = 'transform.4s ease';
+      slides.classList.remove('dragging');
+      if(isScrolling) return;
 
       const diff = currentX - startX;
-      if(Math.abs(diff) > 50) {
+      const elapsed = Date.now() - startTime;
+      const velocity = Math.abs(diff) / elapsed;
+      const threshold = velocity > 0.5? 30 : 80;
+
+      if(Math.abs(diff) > threshold) {
         if(diff > 0) slide(slider.id, -1);
         else slide(slider.id, 1);
       } else {
@@ -609,7 +687,7 @@ function initSwipeSlider() {
     };
 
     slider.addEventListener('touchstart', start, {passive: true});
-    slider.addEventListener('touchmove', move, {passive: true});
+    slider.addEventListener('touchmove', move, {passive: false});
     slider.addEventListener('touchend', end);
     slider.addEventListener('mousedown', start);
     slider.addEventListener('mousemove', move);
@@ -618,31 +696,35 @@ function initSwipeSlider() {
   });
 }
 
+function openLightboxFromSlider(sliderId, idx) {
+  const slider = document.getElementById(sliderId);
+  const imgs = Array.from(slider.querySelectorAll('.slides img')).map(img => img.src);
+  openLightbox(imgs, idx);
+}
+
 function openLightbox(images, index) {
   currentLightboxImages = images;
   currentLightboxIndex = index;
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightboxImg');
   img.src = images[index];
-  img.style.transform = 'scale(1)';
+  img.style.transform = 'scale(1) translate(0px, 0px)';
   lightbox.classList.add('active');
   updateLightboxCounter();
-  initPinchZoom();
+  initZoomPan();
   gtag('event', 'view_item', {'event_category': 'engagement'});
 }
 
-function closeLightbox(e) {
-  if(e.target.id === 'lightbox' || e.target.className === 'lightbox-close') {
-    document.getElementById('lightbox').classList.remove('active');
-  }
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
 }
 
-function lightboxSlide(dir, e) {
-  e.stopPropagation();
+function lightboxSlide(dir) {
   currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
   const img = document.getElementById('lightboxImg');
   img.src = currentLightboxImages[currentLightboxIndex];
-  img.style.transform = 'scale(1)';
+  img.style.transform = 'scale(1) translate(0px, 0px)';
+  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
   updateLightboxCounter();
 }
 
@@ -650,35 +732,70 @@ function updateLightboxCounter() {
   document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
 }
 
-function initPinchZoom() {
-  const img = document.getElementById('lightboxImg');
-  let scale = 1, startDistance = 0, lastScale = 1;
+let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
 
-  img.addEventListener('touchstart', e => {
+function initZoomPan() {
+  const img = document.getElementById('lightboxImg');
+  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
+
+  let startDistance = 0, startX = 0, startY = 0;
+
+  img.ontouchend = e => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - zoomState.lastTap;
+    if(tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      if(zoomState.scale === 1) {
+        zoomState.scale = 2.5;
+        zoomState.lastScale = 2.5;
+      } else {
+        zoomState.scale = 1;
+        zoomState.lastScale = 1;
+        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
+      }
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
+    }
+    zoomState.lastTap = currentTime;
+    if(e.touches.length < 2) {
+      zoomState.lastScale = zoomState.scale;
+      zoomState.lastPosX = zoomState.posX;
+      zoomState.lastPosY = zoomState.posY;
+    }
+  };
+
+  img.ontouchstart = e => {
     if(e.touches.length === 2) {
       startDistance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
+    } else if(e.touches.length === 1 && zoomState.scale > 1) {
+      startX = e.touches[0].pageX - zoomState.lastPosX;
+      startY = e.touches[0].pageY - zoomState.lastPosY;
     }
-  });
+  };
 
-  img.addEventListener('touchmove', e => {
+  img.ontouchmove = e => {
     if(e.touches.length === 2) {
       e.preventDefault();
       const distance = Math.hypot(
         e.touches[0].pageX - e.touches[1].pageX,
         e.touches[0].pageY - e.touches[1].pageY
       );
-      scale = lastScale * (distance / startDistance);
-      scale = Math.min(Math.max(1, scale), 4);
-      img.style.transform = `scale(${scale})`;
+      zoomState.scale = zoomState.lastScale * (distance / startDistance);
+      zoomState.scale = Math.min(Math.max(1, zoomState.scale), 4);
+      if(zoomState.scale === 1) {
+        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
+      }
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
+    } else if(e.touches.length === 1 && zoomState.scale > 1) {
+      e.preventDefault();
+      zoomState.posX = e.touches[0].pageX - startX;
+      zoomState.posY = e.touches[0].pageY - startY;
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
     }
-  });
-
-  img.addEventListener('touchend', e => {
-    if(e.touches.length < 2) lastScale = scale;
-  });
+  };
 }
 
 function toggleTheme() {
