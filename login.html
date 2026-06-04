@@ -16,7 +16,7 @@
       margin: 0;
       padding: 20px;
     }
-.box {
+   .box {
       background: white;
       padding: 35px 30px;
       border-radius: 16px;
@@ -25,9 +25,9 @@
       max-width: 360px;
       text-align: center;
     }
-.logo { font-size: 32px; margin-bottom: 5px; }
-.welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
-.subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
+   .logo { font-size: 32px; margin-bottom: 5px; }
+   .welcome { color: #1877f2; font-size: 18px; font-weight: 600; margin: 0 0 5px 0; }
+   .subtitle { color: #666; font-size: 14px; margin: 0 0 25px 0; }
     h2 { color: #1c1e21; margin: 0 0 20px 0; font-size: 22px; }
     input {
       width: 100%; padding: 14px; margin: 10px 0;
@@ -44,22 +44,19 @@
     button:hover { background: #0d65d9; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { margin-top: 12px; font-size: 14px; height: 20px; }
-.error { color: red; }
-.sukses { color: green; }
-.footer { margin-top: 25px; font-size: 12px; color: #999; }
-.back-link {
+   .error { color: red; }
+   .sukses { color: green; }
+   .footer { margin-top: 25px; font-size: 12px; color: #999; }
+   .back-link {
       margin-top: 20px;
       padding-top: 20px;
       border-top: 1px solid #eee;
     }
-.back-link a {
+   .back-link a {
       color: #1877f2;
       font-size: 14px;
       text-decoration: none;
       font-weight: 500;
-    }
-.back-link a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -70,8 +67,8 @@
     <p class="subtitle">OTO PADANG</p>
 
     <h2>Login Showroom</h2>
-    <input type="email" id="email" placeholder="Email" value="admin@putraoto.com">
-    <input type="password" id="password" placeholder="Password" value="123456">
+    <input type="email" id="email" placeholder="Email Showroom">
+    <input type="password" id="password" placeholder="Password">
     <button id="btnLogin" onclick="login()">Masuk</button>
     <p id="status"></p>
 
@@ -83,34 +80,18 @@
   </div>
 
   <script>
-    const DATA_SHOWROOM = {
-      "admin@putraoto.com": {
-        id: "putra-oto-solok",
-        nama: "Putra Oto Solok",
-        email: "admin@putraoto.com",
-        lokasi: "Solok, Sumbar",
-        pass: "123456"
-      },
-      "jaya@motor.com": {
-        id: "jaya-motor",
-        nama: "Jaya Motor",
-        email: "jaya@motor.com",
-        lokasi: "Padang Barat",
-        pass: "123456"
-      }
-    };
+    const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
+    const GID_PARTNER = '490587314'; // GID tab Partner lu
+    const API_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID_PARTNER}`;
 
-    // Kalo udah login, langsung lempar ke form - VERSI ANTI CORRUPT
     try {
       const showroomData = JSON.parse(localStorage.getItem('showroom') || '{}');
-      if (showroomData.id) {
-        window.location.href = 'input-mobil.html';
-      }
+      if (showroomData.id) window.location.href = 'input-mobil.html';
     } catch(e) {
       localStorage.removeItem('showroom');
     }
 
-    function login() {
+    async function login() {
       const email = document.getElementById('email').value.trim().toLowerCase();
       const pass = document.getElementById('password').value;
       const status = document.getElementById('status');
@@ -129,36 +110,72 @@
         return;
       }
 
-      const showroom = DATA_SHOWROOM[email];
+      try {
+        const res = await fetch(API_URL);
+        const text = await res.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        const headers = json.table.cols.map(c => c.label? c.label.toLowerCase().replace(/ /g,'_').trim() : '');
+        const rows = json.table.rows;
 
-      if (!showroom) {
+        let showroom = null;
+        for (let r of rows) {
+          let obj = {};
+          headers.forEach((h,i) => {
+            if(h) obj[h] = r.c[i] && r.c[i].v!= null? r.c[i].v.toString().trim() : '';
+          });
+          if (obj.email && obj.email.toLowerCase() === email) {
+            showroom = obj;
+            break;
+          }
+        }
+
+        if (!showroom) {
+          status.className = 'error';
+          status.innerText = 'Email tidak terdaftar';
+          btn.disabled = false;
+          btn.innerText = 'Masuk';
+          return;
+        }
+
+        if (showroom.password!== pass) {
+          status.className = 'error';
+          status.innerText = 'Password salah';
+          btn.disabled = false;
+          btn.innerText = 'Masuk';
+          return;
+        }
+
+        if (showroom.status && showroom.status.toLowerCase()!== 'ready') {
+          status.className = 'error';
+          status.innerText = 'Akun belum aktif / suspended';
+          btn.disabled = false;
+          btn.innerText = 'Masuk';
+          return;
+        }
+
+        localStorage.setItem('showroom', JSON.stringify({
+          id: showroom.slug_showroom,
+          nama: showroom.nama_showroom,
+          email: showroom.email,
+          gid: showroom.sheet_gid,
+          domain: showroom.domain_showroom,
+          limit: showroom.limit_mobil,
+          no_hp: showroom.no_hp_pic
+        }));
+
+        status.className = 'sukses';
+        status.innerText = 'Login berhasil...';
+        setTimeout(() => {
+          window.location.href = 'input-mobil.html';
+        }, 500);
+
+      } catch(e) {
+        console.error(e);
         status.className = 'error';
-        status.innerText = 'Email tidak terdaftar';
+        status.innerText = 'Gagal konek ke server';
         btn.disabled = false;
         btn.innerText = 'Masuk';
-        return;
       }
-
-      if (showroom.pass!== pass) {
-        status.className = 'error';
-        status.innerText = 'Password salah';
-        btn.disabled = false;
-        btn.innerText = 'Masuk';
-        return;
-      }
-
-      localStorage.setItem('showroom', JSON.stringify({
-        id: showroom.id,
-        nama: showroom.nama,
-        email: showroom.email,
-        lokasi: showroom.lokasi
-      }));
-
-      status.className = 'sukses';
-      status.innerText = 'Login berhasil...';
-      setTimeout(() => {
-        window.location.href = 'input-mobil.html';
-      }, 500);
     }
 
     document.getElementById('password').addEventListener('keypress', function(e) {
