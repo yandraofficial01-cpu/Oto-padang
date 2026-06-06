@@ -94,26 +94,25 @@
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
 .card{background:var(--card);border-radius:20px;overflow:visible;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease;position:relative}
 .card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* UDAH GUA BENERIN - PAKE SPASI */
 .card.hot-item {
-  padding: 3px;
-  background: linear-gradient(45deg, var(--gold1), var(--gold2), var(--gold1), var(--gold3));
-  background-size: 400% 400%;
-  animation: goldGlow 3s ease infinite;
-  border: none;
-  box-shadow: 0 0 30px rgba(255,215,0,.4);
-}
-@keyframes goldGlow {
-  0%,100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+      padding: 3px;
+      background: linear-gradient(45deg, var(--gold1), var(--gold2), var(--gold1), var(--gold3));
+      background-size: 400% 400%;
+      animation: goldGlow 3s ease infinite;
+      border: none;
+      box-shadow: 0 0 30px rgba(255,215,0,.4);
+    }
+    @keyframes goldGlow {
+      0%,100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
 .card.hot-item .card-inner {
-  background: var(--card);
-  border-radius: 17px;
-  overflow: hidden;
-}
+      background: var(--card);
+      border-radius: 17px;
+      overflow: hidden;
+    }
 
 .slider{position:relative;width:100%;height:240px;background:#1c1c1e;overflow:hidden;touch-action:pan-y}
 .slides{display:flex;height:100%;transition:transform.3s cubic-bezier(.25,.46,.45,.94);will-change:transform}
@@ -129,28 +128,28 @@
 .card-body{padding:20px}
 .badge{background:var(--primary);padding:6px 12px;border-radius:8px;font-size:12px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;font-weight:700;color:#fff}
 .badge.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);box-shadow:0 4px 12px rgba(255,59,48,.4);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 
 .badge.hot-premium {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: linear-gradient(135deg, var(--gold1), var(--gold3));
-  color: #000;
-  padding: 8px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 800;
-  z-index: 3;
-  box-shadow: 0 4px 16px rgba(255, 215, 0,.6);
-  border: 2px solid rgba(255,255,255,.3);
-  text-shadow: 0 1px 2px rgba(0,0,0,.2);
-  animation: badgePulse 2s infinite;
-}
-@keyframes badgePulse {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, var(--gold1), var(--gold3));
+      color: #000;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      z-index: 3;
+      box-shadow: 0 4px 16px rgba(255, 215, 0,.6);
+      border: 2px solid rgba(255,255,255,.3);
+      text-shadow: 0 1px 2px rgba(0,0,0,.2);
+      animation: badgePulse 2s infinite;
+    }
+    @keyframes badgePulse {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
 
 .card h3{font-size:22px;margin-bottom:8px}
 .harga{color:var(--green);font-weight:800;font-size:26px;margin:12px 0}
@@ -171,6 +170,7 @@
 .showroom-btn:hover{transform:scale(1.02);box-shadow:0 8px 20px rgba(0,122,255,.3)}
 
 .loading,.no-result{text-align:center;padding:40px;color:var(--text2);grid-column:1/-1}
+.load-more{background:var(--primary);color:#fff;padding:14px 24px;border-radius:12px;border:none;font-weight:700;cursor:pointer;margin:20px auto;display:block}
 
 .lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
 .lightbox.active{display:flex}
@@ -183,7 +183,7 @@
 .share-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:flex-end;justify-content:center}
 .share-modal.active{display:flex}
 .share-sheet{background:var(--card);width:100%;max-width:500px;border-radius:20px 20px 0 0;padding:24px;animation:slideUp.3s ease}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .share-title{font-size:18px;font-weight:700;margin-bottom:20px;text-align:center}
 .share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
 .share-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;text-decoration:none;color:var(--text)}
@@ -234,6 +234,7 @@
   </div>
 
   <div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
+  <button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">Muat Lebih Banyak</button>
 
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">×</button>
@@ -251,11 +252,18 @@
     </div>
   </div>
 
-  <div class="toast" id="toast">Link berhasil disalin!</div><script>
+  <div class="toast" id="toast">Link berhasil disalin!</div>
+
+<script>
 const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
+const GID_INDUK = '490587314';
+const GID_MOBIL_MASSAL = '1022893642';
 const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
 let semuaMobilGlobal = [];
+let filteredDataGlobal = [];
 let semuaShowroomGlobal = [];
+let currentPage = 0;
+const ITEMS_PER_PAGE = 12;
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
 
@@ -331,46 +339,67 @@ function fixNomorWA(nomor) {
   if(wa.startsWith('8')) wa = '62' + wa;
   if(!wa.startsWith('62')) wa = '62' + wa;
   return wa;
-}
-
-// INIT UDAH GUA BENERIN - ANTI DUPLIKAT BRO
+}// INIT FINAL - FIX KAMUS SHOWROOM + ANTI KETUKER
 async function init() {
   try {
-    semuaShowroomGlobal = (await ambilDataSheet('490587314')).filter(s => s.nama_showroom);
-
-    const promisesMobil = semuaShowroomGlobal.filter(s => {
-      return s.sheet_gid!== undefined && s.sheet_gid!== null && s.sheet_gid.toString().trim()!== '';
-    }).map(async (showroom) => {
-      const gid = showroom.sheet_gid.toString().trim();
-      const mobil = await ambilDataSheet(gid);
-      const wa_admin_bener = fixNomorWA(showroom.wa_admin);
-      return mobil.filter(m => m.merk).map(m => ({...m,...showroom, wa_admin: wa_admin_bener}));
+    // 1. Ambil data showroom yang AKTIF aja dari sheet induk
+    semuaShowroomGlobal = (await ambilDataSheet(GID_INDUK)).filter(s => {
+      const status = safeString(s.status).toLowerCase();
+      return s.nama_showroom && status === 'aktif';
     });
 
-    const semuaData = await Promise.all(promisesMobil);
-    
-    // FIX DUPLIKAT BRO - PAKE SET
-    const semuaDataGabung = semuaData.flat();
+    // 2. Bikin kamus showroom - FIX: PAKE
+    let mapShowroom = {}; // 352
+semuaShowroomGlobal.forEach(s => {
+  const slug = safeString(s.slug_showroom).toLowerCase();
+  if (slug) {
+    mapShowroom[slug] = {
+      nama_showroom: s.nama_showroom,
+      wa_admin: fixNomorWA(s.no_hp_pic),
+      alamat: s.alamat || '',
+      domain_showroom: s.domain_showroom || ''
+    };
+  }
+});
+
+    // 3. Ambil SEMUA MOBIL dari 1 SHEET GID 1022893642
+    const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
+
+    // 4. FILTER + JOIN + ANTI DOUBLE
     const uniqueMobil = [];
     const seenIds = new Set();
 
-    semuaDataGabung.forEach(m => {
+    semuaMobilMentah.forEach(m => {
       const id = m.id_mobil || m.timestamp;
       if (!seenIds.has(id)) {
         seenIds.add(id);
-        const statusAnak = m.status_anak? m.status_anak.toString().toLowerCase().trim() : '';
-        const statusInduk = m.status_induk? m.status_induk.toString().toLowerCase().trim() : '';
-        if (statusAnak === 'ready' || statusInduk === 'ready') {
-          uniqueMobil.push(m);
+
+        const statusAnak = safeString(m.status_anak).toLowerCase();
+        if (statusAnak === 'aktif') {
+          const slug = safeString(m.slug_showroom).toLowerCase();
+       const infoShowroom=mapShowroom[slug]; // AMBIL PAKE
+
+          if (infoShowroom) {
+            uniqueMobil.push({
+        ...m,
+              nama_showroom: infoShowroom.nama_showroom,
+              wa_admin: infoShowroom.wa_admin, // INI BAKAL 628979879518 BUAT CALYA
+              alamat: infoShowroom.alamat,
+              domain_showroom: infoShowroom.domain_showroom
+            });
+          }
         }
       }
     });
 
     semuaMobilGlobal = uniqueMobil;
+    filteredDataGlobal = uniqueMobil;
+    currentPage = 0;
 
     renderDaftarShowroom(semuaShowroomGlobal);
-    renderMobil(semuaMobilGlobal);
+    renderMobilPaginated();
     loadTheme();
+
   } catch(e) {
     console.error('ERROR:', e);
     document.getElementById('list-mobil').innerHTML = `<div class="loading" style="color:#ff3b30">Error: ${e.message}<br>Pastikan Sheet di-share "Anyone with the link"</div>`;
@@ -402,17 +431,28 @@ function filterData() {
     (m.nama_showroom || '').toLowerCase().includes(keyword)
   );
 
-  renderMobil(data);
+  filteredDataGlobal = data;
+  currentPage = 0;
+  renderMobilPaginated();
 }
 
-function renderMobil(data) {
+function renderMobilPaginated() {
   const div = document.getElementById('list-mobil');
-  if(data.length === 0) return div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Cek Console F12. Pastikan kolom status_anak = READY</div>';
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-  div.innerHTML = data.map((m, idx) => {
+  if(filteredDataGlobal.length === 0) {
+    div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Pastikan kolom status_anak = AKTIF</div>';
+    if(loadMoreBtn) loadMoreBtn.style.display = 'none';
+    return;
+  }
+
+  const start = currentPage * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const dataToRender = filteredDataGlobal.slice(0, end);
+
+  div.innerHTML = dataToRender.map((m, idx) => {
     const images = getAllImages(m);
     const sliderId = `slider-${(m.timestamp || Date.now())}-${idx}`;
-
     const nomorWA = m.no_wa_sales? fixNomorWA(m.no_wa_sales) : m.wa_admin;
 
     const waButton = nomorWA?
@@ -450,7 +490,7 @@ function renderMobil(data) {
       <div class="slider" id="${sliderId}" data-current="0">
         ${badgeHotPremium}
         <div class="slides">
-          ${images.map((img,i) => `<img src="${img}" loading="lazy" onclick='openLightboxFromSlider("${sliderId}", ${i})' onerror="removeBrokenSlide('${sliderId}', this)">`).join('')}
+${images.map((img,i) => `<img src="${img}" alt="${m.merk} ${m.tipe} ${m.tahun} - ${m.nama_showroom}" loading="lazy" onclick='openLightboxFromSlider("${sliderId}", ${i})' onerror="removeBrokenSlide('${sliderId}', this)">`).join('')}
         </div>
         ${images.length > 1? `
           <button class="slider-btn prev" onclick="slide('${sliderId}', -1, event)">‹</button>
@@ -484,26 +524,27 @@ function renderMobil(data) {
     </div>
   `}).join('');
 
+  if(loadMoreBtn) loadMoreBtn.style.display = end < filteredDataGlobal.length? 'block' : 'none';
   initSwipeSlider();
+}
+
+function loadMore() {
+  currentPage++;
+  renderMobilPaginated();
 }
 
 function removeBrokenSlide(sliderId, imgEl) {
   const slider = document.getElementById(sliderId);
   if(!slider) return;
-
   const slides = slider.querySelector('.slides');
   const dotsContainer = slider.querySelector('.dots');
   const imgIdx = Array.from(slides.children).indexOf(imgEl);
-
   imgEl.remove();
-
   if(dotsContainer && dotsContainer.children[imgIdx]) {
     dotsContainer.children[imgIdx].remove();
   }
-
   let current = parseInt(slider.dataset.current || 0);
   const newTotal = slides.children.length;
-
   if(newTotal === 0) {
     slides.innerHTML = `<img src="https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image">`;
     slider.querySelector('.slider-btn.prev')?.remove();
@@ -511,15 +552,12 @@ function removeBrokenSlide(sliderId, imgEl) {
     dotsContainer?.remove();
     return;
   }
-
   if(current >= newTotal) {
     current = newTotal - 1;
     slider.dataset.current = current;
     slides.style.transform = `translateX(-${current * 100}%)`;
   }
-
   dotsContainer?.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
-
   if(newTotal <= 1) {
     slider.querySelector('.slider-btn.prev')?.remove();
     slider.querySelector('.slider-btn.next')?.remove();
@@ -534,34 +572,26 @@ function openShareModal(data) {
   const waLink = data.wa? `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}` : '#';
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
-
   window.dataLayer = window.dataLayer || [];
   dataLayer.push({'event': 'share', 'method': 'modal_open', 'content_type': 'mobil', 'item_id': data.title});
-
   grid.innerHTML = `
     <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon wa">💬</div>
-      <div class="share-label">WhatsApp</div>
+      <div class="share-icon wa">💬</div><div class="share-label">WhatsApp</div>
     </a>
     <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon fb">f</div>
-      <div class="share-label">Facebook</div>
+      <div class="share-icon fb">f</div><div class="share-label">Facebook</div>
     </a>
     <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon tw">𝕏</div>
-      <div class="share-label">Twitter</div>
+      <div class="share-icon tw">𝕏</div><div class="share-label">Twitter</div>
     </a>
     <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon ig">📷</div>
-      <div class="share-label">Instagram</div>
+      <div class="share-icon ig">📷</div><div class="share-label">Instagram</div>
     </a>
     <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); dataLayer.push({'event': 'share', 'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon tt">♪</div>
-      <div class="share-label">TikTok</div>
+      <div class="share-icon tt">♪</div><div class="share-label">TikTok</div>
     </a>
     <a href="#" onclick="copyLink('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon copy">🔗</div>
-      <div class="share-label">Copy Link</div>
+      <div class="share-icon copy">🔗</div><div class="share-label">Copy Link</div>
     </a>
   `;
   modal.classList.add('active');
@@ -602,38 +632,27 @@ function showToast(msg) {
 }
 
 function slide(sliderId, dir, e) {
-  if(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
+  if(e) { e.stopPropagation(); e.preventDefault(); }
   const slider = document.getElementById(sliderId);
   const slides = slider.querySelector('.slides');
   const dots = slider.querySelectorAll('.dot');
   const total = slides.children.length;
   let current = parseInt(slider.dataset.current || 0);
-
   let newCurrent = current + dir;
   if(dir > 0) newCurrent = Math.min(current + 1, total - 1);
   if(dir < 0) newCurrent = Math.max(current - 1, 0);
-
   if(newCurrent === current) return;
-
   slides.style.transform = `translateX(-${newCurrent * 100}%)`;
   slider.dataset.current = newCurrent;
-
   dots.forEach((d,i) => d.classList.toggle('active', i === newCurrent));
 }
 
 function goSlide(sliderId, idx, e) {
-  if(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
+  if(e) { e.stopPropagation(); e.preventDefault(); }
   const slider = document.getElementById(sliderId);
   const slides = slider.querySelector('.slides');
   const dots = slider.querySelectorAll('.dot');
   const total = slides.children.length;
-
   idx = Math.max(0, Math.min(idx, total - 1));
   slides.style.transform = `translateX(-${idx * 100}%)`;
   slider.dataset.current = idx;
@@ -644,9 +663,7 @@ function initSwipeSlider() {
   document.querySelectorAll('.slider').forEach(slider => {
     const slides = slider.querySelector('.slides');
     if(slides.children.length <= 1) return;
-
     let startX = 0, startY = 0, currentX = 0, isDragging = false, isScrolling = null, startTime = 0;
-
     const start = e => {
       if(e.touches && e.touches.length > 1) return;
       startX = e.touches? e.touches[0].clientX : e.clientX;
@@ -656,36 +673,28 @@ function initSwipeSlider() {
       isScrolling = null;
       slides.classList.add('dragging');
     };
-
     const move = e => {
       if(!isDragging) return;
       currentX = e.touches? e.touches[0].clientX : e.clientX;
       const currentY = e.touches? e.touches[0].clientY : e.clientY;
       const diffX = currentX - startX;
       const diffY = currentY - startY;
-
-      if(isScrolling === null) {
-        isScrolling = Math.abs(diffX) < Math.abs(diffY);
-      }
+      if(isScrolling === null) isScrolling = Math.abs(diffX) < Math.abs(diffY);
       if(isScrolling) return;
-
       e.preventDefault();
       const current = parseInt(slider.dataset.current || 0);
       const offset = -current * 100 + (diffX / slider.offsetWidth) * 100;
       slides.style.transform = `translateX(${offset}%)`;
     };
-
     const end = e => {
       if(!isDragging) return;
       isDragging = false;
       slides.classList.remove('dragging');
       if(isScrolling) return;
-
       const diff = currentX - startX;
       const elapsed = Date.now() - startTime;
       const velocity = Math.abs(diff) / elapsed;
       const threshold = velocity > 0.5? 30 : 80;
-
       if(Math.abs(diff) > threshold) {
         if(diff > 0) slide(slider.id, -1);
         else slide(slider.id, 1);
@@ -694,7 +703,6 @@ function initSwipeSlider() {
         slides.style.transform = `translateX(-${current * 100}%)`;
       }
     };
-
     slider.addEventListener('touchstart', start, {passive: true});
     slider.addEventListener('touchmove', move, {passive: false});
     slider.addEventListener('touchend', end);
@@ -747,9 +755,7 @@ let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY
 function initZoomPan() {
   const img = document.getElementById('lightboxImg');
   zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
-
   let startDistance = 0, startX = 0, startY = 0;
-
   img.ontouchend = e => {
     const currentTime = new Date().getTime();
     const tapLength = currentTime - zoomState.lastTap;
@@ -773,26 +779,18 @@ function initZoomPan() {
       zoomState.lastPosY = zoomState.posY;
     }
   };
-
   img.ontouchstart = e => {
     if(e.touches.length === 2) {
-      startDistance = Math.hypot(
-        e.touches[0].pageX - e.touches[1].pageX,
-        e.touches[0].pageY - e.touches[1].pageY
-      );
+      startDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
     } else if(e.touches.length === 1 && zoomState.scale > 1) {
       startX = e.touches[0].pageX - zoomState.lastPosX;
       startY = e.touches[0].pageY - zoomState.lastPosY;
     }
   };
-
   img.ontouchmove = e => {
     if(e.touches.length === 2) {
       e.preventDefault();
-      const distance = Math.hypot(
-        e.touches[0].pageX - e.touches[1].pageX,
-        e.touches[0].pageY - e.touches[1].pageY
-      );
+      const distance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
       zoomState.scale = zoomState.lastScale * (distance / startDistance);
       zoomState.scale = Math.min(Math.max(1, zoomState.scale), 4);
       if(zoomState.scale === 1) {
@@ -828,4 +826,4 @@ function loadTheme() {
 init();
 </script>
 </body>
-</html
+</html>
