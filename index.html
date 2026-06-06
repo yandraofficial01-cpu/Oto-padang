@@ -96,7 +96,7 @@
 .card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.35)}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* FIX BORDER EMAS CUMA KELILING - ADA SPASI */
+/* UDAH GUA BENERIN - PAKE SPASI */
 .card.hot-item {
   padding: 3px;
   background: linear-gradient(45deg, var(--gold1), var(--gold2), var(--gold1), var(--gold3));
@@ -333,6 +333,7 @@ function fixNomorWA(nomor) {
   return wa;
 }
 
+// INIT UDAH GUA BENERIN - ANTI DUPLIKAT BRO
 async function init() {
   try {
     semuaShowroomGlobal = (await ambilDataSheet('490587314')).filter(s => s.nama_showroom);
@@ -347,12 +348,25 @@ async function init() {
     });
 
     const semuaData = await Promise.all(promisesMobil);
+    
+    // FIX DUPLIKAT BRO - PAKE SET
+    const semuaDataGabung = semuaData.flat();
+    const uniqueMobil = [];
+    const seenIds = new Set();
 
-    semuaMobilGlobal = semuaData.flat().filter(m => {
-      const statusAnak = m.status_anak? m.status_anak.toString().toLowerCase().trim() : '';
-      const statusInduk = m.status_induk? m.status_induk.toString().toLowerCase().trim() : '';
-      return statusAnak === 'ready' || statusInduk === 'ready';
+    semuaDataGabung.forEach(m => {
+      const id = m.id_mobil || m.timestamp;
+      if (!seenIds.has(id)) {
+        seenIds.add(id);
+        const statusAnak = m.status_anak? m.status_anak.toString().toLowerCase().trim() : '';
+        const statusInduk = m.status_induk? m.status_induk.toString().toLowerCase().trim() : '';
+        if (statusAnak === 'ready' || statusInduk === 'ready') {
+          uniqueMobil.push(m);
+        }
+      }
     });
+
+    semuaMobilGlobal = uniqueMobil;
 
     renderDaftarShowroom(semuaShowroomGlobal);
     renderMobil(semuaMobilGlobal);
@@ -814,4 +828,4 @@ function loadTheme() {
 init();
 </script>
 </body>
-</html>
+</html
