@@ -145,7 +145,8 @@
           return;
         }
 
-        if (showroom.status && showroom.status.toLowerCase()!== 'ready') {
+        // UDAH GUA GANTI JADI AKTIF BRO
+        if (showroom.status && showroom.status.toLowerCase()!== 'aktif') {
           status.className = 'error';
           status.innerText = 'Akun belum aktif / suspended';
           btn.disabled = false;
