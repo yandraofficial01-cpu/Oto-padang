@@ -392,9 +392,17 @@ semuaShowroomGlobal.forEach(s => {
       }
     });
 
-    semuaMobilGlobal = uniqueMobil;
-    filteredDataGlobal = uniqueMobil;
+    // SORTING: BADGE HOT NAIK PALING ATAS
+    semuaMobilGlobal = uniqueMobil.sort((a, b) => {
+      const aPremium = safeString(a.tag).toLowerCase() === 'hot';
+      const bPremium = safeString(b.tag).toLowerCase() === 'hot';
+      if (aPremium && !bPremium) return -1;
+      if (!aPremium && bPremium) return 1;
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+    filteredDataGlobal = semuaMobilGlobal;
     currentPage = 0;
+
 
     renderDaftarShowroom(semuaShowroomGlobal);
     renderMobilPaginated();
