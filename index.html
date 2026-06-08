@@ -373,6 +373,26 @@ body{
 @media (max-width: 768px) {
   .filter-bar select, #resetFilter { min-width: 100%; }
 }
+/* Biar dropdown ga jebol kalo isinya banyak */
+.dropdown-menu {
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  z-index: 9999 !important;
+  background: var(--card) !important;
+  border: 1.5px solid var(--gold1) !important;
+}
+
+/* SCROLL BAR EMAS SULTAN */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: var(--gold1);
+  border-radius: 3px;
+}
   </style>
 </head>
 <body data-theme="dark">
