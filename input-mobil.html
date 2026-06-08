@@ -6,31 +6,35 @@
   <title>Input Mobil - Oto Padang</title>
   <style>
     body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; margin: 0; }
-   .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+ .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
     h2 { text-align: center; color: #1877f2; margin-bottom: 5px; }
     #namaShowroom { text-align: center; color: #666; font-size: 14px; margin-bottom: 20px; }
     input, select, textarea { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
     button { width: 100%; padding: 12px; background: #1877f2; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer; }
     button:disabled { background: #ccc; cursor: not-allowed; }
     #status { text-align: center; margin-top: 10px; font-size: 14px; min-height: 20px; padding: 8px; border-radius: 6px; }
-   .sukses { background: #d4edda; color: #155724; }
-   .error { background: #f8d7da; color: #721c24; }
-   .info { background: #cce5ff; color: #004085; }
-   .logout { background: #e41e3f; margin-top: 5px; }
+ .sukses { background: #d4edda; color: #155724; }
+ .error { background: #f8d7da; color: #721c24; }
+ .info { background: #cce5ff; color: #004085; }
+ .logout { background: #e41e3f; margin-top: 5px; }
     label { font-size: 14px; font-weight: bold; display: block; margin-top: 10px; }
-   .preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
-   .preview-item { position: relative; aspect-ratio: 1; }
-   .preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
-   .hapus { position: absolute; top: -6px; right: -6px; background: #e41e3f; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; }
-   .preview.loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
-   .row { display: flex; gap: 10px; }
-   .row div { flex: 1; }
-   .required::after { content: " *"; color: red; }
-   .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; font-weight: bold; }
+ .preview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+ .preview-item { position: relative; aspect-ratio: 1; }
+ .preview img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; border: 2px solid #ddd; }
+ .hapus { position: absolute; top: -6px; right: -6px; background: #e41e3f; color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; padding: 0; }
+ .loading { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; }
+ .row { display: flex; gap: 10px; }
+ .row div { flex: 1; }
+ .required::after { content: " *"; color: red; }
+ .count-foto { font-size: 12px; color: #1877f2; margin-top: 4px; font-weight: bold; }
     input[type=file]{display:none}
-   .btn-upload { background: #28a745; }
-   .progress-bar { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-   .progress-fill { height: 100%; background: #1877f2; width: 0%; transition: width 0.3s; }
+ .btn-upload { background: #28a745; }
+ .progress-bar { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
+ .progress-fill { height: 100%; background: #1877f2; width: 0%; transition: width 0.3s; }
+ .info-box {
+      background: #fff3cd; border: 1px solid #ffc107; color: #856404;
+      padding: 10px; border-radius: 6px; font-size: 12px; margin: 15px 0;
+    }
   </style>
 </head>
 <body>
@@ -134,6 +138,11 @@
 
       <label class="required">No WA Sales</label>
       <input type="text" name="no_wa_sales" placeholder="08123456789" required>
+
+      <!-- INFO BOX GANTI CHECKBOX -->
+      <div class="info-box">
+        ℹ️ Mobil akan langsung tayang di web showroom Anda. Untuk tampil di OTO PADANG, tunggu approval admin.
+      </div>
 
       <button type="submit" id="btnSimpan">Simpan Mobil</button>
     </form>
@@ -274,6 +283,11 @@
       data.no_wa_sales = fixNomorWA(data.no_wa_sales);
       data.slug_showroom = showroom.id;
       data.email_pengisi = showroom.email;
+      data.nama_showroom = showroom.nama;
+
+      // === LOGIKA FINAL: ANAK AUTO AKTIF, INDUK SELALU READY ===
+      data.status_anak = 'AKTIF'; // Web anak langsung tayang
+      data.status_induk = 'READY'; // Induk nunggu lu acc manual di Sheet
 
       const payload = {
         data: idMobil? {} : data,
@@ -303,7 +317,7 @@
       }
 
       status.className = 'sukses';
-      status.innerText = `Mobil udah kesimpen! ID: ${idMobil}`;
+      status.innerText = `Mobil udah kesimpen & tayang di web Anda! Nunggu approval buat OTO PADANG. ID: ${idMobil}`;
 
       setTimeout(() => {
         e.target.reset();
@@ -316,7 +330,7 @@
         document.getElementById('btnPilihFoto').disabled = false;
         status.innerText = '';
         status.className = '';
-      }, 2000);
+      }, 3000);
     }
 
     function fixNomorWA(nomor) {
