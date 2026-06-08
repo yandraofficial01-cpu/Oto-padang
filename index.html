@@ -91,10 +91,57 @@
     *{margin:0;padding:0;box-sizing:border-box;transition:background.3s,color.3s}
     body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);padding:16px}
 
-.banner{background:linear-gradient(135deg,var(--primary),#5e5ce6);border-radius:20px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;box-shadow:0 8px 24px rgba(0,122,255,.2)}
-.logo{width:56px;height:56px;background:rgba(255,255,255,.2);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800;backdrop-filter:blur(10px);color:#fff}
-.banner-text h1{font-size:28px;font-weight:800;color:#fff;margin-bottom:4px}
-.banner-text p{color:rgba(255,255,255,.8);font-size:14px}
+.banner{
+  position:fixed;
+  top:0; left:0; right:0;
+  z-index:99999;
+  background:#000;
+  padding:16px 16px 16px 16px; /* BALIKIN 16PX AJA */
+  display:flex;
+  align-items:center;
+  gap:12px;
+  /* HAPUS border-bottom, GANTI PAKE INI */
+  box-shadow: 0 2px 0 #FFD700, /* GARIS EMAS */
+              0 12px 0 #000,   /* SPASI HITAM 10PX */
+              0 14px 0 #FFD700; /* GARIS EMAS TIPIS BAWAH */
+}
+
+
+
+.logo{
+  width:65px;  /* LOGO GEDEIN */
+  height:65px;
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.banner-text h1{
+  font-size:22px;
+  color:#FFD700;
+  margin:0;
+  line-height:1.2;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6),
+               0 0 16px rgba(255, 215, 0, 0.3);
+}
+
+.banner-text p{
+  font-size:13px;
+  color:#ccc;
+  margin:0;
+  line-height:1;
+}
+
+
+body{
+  padding-top:115px; /* NAIKIN KARENA BANNER + 2 GARIS EMAS TEBEL */
+}
+
+
 
 .header-actions{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
 .search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:16px}
@@ -334,13 +381,15 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <div class="banner">
-    <div class="logo">OP</div>
-    <div class="banner-text">
-      <h1>OTO PADANG</h1>
-      <p>Kurator Mobil Bekas Terpercaya Sumatera Barat</p>
-    </div>
+<div class="banner">
+  <div class="logo">
+  <img src="https://i.imgur.com/EqSPvwt.jpeg" alt="OTO PADANG">
   </div>
+  <div class="banner-text">
+    <h1>OTO PADANG</h1>
+    <p>Kurator Mobil Bekas Terpercaya Sumatera Barat</p>
+  </div>
+</div>
 
   <div class="header-actions">
     <input type="text" class="search" id="search" placeholder="🔍 Cari Avanza, 2019, Manual..." oninput="filterData()">
