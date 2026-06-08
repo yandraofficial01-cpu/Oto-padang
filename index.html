@@ -574,22 +574,24 @@ async function init() {
       return s.nama_showroom && status === 'aktif';
     });
 
-    // 2. Bikin kamus showroom - FIX: PAKE
-    let mapShowroom = {}; // 352
-semuaShowroomGlobal.forEach(s => {
-  const slug = safeString(s.slug_showroom).toLowerCase();
-  if (slug) {
-    mapShowroom[slug] = {
-      nama_showroom: s.nama_showroom,
-      wa_admin: fixNomorWA(s.no_hp_pic),
-      alamat: s.alamat || '',
-      domain_showroom: s.domain_showroom || ''
-    };
-  }
-});
+    // 2. Bikin kamus showroom - FIX: PAKE SLUG_SHOWROOM
+    let mapShowroom = {};
+    semuaShowroomGlobal.forEach(s => {
+      const slug = safeString(s.slug_showroom).toLowerCase();
+      if (slug) {
+        mapShowroom = {
+          nama_showroom: s.nama_showroom,
+          wa_admin: fixNomorWA(s.no_hp_pic),
+          alamat: s.alamat || '',
+          domain_showroom: s.domain_showroom || ''
+        };
+      }
+    });
 
     // 3. Ambil SEMUA MOBIL dari 1 SHEET GID 1022893642
     const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
+    console.log('MAP SHOWROOM:', mapShowroom);
+    console.log('JUMLAH MOBIL MENTAH:', semuaMobilMentah.length);
 
     // 4. FILTER + JOIN + ANTI DOUBLE
     const uniqueMobil = [];
@@ -599,17 +601,15 @@ semuaShowroomGlobal.forEach(s => {
       const id = m.id_mobil || m.timestamp;
       if (!seenIds.has(id)) {
         seenIds.add(id);
-
-        const statusAnak = safeString(m.status_anak).toLowerCase();
-        if (statusAnak === 'aktif') {
+        const statusInduk = safeString(m.status_induk).toLowerCase();
+        if (statusInduk === 'aktif') {
           const slug = safeString(m.slug_showroom).toLowerCase();
-       const infoShowroom=mapShowroom[slug]; // AMBIL PAKE
-
+          const infoShowroom = mapShowroom;
           if (infoShowroom) {
             uniqueMobil.push({
-        ...m,
+              ...m,
               nama_showroom: infoShowroom.nama_showroom,
-              wa_admin: infoShowroom.wa_admin, // INI BAKAL 628979879518 BUAT CALYA
+              wa_admin: infoShowroom.wa_admin,
               alamat: infoShowroom.alamat,
               domain_showroom: infoShowroom.domain_showroom
             });
@@ -626,9 +626,9 @@ semuaShowroomGlobal.forEach(s => {
       if (!aPremium && bPremium) return 1;
       return new Date(b.timestamp) - new Date(a.timestamp);
     });
+    
     filteredDataGlobal = semuaMobilGlobal;
     currentPage = 0;
-
 
     renderDaftarShowroom(semuaShowroomGlobal);
     renderMobilPaginated();
