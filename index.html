@@ -474,17 +474,72 @@ let currentPage = 0;
 const ITEMS_PER_PAGE = 12;
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
+let semuaShowroom = [];
 
+function renderDaftarShowroom(showroomList) {
+  const div = document.getElementById('daftarShowroomMenu');
+  if (!div) return;
+  
+  console.log('Data masuk ke render:', showroomList); // DEBUG
+  
+  if (!Array.isArray(showroomList)) showroomList = [];
+  
+  // FIX: Cek domain + status + buang spasi
+  const showroomAktif = showroomList.filter(s => {
+    const domain = s.domain_showroom ? s.domain_showroom.toString().trim() : '';
+    const status = s.status ? s.status.toString().trim().toLowerCase() : '';
+    return domain && domain !== '#' && status === 'aktif';
+  });
+  
+  console.log('Hasil filter:', showroomAktif); // DEBUG
+  
+  if(showroomAktif.length === 0){
+    div.innerHTML = `<div style="padding:12px;text-align:center;color:#888">Belum ada showroom</div>`;
+    return;
+  }
+
+  div.innerHTML = showroomAktif.map(s => `
+    <div class="showroom-item" onclick="pilihShowroom('${s.domain_showroom}')" style="padding:10px;cursor:pointer;border-bottom:1px solid #eee">
+      🏢 ${s.nama_showroom || s.slug_showroom}
+    </div>
+  `).join('');
+}
+
+function pilihShowroom(domain) {
+  console.log('Dipilih:', domain);
+  document.getElementById('daftarShowroomMenu').classList.remove('show');
+  // Nanti diisi action pas klik showroom, misal redirect
+  // window.location.href = `https://${domain}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Mulai fetch showroom...');
+  fetch(`https://opensheet.elk.sh/${SHEET_ID}/PAKET_SHOWROOM`) // <-- GANTI INI
+    .then(res => {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(data => {
+      console.log('Data Showroom masuk:', data);
+      semuaShowroom = Array.isArray(data) ? data : [];
+      renderDaftarShowroom(semuaShowroom);
+    })
+    .catch(err => {
+      console.log('Gagal fetch showroom:', err.message);
+      renderDaftarShowroom([]); // Kasih array kosong biar ga error
+    });
+});
 function safeString(val) {
   return val? val.toString().trim() : '';
 }
 
 function toggleDropdown(id){
   document.querySelectorAll('.dropdown-menu').forEach(m => {
-    if(m.id!== id) m.classList.remove('show');
+    if(m.id != id) m.classList.remove('show'); // ⬅️ GANTI == JADI !=
   });
   document.getElementById(id).classList.toggle('show');
 }
+
 
 window.onclick = function(e) {
   if (!e.target.matches('.dropdown-btn')) {
@@ -585,13 +640,7 @@ async function init() {
     filteredDataGlobal = semuaMobilGlobal;
     currentPage = 0;
 
-    const showroomUnik = [...new Map(semuaMobilGlobal.map(m => [m.slug_showroom, {
-      slug_showroom: m.slug_showroom,
-      nama_showroom: m.nama_showroom,
-      domain_showroom: m.domain_showroom
-    }])).values()];
-
-    renderDaftarShowroom(showroomUnik);
+    
     renderMobilPaginated();
     loadTheme();
 
@@ -969,8 +1018,6 @@ function lightboxSlide(dir) {
 function updateLightboxCounter() {
   document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
 }
-
-let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
 
 function initZoomPan() {
   const img = document.getElementById('lightboxImg');
@@ -1048,32 +1095,13 @@ init();
 
 
 <script>
-const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
-const GID_MOBIL_MASSAL = '1022893642';
-const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
-let semuaMobilGlobal = [];
-let filteredDataGlobal = [];
-let currentPage = 0;
-const ITEMS_PER_PAGE = 12;
-let currentLightboxImages = [];
-let currentLightboxIndex = 0;
 
 function safeString(val) {
   return val? val.toString().trim() : '';
 }
 
-function toggleDropdown(id){
-  document.querySelectorAll('.dropdown-menu').forEach(m => {
-    if(m.id!== id) m.classList.remove('show');
-  });
-  document.getElementById(id).classList.toggle('show');
-}
 
-window.onclick = function(e) {
-  if (!e.target.matches('.dropdown-btn')) {
-    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
-  }
-}
+
 
 async function ambilDataSheet(gid) {
   const url = `${BASE_JSON}&gid=${gid}`;
@@ -1184,19 +1212,7 @@ async function init() {
   }
 }
 
-function renderDaftarShowroom(showroomList) {
-  const div = document.getElementById('daftarShowroomMenu');
-  const showroomAdaDomain = showroomList.filter(s => s.domain_showroom && s.domain_showroom!== '#');
 
-  if(showroomAdaDomain.length === 0){
-    div.innerHTML = `<div class="empty">Belum ada showroom</div>`;
-    return;
-  }
-
-  div.innerHTML = showroomAdaDomain.map(s =>
-    `<a href="${s.domain_showroom}" target="_blank">🏪 ${s.nama_showroom}</a>`
-  ).join('');
-}
 
 function filterData() {
   const keyword = document.getElementById('search').value.toLowerCase();
@@ -1225,19 +1241,6 @@ function filterData() {
   renderMobilPaginated();
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('filterHarga').addEventListener('change', filterData);
-  document.getElementById('filterTahun').addEventListener('change', filterData);
-  document.getElementById('filterTransmisi').addEventListener('change', filterData);
-
-  document.getElementById('resetFilter').addEventListener('click', () => {
-    document.getElementById('search').value = '';
-    document.getElementById('filterHarga').value = '';
-    document.getElementById('filterTahun').value = '';
-    document.getElementById('filterTransmisi').value = '';
-    filterData();
-  });
-});
 
 function renderMobilPaginated() {
   const div = document.getElementById('list-mobil');
@@ -1553,7 +1556,6 @@ function updateLightboxCounter() {
   document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
 }
 
-let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
 
 function initZoomPan() {
   const img = document.getElementById('lightboxImg');
