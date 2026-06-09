@@ -512,23 +512,7 @@ function pilihShowroom(domain) {
   // window.location.href = `https://${domain}`;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Mulai fetch showroom...');
-  fetch(`https://opensheet.elk.sh/${SHEET_ID}/PAKET_SHOWROOM`) // <-- GANTI INI
-    .then(res => {
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json();
-    })
-    .then(data => {
-      console.log('Data Showroom masuk:', data);
-      semuaShowroom = Array.isArray(data) ? data : [];
-      renderDaftarShowroom(semuaShowroom);
-    })
-    .catch(err => {
-      console.log('Gagal fetch showroom:', err.message);
-      renderDaftarShowroom([]); // Kasih array kosong biar ga error
-    });
-});
+
 function safeString(val) {
   return val? val.toString().trim() : '';
 }
@@ -539,7 +523,6 @@ function toggleDropdown(id){
   });
   document.getElementById(id).classList.toggle('show');
 }
-
 
 window.onclick = function(e) {
   if (!e.target.matches('.dropdown-btn')) {
@@ -603,7 +586,59 @@ function fixNomorWA(nomor) {
   if(!wa.startsWith('62')) wa = '62' + wa;
   return wa;
 }
+function renderDaftarShowroom(showroomList) {
+  console.log('>>> FUNGSI RENDER KEJALANIN <<<');
+  const div = document.getElementById('daftarShowroomMenu');
+  if (!div) {
+    console.log('ERROR: div daftarShowroomMenu ga ketemu');
+    return;
+  }
+  
+  console.log('Data masuk ke render:', showroomList);
+  
+  const showroomAktif = showroomList.filter(s => {
+    const domain = s.domain_showroom ? s.domain_showroom.toString().trim() : '';
+    const status = s.status ? s.status.toString().trim().toLowerCase() : '';
+    return domain && domain !== '#' && status === 'aktif';
+  });
+  
+  console.log('Hasil filter:', showroomAktif);
+  
+  if(showroomAktif.length === 0){
+    div.innerHTML = `<div style="padding:12px;text-align:center;color:#888">Belum ada showroom</div>`;
+    return;
+  }
 
+  div.innerHTML = showroomAktif.map(s => `
+    <div class="showroom-item" onclick="pilihShowroom('${s.domain_showroom}')" style="padding:10px;cursor:pointer;border-bottom:1px solid #eee">
+      🏢 ${s.nama_showroom || s.slug_showroom}
+    </div>
+  `).join('');
+}
+
+function pilihShowroom(domain) {
+  if (!domain || domain === '#') {
+    alert('Domain showroom belum diisi');
+    return;
+  }
+  window.location.href = domain;
+}
+
+// FUNGSI KHUSUS BUAT AMBIL DATA SHOWROOM
+function initDataShowroom() {
+  console.log("Mulai fetch showroom...");
+  fetch('https://opensheet.elk.sh/1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg/PAKET_SHOWROOM')
+  .then(res => res.json())
+  .then(data => {
+    console.log("Data Showroom masuk:", data);
+    semuaShowroom = Array.isArray(data) ? data : [];
+    renderDaftarShowroom(semuaShowroom); // INI YANG NGERENDER DROPDOWN
+  })
+  .catch(err => console.error("Error showroom:", err));
+}
+
+// JALANIN FUNGSI SHOWROOM
+initDataShowroom();
 async function init() {
   try {
     const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
