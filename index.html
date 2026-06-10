@@ -19,59 +19,20 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
     transition:background.3s,color.3s
   }
-  body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);padding:16px}
-
-.banner{
-  position:fixed;
-  top:0; left:0; right:0;
-  z-index:9999;
-  background:#000;
-  padding:14px 16px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-bottom: 2px solid var(--gold1);
-}
-
-.logo{
-  width:60px;
-  height:60px;
-}
-
-.logo img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.banner-text h1{
-  font-size:21px;
-  color:var(--gold1);
-  margin:0;
-  line-height:1.2;
-  font-weight: 800;
-  letter-spacing: -0.5px;
-}
-
-.banner-text p{
-  font-size:12px;
-  color:#999;
-  margin:0;
-  line-height:1;
-  font-weight: 600;
-}
-
-body{
-  padding-top:100px;
-}
-
-.header-actions{display:flex;gap:10px;margin:20px 0 24px;flex-wrap:wrap}
-.search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:15px;font-weight:500}
+  body{font-family:'Poppins',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);padding:16px;padding-top:100px}
+.banner{position:fixed;top:0;left:0;right:0;z-index:9999;background:#000;padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--gold1)}
+.logo{width:60px;height:60px}
+.logo img{width:100%;height:100%;object-fit:contain}
+.banner-text h1{font-size:21px;color:var(--gold1);margin:0;line-height:1.2;font-weight:800;letter-spacing:-0.5px}
+.banner-text p{font-size:12px;color:#999;margin:0;line-height:1;font-weight:600}
+.header-actions{display:flex;gap:10px;margin:24px 0 24px;flex-wrap:wrap}
+.search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-size:15px;font-weight:500;outline:none}
 .search::placeholder{color:var(--text2)}
+.search:focus{border-color:var(--gold1)}
 .theme-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-size:20px;color:var(--text)}
-
 .dropdown{position:relative}
 .dropdown-btn{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;font-size:14px}
 .dropdown-btn:hover{background:var(--card-hover)}
@@ -80,30 +41,29 @@ body{
 .dropdown-menu a{display:block;width:100%;text-align:left;padding:12px 16px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px}
 .dropdown-menu a:hover{background:var(--bg)}
 .dropdown-menu.empty{padding:12px 16px;color:var(--text2);font-size:14px}
-
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
 .card{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease;position:relative}
 .card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3);border-color:var(--gold2)}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-.card.hot-item {
-      padding: 2px;
-      background: linear-gradient(135deg, var(--gold1), var(--gold2), var(--gold3));
-      background-size: 200% 200%;
-      animation: goldGlow 4s ease infinite;
-      border: none;
-      box-shadow: 0 0 24px rgba(245,196,81,.3);
-    }
-    @keyframes goldGlow {
-      0%,100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-.card.hot-item .card-inner {
-      background: var(--card);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
+  @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card.hot-item{
+  padding:2px;
+  background:linear-gradient(135deg,var(--gold1),var(--gold2),var(--gold3));
+  background-size:200% 200%;
+  animation:goldGlow 4s ease infinite;
+  border:none;
+  box-shadow:0 0 24px rgba(245,196,81,.3)
+}
+  @keyframes goldGlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.card.hot-item.slider{
+  margin:2px 2px 0 2px;
+  border-radius:16px 16px 0 0;
+  background:var(--card)
+}
+.card.hot-item .card-body{
+  margin:0 2px 2px 2px;
+  border-radius:0 0 16px 16px;
+  background:var(--card)
+}
 .slider{position:relative;width:100%;height:240px;background:#000;overflow:hidden;touch-action:pan-y}
 .slides{display:flex;height:100%;transition:transform.3s cubic-bezier(.25,.46,.45,.94);will-change:transform}
 .slides img{width:100%;height:100%;object-fit:cover;flex-shrink:0;user-select:none;-webkit-user-drag:none;cursor:pointer;background:var(--bg)}
@@ -114,64 +74,28 @@ body{
 .dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:4}
 .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:all.2s}
 .dot.active{background:#fff;width:20px;border-radius:4px}
-
 .card-body{padding:20px}
 .badge{background:linear-gradient(135deg,#007aff,#5e5ce6);padding:6px 12px;border-radius:8px;font-size:11px;display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;font-weight:700;color:#fff;letter-spacing:0.3px}
 .badge.hot{background:linear-gradient(135deg,#ff3b30,#ff9500);box-shadow:0 4px 12px rgba(255,59,48,.4);animation:pulse 2s infinite}
-    @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-
-.badge.hot-premium {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: linear-gradient(135deg, var(--gold1), var(--gold3));
-      color: #000;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      z-index: 3;
-      box-shadow: 0 4px 16px rgba(245, 196, 81,.5);
-      border: 1px solid rgba(255,255,255,.2);
-      animation: badgePulse 2s infinite;
-    }
-    @keyframes badgePulse {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.badge.hot-premium{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--gold1),var(--gold3));color:#000;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:800;z-index:3;box-shadow:0 4px 16px rgba(245,196,81,.5);border:1px solid rgba(255,255,255,.2);animation:badgePulse 2s infinite}
+  @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 .card h3{font-size:20px;margin-bottom:8px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
-.harga{
-  color: var(--gold1)!important;
-  font-weight: 800!important;
-  font-size: 24px!important;
-  margin: 10px 0!important;
-  letter-spacing: -0.5px;
-}
-
-[data-theme="light"] .harga {
-  color: var(--gold2)!important;
-}
-
+.harga{color:var(--gold1)!important;font-weight:800!important;font-size:24px!important;margin:10px 0!important;letter-spacing:-0.5px}
+  [data-theme="light"].harga{color:var(--gold2)!important}
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--text2);margin:16px 0}
-.spec span{background:var(--bg);padding:9px 12px;border-radius:10px;font-weight:600;color:#bbb;border:1px solid var(--border)}
-
+.spec span{background:var(--bg);padding:9px 12px;border-radius:10px;font-weight:600;color:#bbb;border:1px solid #2a2a2a;outline:none}
 .desc{font-size:13px;color:#999;line-height:1.6;margin:12px 0;font-weight:500}
-
 .btn-group{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:16px}
 .wa-btn{background:var(--wa);color:#fff;padding:14px;border-radius:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:700;transition:all.2s;font-size:15px}
 .wa-btn:hover{transform:scale(1.02);box-shadow:0 6px 18px rgba(37,211,102,.35)}
 .wa-btn svg{width:20px;height:20px;flex-shrink:0}
-
 .share-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:14px;border-radius:12px;cursor:pointer;font-size:14px;font-weight:600;transition:all.2s;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .share-btn:hover{background:var(--card-hover);border-color:var(--gold2)}
-
 .showroom-btn{background:linear-gradient(135deg,#007aff,#5e5ce6);color:#fff;padding:13px;border-radius:12px;text-align:center;display:block;text-decoration:none;font-weight:700;margin-top:10px;transition:all.2s;font-size:14px}
 .showroom-btn:hover{transform:scale(1.02);box-shadow:0 6px 18px rgba(0,122,255,.3)}
-
 .loading,.no-result{text-align:center;padding:40px;color:var(--text2);grid-column:1/-1;font-weight:600}
 .load-more{background:var(--primary);color:#fff;padding:14px 24px;border-radius:12px;border:none;font-weight:700;cursor:pointer;margin:20px auto;display:block;font-size:15px}
-
 .lightbox{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.95);z-index:9999;display:none;align-items:center;justify-content:center;overflow:hidden}
 .lightbox.active{display:flex}
 .lightbox-img{max-width:90%;max-height:90%;object-fit:contain;transition:transform.05s linear;touch-action:none;transform-origin:center;will-change:transform}
@@ -179,11 +103,10 @@ body{
 .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.2);color:#fff;border:none;width:50px;height:50px;border-radius:50%;font-size:28px;cursor:pointer;backdrop-filter:blur(10px);z-index:10001}
 .lightbox-prev{left:20px}.lightbox-next{right:20px}
 .lightbox-counter{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:20px;font-size:14px;z-index:10001;font-weight:600}
-
 .share-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:10000;display:none;align-items:flex-end;justify-content:center}
 .share-modal.active{display:flex}
 .share-sheet{background:var(--card);width:100%;max-width:500px;border-radius:20px 20px 0 0;padding:24px;animation:slideUp.3s ease;border-top:2px solid var(--gold1)}
-    @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .share-title{font-size:18px;font-weight:700;margin-bottom:20px;text-align:center}
 .share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
 .share-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;text-decoration:none;color:var(--text)}
@@ -196,245 +119,72 @@ body{
 .share-icon.copy{background:var(--border);color:var(--text)}
 .share-label{font-size:12px;font-weight:600}
 .share-close{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:14px;border-radius:12px;width:100%;font-weight:700;cursor:pointer}
-
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);color:var(--text);padding:14px 24px;border-radius:12px;border:1px solid var(--border);font-weight:600;z-index:10001;opacity:0;transition:all.3s}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-.filter-bar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0 24px 0;
-  padding: 16px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-}
-.filter-bar select, #resetFilter {
-  flex: 1; min-width: 140px;
-  padding: 11px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  outline: none;
-  font-weight: 600;
-}
-.filter-bar select:focus {
-  border-color: var(--gold1);
-}
-#resetFilter {
-  background: var(--gold1);
-  color: #000;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-}
-#resetFilter:hover {
-  background: var(--gold2);
-}
-@media (max-width: 768px) {
- .filter-bar select, #resetFilter { min-width: 100%; }
-}
-
-.dropdown-menu {
-  max-height: 250px!important;
-  overflow-y: auto!important;
-  z-index: 9999!important;
-  background: var(--card)!important;
-  border: 1.5px solid var(--gold1)!important;
-}
-
-.dropdown-menu::-webkit-scrollbar {
-  width: 6px;
-}
-.dropdown-menu::-webkit-scrollbar-track {
-  background: var(--bg);
-}
-.dropdown-menu::-webkit-scrollbar-thumb {
-  background: var(--gold1);
-  border-radius: 3px;
-}
-
-.{
-  background: var(--card);
-  border-top: 2px solid var(--gold1);
-  margin-top: 60px;
-  padding: 40px 16px 20px;
-}
-.-content{
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-  margin-bottom: 32px;
-}
-.-col h4{
-  color: var(--gold1);
-  font-size: 18px;
-  font-weight: 800;
-  margin-bottom: 16px;
-  letter-spacing: -0.3px;
-}
-.-col p{
-  color: #ddd;
-  font-size: 14px;
-  line-height: 1.7;
-  font-weight: 600;
-}
-.-col ul{
-  list-style: none;
-}
-.-col ul li{
-  margin-bottom: 12px;
-}
-.-col ul li a{
-  color: #ddd;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 600;
-  transition: all.2s;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.-col ul li a:hover{
-  color: var(--gold1);
-  transform: translateX(4px);
-}
-.-cta{
-  background: linear-gradient(135deg, var(--gold1), var(--gold3));
-  color: #000;
-  padding: 16px 24px;
-  border-radius: 12px;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 15px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 16px;
-  transition: all.2s;
-}
-.-cta:hover{
-  transform: scale(1.05);
-}
-.-bottom{
-  border-top: 1px solid var(--border);
-  padding-top: 20px;
-  text-align: center;
-  color: #999;
-  font-size: 13px;
-  font-weight: 600;
-}
-.-bottom a{
-  color: var(--gold1);
-  text-decoration: none;
-}
-.social-links{
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-}
-.social-links a{
-  width: 40px;
-  height: 40px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text);
-  transition: all.2s;
-}
-.social-links a:hover{
-  background: var(--gold1);
-  color: #000;
-  border-color: var(--gold1);
-  transform: translateY(-3px);
-}
-@media (max-width: 768px) {
-  .-content{
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-}
-
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 24px 0;padding:16px;background:var(--card);border:1px solid #2a2a2a;border-radius:16px}
+.filter-bar select, #resetFilter{flex:1;min-width:140px;padding:11px 14px;border-radius:10px;border:1px solid #2a2a2a;background:var(--bg);color:var(--text);font-size:14px;outline:none;font-weight:600;-webkit-appearance:none}
+.filter-bar select:focus{border-color:var(--gold1);box-shadow:none}
+  #resetFilter{background:var(--gold1);color:#000;font-weight:700;border:none;cursor:pointer}
+  #resetFilter:hover{background:var(--gold2)}
+  @media (max-width:768px){.filter-bar select, #resetFilter{min-width:100%}}
+.dropdown-menu{max-height:250px!important;overflow-y:auto!important;z-index:9999!important;background:var(--card)!important;border:1.5px solid var(--gold1)!important}
+.dropdown-menu::-webkit-scrollbar{width:6px}
+.dropdown-menu::-webkit-scrollbar-track{background:var(--bg)}
+.dropdown-menu::-webkit-scrollbar-thumb{background:var(--gold1);border-radius:3px}
 .footer{background:var(--card);border-top:2px solid var(--gold1);margin-top:60px;padding:40px 16px 20px}
 .footer-content{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;margin-bottom:32px}
 .footer-col h4{color:var(--gold1);font-size:18px;font-weight:800;margin-bottom:16px}
 .footer-col p{color:var(--text);font-size:14px;line-height:1.7;font-weight:600}
 .footer-col ul{list-style:none;padding:0;margin:0}
 .footer-col ul li{margin-bottom:12px}
-.footer-col ul li a{color:var(--text);text-decoration:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:all .2s}
+.footer-col ul li a{color:var(--text);text-decoration:none;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:all.2s}
 .footer-col ul li a:hover{color:var(--gold1);transform:translateX(4px)}
-.footer-cta{background:#25D366!important;color:#fff!important;padding:16px 24px;border-radius:12px;text-decoration:none;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:8px;margin-top:16px;box-shadow:0 6px 20px rgba(37,211,102,.3);transition:all .2s}
+.footer-cta{background:#25D366!important;color:#fff!important;padding:16px 24px;border-radius:12px;text-decoration:none;font-weight:800;font-size:15px;display:inline-flex;align-items:center;gap:8px;margin-top:16px;box-shadow:0 6px 20px rgba(37,211,102,.3);transition:all.2s}
 .footer-cta:hover{transform:scale(1.05);box-shadow:0 8px 28px rgba(37,211,102,.5)}
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;text-align:center;color:var(--text2);font-size:13px;font-weight:600}
 .footer-bottom a{color:var(--gold1);text-decoration:none}
-@media (max-width:768px){
-  .footer-content{grid-template-columns:1fr;gap:24px;text-align:center}
-  .footer-col ul li a{justify-content:center}
-  .footer-cta{width:100%;justify-content:center}
-}
-  </style>
+  @media (max-width:768px){.footer-content{grid-template-columns:1fr;gap:24px;text-align:center}.footer-col ul li a{justify-content:center}.footer-cta{width:100%;justify-content:center}}
+</style>
 </head>
 <body data-theme="dark">
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5C3TD5R"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5C3TD5R" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="banner">
-  <div class="logo">
-  <img src="https://i.imgur.com/EqSPvwt.jpeg" alt="OTO PADANG">
-  </div>
-  <div class="banner-text">
-    <h1>OTO PADANG</h1>
-    <p>Kurator Mobil Bekas Terpercaya Sumatera Barat</p>
-  </div>
+  <div class="logo"><img src="https://i.imgur.com/EqSPvwt.jpeg" alt="OTO PADANG"></div>
+  <div class="banner-text"><h1>OTO PADANG</h1><p>Kurator Mobil Bekas Terpercaya Sumatera Barat</p></div>
 </div>
 
-  <div class="header-actions">
-    <input type="text" class="search" id="search" placeholder="🔍 Cari Avanza, 2019, Manual..." oninput="filterData()">
-
-    <div class="dropdown">
-      <button class="dropdown-btn" onclick="toggleDropdown('daftarShowroomMenu')">🏪 Daftar Showroom ▼</button>
-      <div class="dropdown-menu" id="daftarShowroomMenu"></div>
-    </div>
-
-    <div class="dropdown">
-      <button class="dropdown-btn" onclick="toggleDropdown('showroomMenu')">🔐 Login Showroom ▼</button>
-      <div class="dropdown-menu" id="showroomMenu">
-        <a href="login.html">🔐 Login Showroom</a>
-      </div>
-    </div>
-
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+<div class="header-actions">
+  <input type="text" class="search" id="search" placeholder="🔍 Cari Avanza, 2019, Manual..." oninput="filterData()">
+  <div class="dropdown">
+    <button class="dropdown-btn" onclick="toggleDropdown('daftarShowroomMenu')">🏪 Daftar Showroom ▼</button>
+    <div class="dropdown-menu" id="daftarShowroomMenu"></div>
   </div>
+  <div class="dropdown">
+    <button class="dropdown-btn" onclick="toggleDropdown('showroomMenu')">🔐 Login Showroom ▼</button>
+    <div class="dropdown-menu" id="showroomMenu"><a href="login.html">🔐 Login Showroom</a></div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+</div>
 
 <div class="filter-bar">
   <select id="filterHarga">
     <option value="">Semua Harga</option>
     <option value="0-100000000">Di bawah 100 Juta</option>
-    <option value="100000-200000000">100 - 200 Juta</option>
+    <option value="100000000-200000000">100 - 200 Juta</option>
     <option value="200000000-300000000">200 - 300 Juta</option>
     <option value="300000000-99999999999">300 Juta ke atas</option>
   </select>
-
-<select id="filterTahun">
-  <option value="">Semua Tahun</option>
-  <option value="1995-2000">1995 - 2000</option>
-  <option value="2001-2005">2001 - 2005</option>
-  <option value="2006-2010">2006 - 2010</option>
-  <option value="2011-2015">2011 - 2015</option>
-  <option value="2016-2020">2016 - 2020</option>
-  <option value="2021-2023">2021 - 2023</option>
-  <option value="2024-2026">2024 - 2026</option>
-</select>
-
+  <select id="filterTahun">
+    <option value="">Semua Tahun</option>
+    <option value="1995-2000">1995 - 2000</option>
+    <option value="2001-2005">2001 - 2005</option>
+    <option value="2006-2010">2006 - 2010</option>
+    <option value="2011-2015">2011 - 2015</option>
+    <option value="2016-2020">2016 - 2020</option>
+    <option value="2021-2023">2021 - 2023</option>
+    <option value="2024-2026">2024 - 2026</option>
+  </select>
   <select id="filterTransmisi">
     <option value="">Semua Transmisi</option>
     <option value="Manual">Manual</option>
@@ -442,29 +192,31 @@ body{
     <option value="AT">AT</option>
     <option value="CVT">CVT</option>
   </select>
-
   <button id="resetFilter">Reset</button>
 </div>
-  <div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
-  <button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">Muat Lebih Banyak</button>
 
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" onclick="closeLightbox()">×</button>
-    <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1)">‹</button>
-    <img class="lightbox-img" id="lightboxImg" src="">
-    <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1)">›</button>
-    <div class="lightbox-counter" id="lightboxCounter"></div>
+<div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
+<button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">Muat Lebih Banyak</button>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1)">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1)">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
+<div class="share-modal" id="shareModal" onclick="closeShareModal(event)">
+  <div class="share-sheet" onclick="event.stopPropagation()">
+    <div class="share-title">Bagikan Mobil Ini</div>
+    <div class="share-grid" id="shareGrid"></div>
+    <button class="share-close" onclick="closeShareModal()">Tutup</button>
   </div>
+</div>
 
-  <div class="share-modal" id="shareModal" onclick="closeShareModal(event)">
-    <div class="share-sheet" onclick="event.stopPropagation()">
-      <div class="share-title">Bagikan Mobil Ini</div>
-      <div class="share-grid" id="shareGrid"></div>
-      <button class="share-close" onclick="closeShareModal()">Tutup</button>
-    </div>
-  </div>
+<div class="toast" id="toast">Link berhasil disalin!</div>
 
-  <div class="toast" id="toast">Link berhasil disalin!</div><script>
+<script>
 const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
 const GID_MOBIL_MASSAL = '1022893642';
 const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
@@ -474,44 +226,7 @@ let currentPage = 0;
 const ITEMS_PER_PAGE = 12;
 let currentLightboxImages = [];
 let currentLightboxIndex = 0;
-let semuaShowroom = [];
-
-function renderDaftarShowroom(showroomList) {
-  const div = document.getElementById('daftarShowroomMenu');
-  if (!div) return;
-  
-  console.log('Data masuk ke render:', showroomList); // DEBUG
-  
-  if (!Array.isArray(showroomList)) showroomList = [];
-  
-  // FIX: Cek domain + status + buang spasi
-  const showroomAktif = showroomList.filter(s => {
-    const domain = s.domain_showroom ? s.domain_showroom.toString().trim() : '';
-    const status = s.status ? s.status.toString().trim().toLowerCase() : '';
-    return domain && domain !== '#' && status === 'aktif';
-  });
-  
-  console.log('Hasil filter:', showroomAktif); // DEBUG
-  
-  if(showroomAktif.length === 0){
-    div.innerHTML = `<div style="padding:12px;text-align:center;color:#888">Belum ada showroom</div>`;
-    return;
-  }
-
-  div.innerHTML = showroomAktif.map(s => `
-    <div class="showroom-item" onclick="pilihShowroom('${s.domain_showroom}')" style="padding:10px;cursor:pointer;border-bottom:1px solid #eee">
-      🏢 ${s.nama_showroom || s.slug_showroom}
-    </div>
-  `).join('');
-}
-
-function pilihShowroom(domain) {
-  console.log('Dipilih:', domain);
-  document.getElementById('daftarShowroomMenu').classList.remove('show');
-  // Nanti diisi action pas klik showroom, misal redirect
-  // window.location.href = `https://${domain}`;
-}
-
+let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
 
 function safeString(val) {
   return val? val.toString().trim() : '';
@@ -519,7 +234,7 @@ function safeString(val) {
 
 function toggleDropdown(id){
   document.querySelectorAll('.dropdown-menu').forEach(m => {
-    if(m.id != id) m.classList.remove('show'); // ⬅️ GANTI == JADI !=
+    if(m.id!= id) m.classList.remove('show');
   });
   document.getElementById(id).classList.toggle('show');
 }
@@ -537,7 +252,6 @@ async function ambilDataSheet(gid) {
   const text = await res.text();
   const json = JSON.parse(text.substr(47).slice(0, -2));
   const headers = json.table.cols.map(c => c.label? c.label.toLowerCase().replace(/\s/g,'').trim() : '');
-
   return json.table.rows.map(r => {
     let obj = {};
     headers.forEach((h,i) => {
@@ -586,29 +300,19 @@ function fixNomorWA(nomor) {
   if(!wa.startsWith('62')) wa = '62' + wa;
   return wa;
 }
+
 function renderDaftarShowroom(showroomList) {
-  console.log('>>> FUNGSI RENDER KEJALANIN <<<');
   const div = document.getElementById('daftarShowroomMenu');
-  if (!div) {
-    console.log('ERROR: div daftarShowroomMenu ga ketemu');
-    return;
-  }
-  
-  console.log('Data masuk ke render:', showroomList);
-  
+  if (!div) return;
   const showroomAktif = showroomList.filter(s => {
-    const domain = s.domain_showroom ? s.domain_showroom.toString().trim() : '';
-    const status = s.status ? s.status.toString().trim().toLowerCase() : '';
-    return domain && domain !== '#' && status === 'aktif';
+    const domain = s.domain_showroom? s.domain_showroom.toString().trim() : '';
+    const status = s.status? s.status.toString().trim().toLowerCase() : '';
+    return domain && domain!== '#' && status === 'aktif';
   });
-  
-  console.log('Hasil filter:', showroomAktif);
-  
   if(showroomAktif.length === 0){
     div.innerHTML = `<div style="padding:12px;text-align:center;color:#888">Belum ada showroom</div>`;
     return;
   }
-
   div.innerHTML = showroomAktif.map(s => `
     <div class="showroom-item" onclick="pilihShowroom('${s.domain_showroom}')" style="padding:10px;cursor:pointer;border-bottom:1px solid #eee">
       🏢 ${s.nama_showroom || s.slug_showroom}
@@ -621,41 +325,44 @@ function pilihShowroom(domain) {
     alert('Domain showroom belum diisi');
     return;
   }
-  window.location.href = domain;
+  window.open(domain, 'showroom_tab', 'noopener,noreferrer');
+  document.getElementById('daftarShowroomMenu').classList.remove('show');
 }
 
-// FUNGSI KHUSUS BUAT AMBIL DATA SHOWROOM
 function initDataShowroom() {
-  console.log("Mulai fetch showroom...");
-  fetch('https://opensheet.elk.sh/1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg/PAKET_SHOWROOM')
-  .then(res => res.json())
-  .then(data => {
-    console.log("Data Showroom masuk:", data);
-    semuaShowroom = Array.isArray(data) ? data : [];
-    renderDaftarShowroom(semuaShowroom); // INI YANG NGERENDER DROPDOWN
-  })
-  .catch(err => console.error("Error showroom:", err));
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg/export?format=csv&gid=490587314';
+  fetch(SHEET_URL)
+.then(res => res.text())
+.then(csvText => {
+      const rows = csvText.split('\n');
+      const headers = rows[0].split(',').map(h => h.trim());
+      const data = rows.slice(1).map(row => {
+        const values = row.split(',');
+        let obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = values[i]? values[i].trim() : '';
+        });
+        return obj;
+      });
+      renderDaftarShowroom(data);
+    })
+.catch(err => console.error('GAGAL FETCH:', err));
 }
 
-// JALANIN FUNGSI SHOWROOM
-initDataShowroom();
 async function init() {
   try {
     const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
-    
     const uniqueMobil = [];
     const seenIds = new Set();
-
     semuaMobilMentah.forEach(m => {
       const id = m.id_mobil || m.timestamp;
       if (!seenIds.has(id)) {
         seenIds.add(id);
         const statusAnak = safeString(m.status_anak).toLowerCase();
         const statusInduk = safeString(m.status_induk).toLowerCase();
-
         if (statusAnak === 'aktif' && statusInduk === 'aktif') {
           uniqueMobil.push({
-       ...m,
+         ...m,
             nama_showroom: safeString(m.nama_showroom) || 'Sales',
             wa_admin: fixNomorWA(m.no_wa_sales),
             domain_showroom: m.domain_showroom || '#'
@@ -663,7 +370,6 @@ async function init() {
         }
       }
     });
-
     semuaMobilGlobal = uniqueMobil.sort((a, b) => {
       const aPremium = safeString(a.tag).toLowerCase() === 'hot';
       const bPremium = safeString(b.tag).toLowerCase() === 'hot';
@@ -671,32 +377,14 @@ async function init() {
       if (!aPremium && bPremium) return 1;
       return new Date(b.timestamp) - new Date(a.timestamp);
     });
-
     filteredDataGlobal = semuaMobilGlobal;
     currentPage = 0;
-
-    
     renderMobilPaginated();
     loadTheme();
-
   } catch(e) {
     console.error('ERROR:', e);
     document.getElementById('list-mobil').innerHTML = `<div class="loading" style="color:#ff3b30">Error: ${e.message}<br>Pastikan Sheet di-share "Anyone with the link"</div>`;
   }
-}
-
-function renderDaftarShowroom(showroomList) {
-  const div = document.getElementById('daftarShowroomMenu');
-  const showroomAdaDomain = showroomList.filter(s => s.domain_showroom && s.domain_showroom!== '#');
-
-  if(showroomAdaDomain.length === 0){
-    div.innerHTML = `<div class="empty">Belum ada showroom</div>`;
-    return;
-  }
-
-  div.innerHTML = showroomAdaDomain.map(s =>
-    `<a href="${s.domain_showroom}" target="_blank">🏪 ${s.nama_showroom}</a>`
-  ).join('');
 }
 
 function filterData() {
@@ -704,23 +392,17 @@ function filterData() {
   const filterHarga = document.getElementById('filterHarga').value;
   const filterTahun = document.getElementById('filterTahun').value;
   const filterTransmisi = document.getElementById('filterTransmisi').value;
-
   const [minHarga, maxHarga] = filterHarga? filterHarga.split('-').map(Number) : [0, Infinity];
   const [minTahun, maxTahun] = filterTahun? filterTahun.split('-').map(Number) : [0, Infinity];
-
   const hasilFilter = semuaMobilGlobal.filter(mobil => {
     const hargaMobil = Number(String(mobil.harga_cash).trim()) || 0;
     const tahunMobil = Number(mobil.tahun) || 0;
-
-    const namaMatch =!keyword || String(mobil.merk || '').toLowerCase().includes(keyword) ||
-                      String(mobil.tipe || '').toLowerCase().includes(keyword);
+    const namaMatch =!keyword || String(mobil.merk || '').toLowerCase().includes(keyword) || String(mobil.tipe || '').toLowerCase().includes(keyword);
     const hargaMatch = hargaMobil >= minHarga && hargaMobil <= maxHarga;
     const tahunMatch = tahunMobil >= minTahun && tahunMobil <= maxTahun;
     const transmisiMatch =!filterTransmisi || mobil.transmisi === filterTransmisi;
-
     return namaMatch && hargaMatch && tahunMatch && transmisiMatch;
   });
-
   filteredDataGlobal = hasilFilter;
   currentPage = 0;
   renderMobilPaginated();
@@ -730,7 +412,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('filterHarga').addEventListener('change', filterData);
   document.getElementById('filterTahun').addEventListener('change', filterData);
   document.getElementById('filterTransmisi').addEventListener('change', filterData);
-
   document.getElementById('resetFilter').addEventListener('click', () => {
     document.getElementById('search').value = '';
     document.getElementById('filterHarga').value = '';
@@ -738,37 +419,31 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filterTransmisi').value = '';
     filterData();
   });
+  initDataShowroom();
+  init();
 });
 
 function renderMobilPaginated() {
   const div = document.getElementById('list-mobil');
   const loadMoreBtn = document.getElementById('loadMoreBtn');
-
   if(filteredDataGlobal.length === 0) {
     div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Pastikan kolom status_anak = AKTIF</div>';
     if(loadMoreBtn) loadMoreBtn.style.display = 'none';
     return;
   }
-
   const start = currentPage * ITEMS_PER_PAGE;
   const end = start + ITEMS_PER_PAGE;
   const dataToRender = filteredDataGlobal.slice(0, end);
-
   div.innerHTML = dataToRender.map((m, idx) => {
     const images = getAllImages(m);
     const sliderId = `slider-${(m.timestamp || Date.now())}-${idx}`;
     const nomorWA = m.wa_admin;
-
     const waButton = nomorWA?
-      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}"
-          class="wa-btn"
-          target="_blank"
-          onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_wa', 'showroom_name': '${m.nama_showroom}', 'mobil': '${m.merk} ${m.tipe} ${m.tahun}', 'harga': '${m.harga_cash}', 'tahun': '${m.tahun}'});">
-          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
+      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">
+          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.-.7-.5z"/></svg>
           Chat WA ${m.nama_showroom}
        </a>` :
       `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
-
     const shareData = {
       id: m.timestamp,
       title: `${m.merk} ${m.tipe} ${m.tahun}`,
@@ -777,20 +452,16 @@ function renderMobilPaginated() {
       wa: nomorWA,
       img: images[0]
     };
-
     const btnKeShowroom = m.domain_showroom && m.domain_showroom!== '#'? `
-      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn" onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_showroom', 'showroom_name': '${m.nama_showroom}'});">
+      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn">
         🏪 Kunjungi ${m.nama_showroom}
       </a>
     ` : '';
-
     const isHot = safeString(m.tag).toLowerCase() === 'hot';
     const hotClass = isHot? 'hot-item' : '';
     const badgeHotPremium = isHot? `<div class="badge hot-premium">👑 HOT DEAL</div>` : '';
-
     return `
     <div class="card ${hotClass}">
-      ${hotClass? '<div class="card-inner">' : ''}
       <div class="slider" id="${sliderId}" data-current="0">
         ${badgeHotPremium}
         <div class="slides">
@@ -805,9 +476,7 @@ ${images.map((img,i) => `<img src="${img}" alt="${m.merk} ${m.tipe} ${m.tahun} -
         ` : ''}
       </div>
       <div class="card-body">
-        <div class="badge">
-          🏪 ${m.nama_showroom}
-        </div>
+        <div class="badge">🏪 ${m.nama_showroom}</div>
         <h3>${m.merk} ${m.tipe} ${m.tahun}</h3>
         <div class="harga">Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}</div>
         <div class="spec">
@@ -824,10 +493,8 @@ ${images.map((img,i) => `<img src="${img}" alt="${m.merk} ${m.tipe} ${m.tahun} -
         </div>
         ${btnKeShowroom}
       </div>
-      ${hotClass? '</div>' : ''}
     </div>
   `}).join('');
-
   if(loadMoreBtn) loadMoreBtn.style.display = end < filteredDataGlobal.length? 'block' : 'none';
   initSwipeSlider();
 }
@@ -876,25 +543,23 @@ function openShareModal(data) {
   const waLink = data.wa? `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}` : '#';
   const encodedText = encodeURIComponent(text);
   const encodedUrl = encodeURIComponent(waLink);
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'share', 'method': 'modal_open', 'content_type': 'mobil', 'item_id': data.title});
   grid.innerHTML = `
-    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'});">
+    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item">
       <div class="share-icon wa">💬</div><div class="share-label">WhatsApp</div>
     </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'});">
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item">
       <div class="share-icon fb">f</div><div class="share-label">Facebook</div>
     </a>
-    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'});">
+    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item">
       <div class="share-icon tw">𝕏</div><div class="share-label">Twitter</div>
     </a>
-    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); return false;" class="share-item">
       <div class="share-icon ig">📷</div><div class="share-label">Instagram</div>
     </a>
-    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); dataLayer.push({'event': 'share', 'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); return false;" class="share-item">
       <div class="share-icon tt">♪</div><div class="share-label">TikTok</div>
     </a>
-    <a href="#" onclick="copyLink('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
+    <a href="#" onclick="copyLink('${waLink}'); return false;" class="share-item">
       <div class="share-icon copy">🔗</div><div class="share-label">Copy Link</div>
     </a>
   `;
@@ -1033,8 +698,6 @@ function openLightbox(images, index) {
   lightbox.classList.add('active');
   updateLightboxCounter();
   initZoomPan();
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'view_item', 'event_category': 'engagement'});
 }
 
 function closeLightbox() {
@@ -1115,8 +778,6 @@ function toggleTheme() {
   body.setAttribute('data-theme', newTheme);
   btn.textContent = newTheme === 'dark'? '☀️' : '🌙';
   localStorage.setItem('theme', newTheme);
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'toggle_theme', 'theme': newTheme});
 }
 
 function loadTheme() {
@@ -1125,545 +786,6 @@ function loadTheme() {
   document.getElementById('themeBtn').textContent = saved === 'dark'? '☀️' : '🌙';
 }
 
-init();
-</script>
-
-
-<script>
-
-function safeString(val) {
-  return val? val.toString().trim() : '';
-}
-
-
-
-
-async function ambilDataSheet(gid) {
-  const url = `${BASE_JSON}&gid=${gid}`;
-  const res = await fetch(url);
-  if(!res.ok) throw new Error(`HTTP ${res.status}`);
-  const text = await res.text();
-  const json = JSON.parse(text.substr(47).slice(0, -2));
-  const headers = json.table.cols.map(c => c.label? c.label.toLowerCase().replace(/\s/g,'').trim() : '');
-
-  return json.table.rows.map(r => {
-    let obj = {};
-    headers.forEach((h,i) => {
-      if(h) {
-        let val = r.c[i] && r.c[i].v!= null? r.c[i].v : '';
-        obj[h] = val.toString().trim();
-      }
-    });
-    return obj;
-  });
-}
-
-function fixImgurUrl(url) {
-  if(!url) return '';
-  url = url.trim();
-  if(url.includes('drive.google.com')) {
-    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    if(match && match[1]) {
-      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
-    }
-  }
-  if(url.includes('imgur.com/') &&!url.includes('i.imgur.com')) {
-    const id = url.split('/').pop().split('.')[0];
-    return `https://i.imgur.com/${id}.jpg`;
-  }
-  return url;
-}
-
-function getAllImages(mobil) {
-  const urls = [];
-  for(let i = 1; i <= 6; i++) {
-    const key = `foto_${i}`;
-    const raw = mobil[key];
-    if(raw && typeof raw === 'string' && raw.trim().length > 10 && raw.trim().toLowerCase().startsWith('http')) {
-      urls.push(fixImgurUrl(raw.trim()));
-    }
-  }
-  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'];
-}
-
-function fixNomorWA(nomor) {
-  if(!nomor) return '';
-  let wa = nomor.toString().replace(/[^0-9]/g, '');
-  if(wa.startsWith('0')) wa = '62' + wa.substring(1);
-  if(wa.startsWith('8')) wa = '62' + wa;
-  if(!wa.startsWith('62')) wa = '62' + wa;
-  return wa;
-}
-
-async function init() {
-  try {
-    const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
-    
-    const uniqueMobil = [];
-    const seenIds = new Set();
-
-    semuaMobilMentah.forEach(m => {
-      const id = m.id_mobil || m.timestamp;
-      if (!seenIds.has(id)) {
-        seenIds.add(id);
-        const statusAnak = safeString(m.status_anak).toLowerCase();
-        const statusInduk = safeString(m.status_induk).toLowerCase();
-
-        if (statusAnak === 'aktif' && statusInduk === 'aktif') {
-          uniqueMobil.push({
-       ...m,
-            nama_showroom: safeString(m.nama_showroom) || 'Sales',
-            wa_admin: fixNomorWA(m.no_wa_sales),
-            domain_showroom: m.domain_showroom || '#'
-          });
-        }
-      }
-    });
-
-    semuaMobilGlobal = uniqueMobil.sort((a, b) => {
-      const aPremium = safeString(a.tag).toLowerCase() === 'hot';
-      const bPremium = safeString(b.tag).toLowerCase() === 'hot';
-      if (aPremium &&!bPremium) return -1;
-      if (!aPremium && bPremium) return 1;
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-
-    filteredDataGlobal = semuaMobilGlobal;
-    currentPage = 0;
-
-    const showroomUnik = [...new Map(semuaMobilGlobal.map(m => [m.slug_showroom, {
-      slug_showroom: m.slug_showroom,
-      nama_showroom: m.nama_showroom,
-      domain_showroom: m.domain_showroom
-    }])).values()];
-
-    renderDaftarShowroom(showroomUnik);
-    renderMobilPaginated();
-    loadTheme();
-
-  } catch(e) {
-    console.error('ERROR:', e);
-    document.getElementById('list-mobil').innerHTML = `<div class="loading" style="color:#ff3b30">Error: ${e.message}<br>Pastikan Sheet di-share "Anyone with the link"</div>`;
-  }
-}
-
-
-
-function filterData() {
-  const keyword = document.getElementById('search').value.toLowerCase();
-  const filterHarga = document.getElementById('filterHarga').value;
-  const filterTahun = document.getElementById('filterTahun').value;
-  const filterTransmisi = document.getElementById('filterTransmisi').value;
-
-  const [minHarga, maxHarga] = filterHarga? filterHarga.split('-').map(Number) : [0, Infinity];
-  const [minTahun, maxTahun] = filterTahun? filterTahun.split('-').map(Number) : [0, Infinity];
-
-  const hasilFilter = semuaMobilGlobal.filter(mobil => {
-    const hargaMobil = Number(String(mobil.harga_cash).trim()) || 0;
-    const tahunMobil = Number(mobil.tahun) || 0;
-
-    const namaMatch =!keyword || String(mobil.merk || '').toLowerCase().includes(keyword) ||
-                      String(mobil.tipe || '').toLowerCase().includes(keyword);
-    const hargaMatch = hargaMobil >= minHarga && hargaMobil <= maxHarga;
-    const tahunMatch = tahunMobil >= minTahun && tahunMobil <= maxTahun;
-    const transmisiMatch =!filterTransmisi || mobil.transmisi === filterTransmisi;
-
-    return namaMatch && hargaMatch && tahunMatch && transmisiMatch;
-  });
-
-  filteredDataGlobal = hasilFilter;
-  currentPage = 0;
-  renderMobilPaginated();
-}
-
-
-function renderMobilPaginated() {
-  const div = document.getElementById('list-mobil');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
-
-  if(filteredDataGlobal.length === 0) {
-    div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Pastikan kolom status_anak = AKTIF</div>';
-    if(loadMoreBtn) loadMoreBtn.style.display = 'none';
-    return;
-  }
-
-  const start = currentPage * ITEMS_PER_PAGE;
-  const end = start + ITEMS_PER_PAGE;
-  const dataToRender = filteredDataGlobal.slice(0, end);
-
-  div.innerHTML = dataToRender.map((m, idx) => {
-    const images = getAllImages(m);
-    const sliderId = `slider-${(m.timestamp || Date.now())}-${idx}`;
-    const nomorWA = m.wa_admin;
-
-    const waButton = nomorWA?
-      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}"
-          class="wa-btn"
-          target="_blank"
-          onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_wa', 'showroom_name': '${m.nama_showroom}', 'mobil': '${m.merk} ${m.tipe} ${m.tahun}', 'harga': '${m.harga_cash}', 'tahun': '${m.tahun}'});">
-          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
-          Chat WA ${m.nama_showroom}
-       </a>` :
-      `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
-
-    const shareData = {
-      id: m.timestamp,
-      title: `${m.merk} ${m.tipe} ${m.tahun}`,
-      harga: `Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}`,
-      showroom: m.nama_showroom,
-      wa: nomorWA,
-      img: images[0]
-    };
-
-    const btnKeShowroom = m.domain_showroom && m.domain_showroom!== '#'? `
-      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn" onclick="window.dataLayer = window.dataLayer || []; dataLayer.push({'event': 'klik_showroom', 'showroom_name': '${m.nama_showroom}'});">
-        🏪 Kunjungi ${m.nama_showroom}
-      </a>
-    ` : '';
-
-    const isHot = safeString(m.tag).toLowerCase() === 'hot';
-    const hotClass = isHot? 'hot-item' : '';
-    const badgeHotPremium = isHot? `<div class="badge hot-premium">👑 HOT DEAL</div>` : '';
-
-    return `
-    <div class="card ${hotClass}">
-      ${hotClass? '<div class="card-inner">' : ''}
-      <div class="slider" id="${sliderId}" data-current="0">
-        ${badgeHotPremium}
-        <div class="slides">
-${images.map((img,i) => `<img src="${img}" alt="${m.merk} ${m.tipe} ${m.tahun} - ${m.nama_showroom}" loading="lazy" onclick='openLightboxFromSlider("${sliderId}", ${i})' onerror="removeBrokenSlide('${sliderId}', this)">`).join('')}
-        </div>
-        ${images.length > 1? `
-          <button class="slider-btn prev" onclick="slide('${sliderId}', -1, event)">‹</button>
-          <button class="slider-btn next" onclick="slide('${sliderId}', 1, event)">›</button>
-          <div class="dots">
-            ${images.map((_,i) => `<span class="dot ${i===0?'active':''}" onclick="goSlide('${sliderId}', ${i}, event)"></span>`).join('')}
-          </div>
-        ` : ''}
-      </div>
-      <div class="card-body">
-        <div class="badge">
-          🏪 ${m.nama_showroom}
-        </div>
-        <h3>${m.merk} ${m.tipe} ${m.tahun}</h3>
-        <div class="harga">Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}</div>
-        <div class="spec">
-          <span>⚙️ ${m.transmisi}</span><span>⛽ ${m.bahan_bakar}</span>
-          <span>🎨 ${m.warna}</span><span>🛣️ ${Number(m.km || 0).toLocaleString('id-ID')} KM</span>
-        </div>
-        <p class="desc">${m.deskripsi || ''}</p>
-        <div class="btn-group">
-          ${waButton}
-          <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Bagikan
-          </button>
-        </div>
-        ${btnKeShowroom}
-      </div>
-      ${hotClass? '</div>' : ''}
-    </div>
-  `}).join('');
-
-  if(loadMoreBtn) loadMoreBtn.style.display = end < filteredDataGlobal.length? 'block' : 'none';
-  initSwipeSlider();
-}
-
-function loadMore() {
-  currentPage++;
-  renderMobilPaginated();
-}
-
-function removeBrokenSlide(sliderId, imgEl) {
-  const slider = document.getElementById(sliderId);
-  if(!slider) return;
-  const slides = slider.querySelector('.slides');
-  const dotsContainer = slider.querySelector('.dots');
-  const imgIdx = Array.from(slides.children).indexOf(imgEl);
-  imgEl.remove();
-  if(dotsContainer && dotsContainer.children[imgIdx]) {
-    dotsContainer.children[imgIdx].remove();
-  }
-  let current = parseInt(slider.dataset.current || 0);
-  const newTotal = slides.children.length;
-  if(newTotal === 0) {
-    slides.innerHTML = `<img src="https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image">`;
-    slider.querySelector('.slider-btn.prev')?.remove();
-    slider.querySelector('.slider-btn.next')?.remove();
-    dotsContainer?.remove();
-    return;
-  }
-  if(current >= newTotal) {
-    current = newTotal - 1;
-    slider.dataset.current = current;
-    slides.style.transform = `translateX(-${current * 100}%)`;
-  }
-  dotsContainer?.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
-  if(newTotal <= 1) {
-    slider.querySelector('.slider-btn.prev')?.remove();
-    slider.querySelector('.slider-btn.next')?.remove();
-    dotsContainer?.remove();
-  }
-}
-
-function openShareModal(data) {
-  const modal = document.getElementById('shareModal');
-  const grid = document.getElementById('shareGrid');
-  const text = `${data.title} - ${data.harga} | ${data.showroom}`;
-  const waLink = data.wa? `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}` : '#';
-  const encodedText = encodeURIComponent(text);
-  const encodedUrl = encodeURIComponent(waLink);
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'share', 'method': 'modal_open', 'content_type': 'mobil', 'item_id': data.title});
-  grid.innerHTML = `
-    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'WhatsApp', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon wa">💬</div><div class="share-label">WhatsApp</div>
-    </a>
-    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Facebook', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon fb">f</div><div class="share-label">Facebook</div>
-    </a>
-    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item" onclick="dataLayer.push({'event': 'share', 'method': 'Twitter', 'content_type': 'mobil', 'item_id': '${data.title}'});">
-      <div class="share-icon tw">𝕏</div><div class="share-label">Twitter</div>
-    </a>
-    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Instagram', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon ig">📷</div><div class="share-label">Instagram</div>
-    </a>
-    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); dataLayer.push({'event': 'share', 'method': 'TikTok', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon tt">♪</div><div class="share-label">TikTok</div>
-    </a>
-    <a href="#" onclick="copyLink('${waLink}'); dataLayer.push({'event': 'share', 'method': 'Copy Link', 'content_type': 'mobil', 'item_id': '${data.title}'}); return false;" class="share-item">
-      <div class="share-icon copy">🔗</div><div class="share-label">Copy Link</div>
-    </a>
-  `;
-  modal.classList.add('active');
-}
-
-function closeShareModal(e) {
-  if(!e || e.target.id === 'shareModal' || e.target.className === 'share-close') {
-    document.getElementById('shareModal').classList.remove('active');
-  }
-}
-
-function copyForIG(url) {
-  navigator.clipboard.writeText(url).then(() => {
-    showToast('Link disalin! Paste di IG Story');
-    closeShareModal();
-  });
-}
-
-function copyForTT(url) {
-  navigator.clipboard.writeText(url).then(() => {
-    showToast('Link disalin! Paste di TikTok');
-    closeShareModal();
-  });
-}
-
-function copyLink(url) {
-  navigator.clipboard.writeText(url).then(() => {
-    showToast('Link berhasil disalin!');
-    closeShareModal();
-  });
-}
-
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
-}
-
-function slide(sliderId, dir, e) {
-  if(e) { e.stopPropagation(); e.preventDefault(); }
-  const slider = document.getElementById(sliderId);
-  const slides = slider.querySelector('.slides');
-  const dots = slider.querySelectorAll('.dot');
-  const total = slides.children.length;
-  let current = parseInt(slider.dataset.current || 0);
-  let newCurrent = current + dir;
-  if(dir > 0) newCurrent = Math.min(current + 1, total - 1);
-  if(dir < 0) newCurrent = Math.max(current - 1, 0);
-  if(newCurrent === current) return;
-  slides.style.transform = `translateX(-${newCurrent * 100}%)`;
-  slider.dataset.current = newCurrent;
-  dots.forEach((d,i) => d.classList.toggle('active', i === newCurrent));
-}
-
-function goSlide(sliderId, idx, e) {
-  if(e) { e.stopPropagation(); e.preventDefault(); }
-  const slider = document.getElementById(sliderId);
-  const slides = slider.querySelector('.slides');
-  const dots = slider.querySelectorAll('.dot');
-  const total = slides.children.length;
-  idx = Math.max(0, Math.min(idx, total - 1));
-  slides.style.transform = `translateX(-${idx * 100}%)`;
-  slider.dataset.current = idx;
-  dots.forEach((d,i) => d.classList.toggle('active', i === idx));
-}
-
-function initSwipeSlider() {
-  document.querySelectorAll('.slider').forEach(slider => {
-    const slides = slider.querySelector('.slides');
-    if(slides.children.length <= 1) return;
-    let startX = 0, startY = 0, currentX = 0, isDragging = false, isScrolling = null, startTime = 0;
-    const start = e => {
-      if(e.touches && e.touches.length > 1) return;
-      startX = e.touches? e.touches[0].clientX : e.clientX;
-      startY = e.touches? e.touches[0].clientY : e.clientY;
-      startTime = Date.now();
-      isDragging = true;
-      isScrolling = null;
-      slides.classList.add('dragging');
-    };
-    const move = e => {
-      if(!isDragging) return;
-      currentX = e.touches? e.touches[0].clientX : e.clientX;
-      const currentY = e.touches? e.touches[0].clientY : e.clientY;
-      const diffX = currentX - startX;
-      const diffY = currentY - startY;
-      if(isScrolling === null) isScrolling = Math.abs(diffX) < Math.abs(diffY);
-      if(isScrolling) return;
-      e.preventDefault();
-      const current = parseInt(slider.dataset.current || 0);
-      const offset = -current * 100 + (diffX / slider.offsetWidth) * 100;
-      slides.style.transform = `translateX(${offset}%)`;
-    };
-    const end = e => {
-      if(!isDragging) return;
-      isDragging = false;
-      slides.classList.remove('dragging');
-      if(isScrolling) return;
-      const diff = currentX - startX;
-      const elapsed = Date.now() - startTime;
-      const velocity = Math.abs(diff) / elapsed;
-      const threshold = velocity > 0.5? 30 : 80;
-      if(Math.abs(diff) > threshold) {
-        if(diff > 0) slide(slider.id, -1);
-        else slide(slider.id, 1);
-      } else {
-        const current = parseInt(slider.dataset.current || 0);
-        slides.style.transform = `translateX(-${current * 100}%)`;
-      }
-    };
-    slider.addEventListener('touchstart', start, {passive: true});
-    slider.addEventListener('touchmove', move, {passive: false});
-    slider.addEventListener('touchend', end);
-    slider.addEventListener('mousedown', start);
-    slider.addEventListener('mousemove', move);
-    slider.addEventListener('mouseup', end);
-    slider.addEventListener('mouseleave', end);
-  });
-}
-
-function openLightboxFromSlider(sliderId, idx) {
-  const slider = document.getElementById(sliderId);
-  const imgs = Array.from(slider.querySelectorAll('.slides img')).map(img => img.src);
-  openLightbox(imgs, idx);
-}
-
-function openLightbox(images, index) {
-  currentLightboxImages = images;
-  currentLightboxIndex = index;
-  const lightbox = document.getElementById('lightbox');
-  const img = document.getElementById('lightboxImg');
-  img.src = images[index];
-  img.style.transform = 'scale(1) translate(0px, 0px)';
-  lightbox.classList.add('active');
-  updateLightboxCounter();
-  initZoomPan();
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'view_item', 'event_category': 'engagement'});
-}
-
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('active');
-}
-
-function lightboxSlide(dir) {
-  currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
-  const img = document.getElementById('lightboxImg');
-  img.src = currentLightboxImages[currentLightboxIndex];
-  img.style.transform = 'scale(1) translate(0px, 0px)';
-  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
-  updateLightboxCounter();
-}
-
-function updateLightboxCounter() {
-  document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
-}
-
-
-function initZoomPan() {
-  const img = document.getElementById('lightboxImg');
-  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
-  let startDistance = 0, startX = 0, startY = 0;
-  img.ontouchend = e => {
-    const currentTime = new Date().getTime();
-    const tapLength = currentTime - zoomState.lastTap;
-    if(tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
-      e.preventDefault();
-      e.stopPropagation();
-      if(zoomState.scale === 1) {
-        zoomState.scale = 2.5;
-        zoomState.lastScale = 2.5;
-      } else {
-        zoomState.scale = 1;
-        zoomState.lastScale = 1;
-        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
-      }
-      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
-    }
-    zoomState.lastTap = currentTime;
-    if(e.touches.length < 2) {
-      zoomState.lastScale = zoomState.scale;
-      zoomState.lastPosX = zoomState.posX;
-      zoomState.lastPosY = zoomState.posY;
-    }
-  };
-  img.ontouchstart = e => {
-    if(e.touches.length === 2) {
-      startDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-    } else if(e.touches.length === 1 && zoomState.scale > 1) {
-      startX = e.touches[0].pageX - zoomState.lastPosX;
-      startY = e.touches[0].pageY - zoomState.lastPosY;
-    }
-  };
-  img.ontouchmove = e => {
-    if(e.touches.length === 2) {
-      e.preventDefault();
-      const distance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
-      zoomState.scale = zoomState.lastScale * (distance / startDistance);
-      zoomState.scale = Math.min(Math.max(1, zoomState.scale), 4);
-      if(zoomState.scale === 1) {
-        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
-      }
-      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
-    } else if(e.touches.length === 1 && zoomState.scale > 1) {
-      e.preventDefault();
-      zoomState.posX = e.touches[0].pageX - startX;
-      zoomState.posY = e.touches[0].pageY - startY;
-      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
-    }
-  };
-}
-
-function toggleTheme() {
-  const body = document.body;
-  const btn = document.getElementById('themeBtn');
-  const newTheme = body.getAttribute('data-theme') === 'dark'? 'light' : 'dark';
-  body.setAttribute('data-theme', newTheme);
-  btn.textContent = newTheme === 'dark'? '☀️' : '🌙';
-  localStorage.setItem('theme', newTheme);
-  window.dataLayer = window.dataLayer || [];
-  dataLayer.push({'event': 'toggle_theme', 'theme': newTheme});
-}
-
-function loadTheme() {
-  const saved = localStorage.getItem('theme') || 'dark';
-  document.body.setAttribute('data-theme', saved);
-  document.getElementById('themeBtn').textContent = saved === 'dark'? '☀️' : '🌙';
-}
-
-init();
 </script>
   <footer class="footer">
     <div class="footer-content">
@@ -1671,7 +793,7 @@ init();
         <h4>OTO PADANG</h4>
         <p>Platform kurator mobil bekas terpercaya di Sumatera Barat. Kami bantu showroom & pemilik mobil jual lebih cepat dengan sistem modern.</p>
         <a href="https://wa.me/628979879518?text=Halo%20OTO%20PADANG,%20saya%20dari%20showroom%20ingin%20kerja%20sama" class="footer-cta" target="_blank">
-          <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
           Chat WhatsApp Sekarang
         </a>
       </div>
