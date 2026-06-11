@@ -41,6 +41,89 @@
 .dropdown-menu a{display:block;width:100%;text-align:left;padding:12px 16px;color:var(--text);text-decoration:none;font-weight:600;font-size:14px}
 .dropdown-menu a:hover{background:var(--bg)}
 .dropdown-menu.empty{padding:12px 16px;color:var(--text2);font-size:14px}
+
+/* KALKULATOR PREMIUM - FIX BUAT HTML LU */
+.kalkulator-hero {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%) !important;
+  border-radius: 20px !important;
+  padding: 24px 20px !important;
+  color: #fff !important;
+  box-shadow: 0 12px 32px rgba(59, 130, 246, 0.35) !important;
+  max-width: 420px !important;
+  margin: 16px auto !important;
+  border: none !important;
+}
+
+.form-group {
+  margin-bottom: 18px !important;
+  display: block !important;
+}
+
+.form-group label {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+  color: rgba(255,255,255,0.9) !important;
+}
+
+.kalkulator-hero input,
+.kalkulator-hero select {
+  width: 100% !important;
+  display: block !important;
+  background: rgba(255,255,255,0.95) !important;
+  border: 2px solid transparent !important;
+  border-radius: 12px !important;
+  padding: 14px 16px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #1e3a8a !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+#dpTextHome {
+  display: block !important;
+  margin-top: 6px !important;
+  font-size: 12px !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.hasil-box {
+  background: rgba(0,0,0,0.25) !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  margin-top: 24px !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.hasil-box p {
+  margin: 0 0 8px !important;
+  font-size: 13px !important;
+  color: rgba(255,255,255,0.8) !important;
+}
+
+#hasilHome {
+  margin: 0 0 16px !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  line-height: 1.2 !important;
+}
+
+#ctaHome {
+  width: 100% !important;
+  background: #fff !important;
+  color: #1d4ed8 !important;
+  border: none !important;
+  padding: 15px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
 .card{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--border);transform:translateY(0);transition:all.3s;animation:fadeIn.5s ease;position:relative}
 .card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3);border-color:var(--gold2)}
@@ -83,6 +166,17 @@
 .card h3{font-size:20px;margin-bottom:8px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
 .harga{color:var(--gold1)!important;font-weight:800!important;font-size:24px!important;margin:10px 0!important;letter-spacing:-0.5px}
   [data-theme="light"].harga{color:var(--gold2)!important}
+
+/* KALKULATOR DI CARD MOBIL */
+.kredit-box{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;margin:14px 0}
+.kredit-box-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.kredit-box-header span{font-size:13px;font-weight:700;color:var(--text)}
+.kredit-row{display:flex;justify-content:space-between;font-size:13px;margin:6px 0;color:var(--text2)}
+.kredit-row b{color:var(--text)}
+.kredit-btn{width:100%;background:var(--gold1);color:#000;border:none;padding:10px;border-radius:10px;font-weight:800;font-size:13px;margin-top:8px;cursor:pointer}
+.kredit-btn:hover{background:var(--gold2)}
+.kredit-note{font-size:10px;color:var(--text2);text-align:center;margin-top:6px}
+
 .spec{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--text2);margin:16px 0}
 .spec span{background:var(--bg);padding:9px 12px;border-radius:10px;font-weight:600;color:#bbb;border:1px solid #2a2a2a;outline:none}
 .desc{font-size:13px;color:#999;line-height:1.6;margin:12px 0;font-weight:500}
@@ -143,7 +237,691 @@
 .footer-cta:hover{transform:scale(1.05);box-shadow:0 8px 28px rgba(37,211,102,.5)}
 .footer-bottom{border-top:1px solid var(--border);padding-top:20px;text-align:center;color:var(--text2);font-size:13px;font-weight:600}
 .footer-bottom a{color:var(--gold1);text-decoration:none}
-  @media (max-width:768px){.footer-content{grid-template-columns:1fr;gap:24px;text-align:center}.footer-col ul li a{justify-content:center}.footer-cta{width:100%;justify-content:center}}
+  @media (max-width:768px){.footer-content{grid-template-columns:1fr;gap:24px;text-align:center}.footer-col ul li a{justify-content:center}.footer-cta{width:100%;justify-content:center}}<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1)">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1)">›</button>
+  <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
+<div class="share-modal" id="shareModal" onclick="closeShareModal(event)">
+  <div class="share-sheet" onclick="event.stopPropagation()">
+    <div class="share-title">Bagikan Mobil Ini</div>
+    <div class="share-grid" id="shareGrid"></div>
+    <button class="share-close" onclick="closeShareModal()">Tutup</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">Link berhasil disalin!</div>
+
+
+<script>
+  // Panggil kalkulator pas halaman selesai load
+  window.onload = function() {
+    hitungHome();
+  }
+
+  // Panggil kalkulator pas input berubah
+  document.getElementById('hargaHome').addEventListener('input', hitungHome);
+  document.getElementById('dpHome').addEventListener('change', hitungHome);
+  document.getElementById('tenorHome').addEventListener('change', hitungHome);
+</script>
+</body>
+</html>
+const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
+const GID_MOBIL_MASSAL = '1022893642';
+const BASE_JSON = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+let semuaMobilGlobal = [];
+let filteredDataGlobal = [];
+let currentPage = 0;
+const ITEMS_PER_PAGE = 12;
+let currentLightboxImages = [];
+let currentLightboxIndex = 0;
+let zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
+
+function safeString(val) {
+  return val? val.toString().trim() : '';
+}
+
+function toggleDropdown(id){
+  document.querySelectorAll('.dropdown-menu').forEach(m => {
+    if(m.id!= id) m.classList.remove('show');
+  });
+  document.getElementById(id).classList.toggle('show');
+}
+
+window.onclick = function(e) {
+  if (!e.target.matches('.dropdown-btn')) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+  }
+}
+
+// KALKULATOR FUNCTION BARU
+function formatRupiah(el) {
+  let angka = el.value.replace(/[^,\d]/g, '').toString();
+  el.value = angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+
+// KALKULATOR DI CARD MOBIL
+function hitungKreditCard(harga, btn) {
+  const dp = harga * 0.3; // default 30%
+  const tenor = 48; // default 4 tahun = 48 bulan
+  // Rumus bener juga buat card
+  const pokok = harga - dp;
+  const bungaTotal = pokok * 0.10 * 4; // 4 tahun
+  const total = pokok + bungaTotal;
+  const cicilan = Math.round(total / 48);
+  
+  const waMsg = `Halo, saya mau simulasi kredit untuk mobil harga Rp ${harga.toLocaleString('id-ID')}, DP 30% Rp ${dp.toLocaleString('id-ID')}, tenor 4 tahun. Estimasi cicilan Rp ${Math.round(cicilan).toLocaleString('id-ID')}/bln`;
+  
+  window.open(`https://wa.me/628979879518?text=${encodeURIComponent(waMsg)}`, '_blank');
+}
+
+async function ambilDataSheet(gid) {
+  const url = `${BASE_JSON}&gid=${gid}`;
+  const res = await fetch(url);
+  if(!res.ok) throw new Error(`HTTP ${res.status}`);
+  const text = await res.text();
+  const json = JSON.parse(text.substr(47).slice(0, -2));
+  const headers = json.table.cols.map(c => c.label? c.label.toLowerCase().replace(/\s/g,'').trim() : '');
+  return json.table.rows.map(r => {
+    let obj = {};
+    headers.forEach((h,i) => {
+      if(h) {
+        let val = r.c[i] && r.c[i].v!= null? r.c[i].v : '';
+        obj[h] = val.toString().trim();
+      }
+    });
+    return obj;
+  });
+}
+
+function fixImgurUrl(url) {
+  if(!url) return '';
+  url = url.trim();
+  if(url.includes('drive.google.com')) {
+    const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if(match && match[1]) {
+      return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    }
+  }
+  if(url.includes('imgur.com/') &&!url.includes('i.imgur.com')) {
+    const id = url.split('/').pop().split('.')[0];
+    return `https://i.imgur.com/${id}.jpg`;
+  }
+  return url;
+}
+
+function getAllImages(mobil) {
+  const urls = [];
+  for(let i = 1; i <= 6; i++) {
+    const key = `foto_${i}`;
+    const raw = mobil[key];
+    if(raw && typeof raw === 'string' && raw.trim().length > 10 && raw.trim().toLowerCase().startsWith('http')) {
+      urls.push(fixImgurUrl(raw.trim()));
+    }
+  }
+  return urls.length? urls : ['https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image'];
+}
+
+function fixNomorWA(nomor) {
+  if(!nomor) return '';
+  let wa = nomor.toString().replace(/[^0-9]/g, '');
+  if(wa.startsWith('0')) wa = '62' + wa.substring(1);
+  if(wa.startsWith('8')) wa = '62' + wa;
+  if(!wa.startsWith('62')) wa = '62' + wa;
+  return wa;
+}
+
+function renderDaftarShowroom(showroomList) {
+  const div = document.getElementById('daftarShowroomMenu');
+  if (!div) return;
+  const showroomAktif = showroomList.filter(s => {
+    const domain = s.domain_showroom? s.domain_showroom.toString().trim() : '';
+    const status = s.status? s.status.toString().trim().toLowerCase() : '';
+    return domain && domain!== '#' && status === 'aktif';
+  });
+  if(showroomAktif.length === 0){
+    div.innerHTML = `<div style="padding:12px;text-align:center;color:#888">Belum ada showroom</div>`;
+    return;
+  }
+  div.innerHTML = showroomAktif.map(s => `
+    <div class="showroom-item" onclick="pilihShowroom('${s.domain_showroom}')" style="padding:10px;cursor:pointer;border-bottom:1px solid #eee">
+      🏢 ${s.nama_showroom || s.slug_showroom}
+    </div>
+  `).join('');
+}
+
+function pilihShowroom(domain) {
+  if (!domain || domain === '#') {
+    alert('Domain showroom belum diisi');
+    return;
+  }
+  window.open(domain, 'showroom_tab', 'noopener,noreferrer');
+  document.getElementById('daftarShowroomMenu').classList.remove('show');
+}
+
+function initDataShowroom() {
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg/export?format=csv&gid=490587314';
+  fetch(SHEET_URL)
+.then(res => res.text())
+.then(csvText => {
+      const rows = csvText.split('\n');
+      const headers = rows[0].split(',').map(h => h.trim());
+      const data = rows.slice(1).map(row => {
+        const values = row.split(',');
+        let obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = values[i]? values[i].trim() : '';
+        });
+        return obj;
+      });
+      renderDaftarShowroom(data);
+    })
+.catch(err => console.error('GAGAL FETCH:', err));
+}
+
+async function init() {
+  try {
+    const semuaMobilMentah = await ambilDataSheet(GID_MOBIL_MASSAL);
+    const uniqueMobil = [];
+    const seenIds = new Set();
+    semuaMobilMentah.forEach(m => {
+      const id = m.id_mobil || m.timestamp;
+      if (!seenIds.has(id)) {
+        seenIds.add(id);
+        const statusAnak = safeString(m.status_anak).toLowerCase();
+        const statusInduk = safeString(m.status_induk).toLowerCase();
+        if (statusAnak === 'aktif' && statusInduk === 'aktif') {
+          uniqueMobil.push({
+        ...m,
+            nama_showroom: safeString(m.nama_showroom) || 'Sales',
+            wa_admin: fixNomorWA(m.no_wa_sales),
+            domain_showroom: m.domain_showroom || '#'
+          });
+        }
+      }
+    });
+    semuaMobilGlobal = uniqueMobil.sort((a, b) => {
+      const aPremium = safeString(a.tag).toLowerCase() === 'hot';
+      const bPremium = safeString(b.tag).toLowerCase() === 'hot';
+      if (aPremium &&!bPremium) return -1;
+      if (!aPremium && bPremium) return 1;
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+    filteredDataGlobal = semuaMobilGlobal;
+    currentPage = 0;
+    renderMobilPaginated();
+    loadTheme();
+    hitungHome(); // init kalkulator homepage
+  } catch(e) {
+    console.error('ERROR:', e);
+    document.getElementById('list-mobil').innerHTML = `<div class="loading" style="color:#ff3b30">Error: ${e.message}<br>Pastikan Sheet di-share "Anyone with the link"</div>`;
+  }
+}
+
+function filterData() {
+  const keyword = document.getElementById('search').value.toLowerCase();
+  const filterHarga = document.getElementById('filterHarga').value;
+  const filterTahun = document.getElementById('filterTahun').value;
+  const filterTransmisi = document.getElementById('filterTransmisi').value;
+  const [minHarga, maxHarga] = filterHarga? filterHarga.split('-').map(Number) : [0, Infinity];
+  const [minTahun, maxTahun] = filterTahun? filterTahun.split('-').map(Number) : [0, Infinity];
+  const hasilFilter = semuaMobilGlobal.filter(mobil => {
+    const hargaMobil = Number(String(mobil.harga_cash).trim()) || 0;
+    const tahunMobil = Number(mobil.tahun) || 0;
+    const namaMatch =!keyword || String(mobil.merk || '').toLowerCase().includes(keyword) || String(mobil.tipe || '').toLowerCase().includes(keyword);
+    const hargaMatch = hargaMobil >= minHarga && hargaMobil <= maxHarga;
+    const tahunMatch = tahunMobil >= minTahun && tahunMobil <= maxTahun;
+    const transmisiMatch =!filterTransmisi || mobil.transmisi === filterTransmisi;
+    return namaMatch && hargaMatch && tahunMatch && transmisiMatch;
+  });
+  filteredDataGlobal = hasilFilter;
+  currentPage = 0;
+  renderMobilPaginated();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('filterHarga').addEventListener('change', filterData);
+  document.getElementById('filterTahun').addEventListener('change', filterData);
+  document.getElementById('filterTransmisi').addEventListener('change', filterData);
+  document.getElementById('resetFilter').addEventListener('click', () => {
+    document.getElementById('search').value = '';
+    document.getElementById('filterHarga').value = '';
+    document.getElementById('filterTahun').value = '';
+    document.getElementById('filterTransmisi').value = '';
+    filterData();
+  });
+  initDataShowroom();
+  init();
+});
+
+function renderMobilPaginated() {
+  const div = document.getElementById('list-mobil');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  if(filteredDataGlobal.length === 0) {
+    div.innerHTML = '<div class="no-result">Mobil tidak ditemukan 🔍<br>Pastikan kolom status_anak = AKTIF</div>';
+    if(loadMoreBtn) loadMoreBtn.style.display = 'none';
+    return;
+  }
+  const start = currentPage * ITEMS_PER_PAGE;
+  const end = start + ITEMS_PER_PAGE;
+  const dataToRender = filteredDataGlobal.slice(0, end);
+  div.innerHTML = dataToRender.map((m, idx) => {
+    const images = getAllImages(m);
+    const sliderId = `slider-${(m.timestamp || Date.now())}-${idx}`;
+    const nomorWA = m.wa_admin;
+    const hargaNum = Number(m.harga_cash || 0);
+    const dp10 = hargaNum * 0.1;
+    const cicilan4th = (hargaNum - dp10) * 1.3 / 48;
+
+    const waButton = nomorWA?
+      `<a href="https://wa.me/${nomorWA}?text=Halo ${m.nama_showroom}, saya minat ${m.merk} ${m.tipe} ${m.tahun}" class="wa-btn" target="_blank">
+          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
+          Chat WA ${m.nama_showroom}
+       </a>` :
+      `<div class="wa-btn" style="background:#666;cursor:not-allowed;">💬 WA Belum Ada</div>`;
+
+    const shareData = {
+      id: m.timestamp,
+      title: `${m.merk} ${m.tipe} ${m.tahun}`,
+      harga: `Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}`,
+      showroom: m.nama_showroom,
+      wa: nomorWA,
+      img: images[0]
+    };
+
+    const btnKeShowroom = m.domain_showroom && m.domain_showroom!== '#'? `
+      <a href="${m.domain_showroom}" target="_blank" class="showroom-btn">
+        🏪 Kunjungi ${m.nama_showroom}
+      </a>
+    ` : '';
+
+    const isHot = safeString(m.tag).toLowerCase() === 'hot';
+    const hotClass = isHot? 'hot-item' : '';
+    const badgeHotPremium = isHot? `<div class="badge hot-premium">👑 HOT DEAL</div>` : '';
+
+    return `
+    <div class="card ${hotClass}">
+      <div class="slider" id="${sliderId}" data-current="0">
+        ${badgeHotPremium}
+        <div class="slides">
+${images.map((img,i) => `<img src="${img}" alt="${m.merk} ${m.tipe} ${m.tahun} - ${m.nama_showroom}" loading="lazy" onclick='openLightboxFromSlider("${sliderId}", ${i})' onerror="removeBrokenSlide('${sliderId}', this)">`).join('')}
+        </div>
+        ${images.length > 1? `
+          <button class="slider-btn prev" onclick="slide('${sliderId}', -1, event)">‹</button>
+          <button class="slider-btn next" onclick="slide('${sliderId}', 1, event)">›</button>
+          <div class="dots">
+            ${images.map((_,i) => `<span class="dot ${i===0?'active':''}" onclick="goSlide('${sliderId}', ${i}, event)"></span>`).join('')}
+          </div>
+        ` : ''}
+      </div>
+      <div class="card-body">
+        <div class="badge">🏪 ${m.nama_showroom}</div>
+        <h3>${m.merk} ${m.tipe} ${m.tahun}</h3>
+        <div class="harga">Rp ${Number(m.harga_cash || 0).toLocaleString('id-ID')}</div>
+
+        <!-- KALKULATOR KREDIT DI CARD - BARU -->
+        <div class="kredit-box">
+          <div class="kredit-box-header">
+            <span>💳</span>
+            <span>Simulasi Kredit</span>
+          </div>
+          <div class="kredit-row">
+            <span>DP 10%:</span>
+            <b>Rp ${Math.round(dp10).toLocaleString('id-ID')}</b>
+          </div>
+          <div class="kredit-row">
+            <span>Cicilan 4th:</span>
+            <b style="color:var(--gold1)">Rp ${Math.round(cicilan4th).toLocaleString('id-ID')}/bln</b>
+          </div>
+          <button class="kredit-btn" onclick="hitungKreditCard(${hargaNum}, this)">Ajukan Cicilan</button>
+          <p class="kredit-note">*Estimasi awal</p>
+        </div>
+
+        <div class="spec">
+          <span>⚙️ ${m.transmisi}</span><span>⛽ ${m.bahan_bakar}</span>
+          <span>🎨 ${m.warna}</span><span>🛣️ ${Number(m.km || 0).toLocaleString('id-ID')} KM</span>
+        </div>
+        <p class="desc">${m.deskripsi || ''}</p>
+        <div class="btn-group">
+          ${waButton}
+          <button class="share-btn" onclick='openShareModal(${JSON.stringify(shareData).replace(/"/g, '&quot;')})'>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Bagikan
+          </button>
+        </div>
+        ${btnKeShowroom}
+      </div>
+    </div>
+  `}).join('');
+  if(loadMoreBtn) loadMoreBtn.style.display = end < filteredDataGlobal.length? 'block' : 'none';
+  initSwipeSlider();
+}
+
+function loadMore() {
+  currentPage++;
+  renderMobilPaginated();
+}
+
+function removeBrokenSlide(sliderId, imgEl) {
+  const slider = document.getElementById(sliderId);
+  if(!slider) return;
+  const slides = slider.querySelector('.slides');
+  const dotsContainer = slider.querySelector('.dots');
+  const imgIdx = Array.from(slides.children).indexOf(imgEl);
+  imgEl.remove();
+  if(dotsContainer && dotsContainer.children[imgIdx]) {
+    dotsContainer.children[imgIdx].remove();
+  }
+  let current = parseInt(slider.dataset.current || 0);
+  const newTotal = slides.children.length;
+  if(newTotal === 0) {
+    slides.innerHTML = `<img src="https://via.placeholder.com/400x240/1c1c1e/666?text=No+Image">`;
+    slider.querySelector('.slider-btn.prev')?.remove();
+    slider.querySelector('.slider-btn.next')?.remove();
+    dotsContainer?.remove();
+    return;
+  }
+  if(current >= newTotal) {
+    current = newTotal - 1;
+    slider.dataset.current = current;
+    slides.style.transform = `translateX(-${current * 100}%)`;
+  }
+  dotsContainer?.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i === current));
+  if(newTotal <= 1) {
+    slider.querySelector('.slider-btn.prev')?.remove();
+    slider.querySelector('.slider-btn.next')?.remove();
+    dotsContainer?.remove();
+  }
+}
+
+function openShareModal(data) {
+  const modal = document.getElementById('shareModal');
+  const grid = document.getElementById('shareGrid');
+  const text = `${data.title} - ${data.harga} | ${data.showroom}`;
+  const waLink = data.wa? `https://wa.me/${data.wa}?text=Halo ${data.showroom}, saya minat ${data.title}` : '#';
+  const encodedText = encodeURIComponent(text);
+  const encodedUrl = encodeURIComponent(waLink);
+  grid.innerHTML = `
+    <a href="https://wa.me/?text=${encodedText}%0A${encodedUrl}" target="_blank" class="share-item">
+      <div class="share-icon wa">💬</div><div class="share-label">WhatsApp</div>
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" class="share-item">
+      <div class="share-icon fb">f</div><div class="share-label">Facebook</div>
+    </a>
+    <a href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}" target="_blank" class="share-item">
+      <div class="share-icon tw">𝕏</div><div class="share-label">Twitter</div>
+    </a>
+    <a href="instagram://library?AssetPath=${encodeURIComponent(data.img)}" onclick="copyForIG('${waLink}'); return false;" class="share-item">
+      <div class="share-icon ig">📷</div><div class="share-label">Instagram</div>
+    </a>
+    <a href="https://www.tiktok.com" onclick="copyForTT('${waLink}'); return false;" class="share-item">
+      <div class="share-icon tt">♪</div><div class="share-label">TikTok</div>
+    </a>
+    <a href="#" onclick="copyLink('${waLink}'); return false;" class="share-item">
+      <div class="share-icon copy">🔗</div><div class="share-label">Copy Link</div>
+    </a>
+  `;
+  modal.classList.add('active');
+}
+
+function closeShareModal(e) {
+  if(!e || e.target.id === 'shareModal' || e.target.className === 'share-close') {
+    document.getElementById('shareModal').classList.remove('active');
+  }
+}
+
+function copyForIG(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Link disalin! Paste di IG Story');
+    closeShareModal();
+  });
+}
+
+function copyForTT(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Link disalin! Paste di TikTok');
+    closeShareModal();
+  });
+}
+
+function copyLink(url) {
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Link berhasil disalin!');
+    closeShareModal();
+  });
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+function slide(sliderId, dir, e) {
+  if(e) { e.stopPropagation(); e.preventDefault(); }
+  const slider = document.getElementById(sliderId);
+  const slides = slider.querySelector('.slides');
+  const dots = slider.querySelectorAll('.dot');
+  const total = slides.children.length;
+  let current = parseInt(slider.dataset.current || 0);
+  let newCurrent = current + dir;
+  if(dir > 0) newCurrent = Math.min(current + 1, total - 1);
+  if(dir < 0) newCurrent = Math.max(current - 1, 0);
+  if(newCurrent === current) return;
+  slides.style.transform = `translateX(-${newCurrent * 100}%)`;
+  slider.dataset.current = newCurrent;
+  dots.forEach((d,i) => d.classList.toggle('active', i === newCurrent));
+}
+
+function goSlide(sliderId, idx, e) {
+  if(e) { e.stopPropagation(); e.preventDefault(); }
+  const slider = document.getElementById(sliderId);
+  const slides = slider.querySelector('.slides');
+  const dots = slider.querySelectorAll('.dot');
+  const total = slides.children.length;
+  idx = Math.max(0, Math.min(idx, total - 1));
+  slides.style.transform = `translateX(-${idx * 100}%)`;
+  slider.dataset.current = idx;
+  dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+}
+
+function initSwipeSlider() {
+  document.querySelectorAll('.slider').forEach(slider => {
+    const slides = slider.querySelector('.slides');
+    if(slides.children.length <= 1) return;
+    let startX = 0, startY = 0, currentX = 0, isDragging = false, isScrolling = null, startTime = 0;
+    const start = e => {
+      if(e.touches && e.touches.length > 1) return;
+      startX = e.touches? e.touches[0].clientX : e.clientX;
+      startY = e.touches? e.touches[0].clientY : e.clientY;
+      startTime = Date.now();
+      isDragging = true;
+      isScrolling = null;
+      slides.classList.add('dragging');
+    };
+    const move = e => {
+      if(!isDragging) return;
+      currentX = e.touches? e.touches[0].clientX : e.clientX;
+      const currentY = e.touches? e.touches[0].clientY : e.clientY;
+      const diffX = currentX - startX;
+      const diffY = currentY - startY;
+      if(isScrolling === null) isScrolling = Math.abs(diffX) < Math.abs(diffY);
+      if(isScrolling) return;
+      e.preventDefault();
+      const current = parseInt(slider.dataset.current || 0);
+      const offset = -current * 100 + (diffX / slider.offsetWidth) * 100;
+      slides.style.transform = `translateX(${offset}%)`;
+    };
+    const end = e => {
+      if(!isDragging) return;
+      isDragging = false;
+      slides.classList.remove('dragging');
+      if(isScrolling) return;
+      const diff = currentX - startX;
+      const elapsed = Date.now() - startTime;
+      const velocity = Math.abs(diff) / elapsed;
+      const threshold = velocity > 0.5? 30 : 80;
+      if(Math.abs(diff) > threshold) {
+        if(diff > 0) slide(slider.id, -1);
+        else slide(slider.id, 1);
+      } else {
+        const current = parseInt(slider.dataset.current || 0);
+        slides.style.transform = `translateX(-${current * 100}%)`;
+      }
+    };
+    slider.addEventListener('touchstart', start, {passive: true});
+    slider.addEventListener('touchmove', move, {passive: false});
+    slider.addEventListener('touchend', end);
+    slider.addEventListener('mousedown', start);
+    slider.addEventListener('mousemove', move);
+    slider.addEventListener('mouseup', end);
+    slider.addEventListener('mouseleave', end);
+  });
+}
+
+function openLightboxFromSlider(sliderId, idx) {
+  const slider = document.getElementById(sliderId);
+  const imgs = Array.from(slider.querySelectorAll('.slides img')).map(img => img.src);
+  openLightbox(imgs, idx);
+}
+
+function openLightbox(images, index) {
+  currentLightboxImages = images;
+  currentLightboxIndex = index;
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightboxImg');
+  img.src = images[index];
+  img.style.transform = 'scale(1) translate(0px, 0px)';
+  lightbox.classList.add('active');
+  updateLightboxCounter();
+  initZoomPan();
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+function lightboxSlide(dir) {
+  currentLightboxIndex = (currentLightboxIndex + dir + currentLightboxImages.length) % currentLightboxImages.length;
+  const img = document.getElementById('lightboxImg');
+  img.src = currentLightboxImages[currentLightboxIndex];
+  img.style.transform = 'scale(1) translate(0px, 0px)';
+  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
+  updateLightboxCounter();
+}
+
+function updateLightboxCounter() {
+  document.getElementById('lightboxCounter').textContent = `${currentLightboxIndex + 1} / ${currentLightboxImages.length}`;
+}
+
+function initZoomPan() {
+  const img = document.getElementById('lightboxImg');
+  zoomState = {scale: 1, lastScale: 1, posX: 0, posY: 0, lastPosX: 0, lastPosY: 0, lastTap: 0};
+  let startDistance = 0, startX = 0, startY = 0;
+  img.ontouchend = e => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - zoomState.lastTap;
+    if(tapLength < 300 && tapLength > 0 && e.touches.length === 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      if(zoomState.scale === 1) {
+        zoomState.scale = 2.5;
+        zoomState.lastScale = 2.5;
+      } else {
+        zoomState.scale = 1;
+        zoomState.lastScale = 1;
+        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
+      }
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
+    }
+    zoomState.lastTap = currentTime;
+    if(e.touches.length < 2) {
+      zoomState.lastScale = zoomState.scale;
+      zoomState.lastPosX = zoomState.posX;
+      zoomState.lastPosY = zoomState.posY;
+    }
+  };
+  img.ontouchstart = e => {
+    if(e.touches.length === 2) {
+      startDistance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+    } else if(e.touches.length === 1 && zoomState.scale > 1) {
+      startX = e.touches[0].pageX - zoomState.lastPosX;
+      startY = e.touches[0].pageY - zoomState.lastPosY;
+    }
+  };
+  img.ontouchmove = e => {
+    if(e.touches.length === 2) {
+      e.preventDefault();
+      const distance = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      zoomState.scale = zoomState.lastScale * (distance / startDistance);
+      zoomState.scale = Math.min(Math.max(1, zoomState.scale), 4);
+      if(zoomState.scale === 1) {
+        zoomState.posX = 0; zoomState.posY = 0; zoomState.lastPosX = 0; zoomState.lastPosY = 0;
+      }
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
+    } else if(e.touches.length === 1 && zoomState.scale > 1) {
+      e.preventDefault();
+      zoomState.posX = e.touches[0].pageX - startX;
+      zoomState.posY = e.touches[0].pageY - startY;
+      img.style.transform = `scale(${zoomState.scale}) translate(${zoomState.posX}px, ${zoomState.posY}px)`;
+    }
+  };
+}
+
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeBtn');
+  const newTheme = body.getAttribute('data-theme') === 'dark'? 'light' : 'dark';
+  body.setAttribute('data-theme', newTheme);
+  btn.textContent = newTheme === 'dark'? '☀️' : '🌙';
+  localStorage.setItem('theme', newTheme);
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.body.setAttribute('data-theme', saved);
+  document.getElementById('themeBtn').textContent = saved === 'dark'? '☀️' : '🌙';
+}
+
+</script>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>OTO PADANG</h4>
+        <p>Platform kurator mobil bekas terpercaya di Sumatera Barat. Kami bantu showroom & pemilik mobil jual lebih cepat dengan sistem modern.</p>
+        <a href="https://wa.me/628979879518?text=Halo%20OTO%20PADANG,%20saya%20dari%20showroom%20ingin%20kerja%20sama" class="footer-cta" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 32 32" fill="currentColor"><path d="M16 0C7.2 0 0 7.2 0 16c0 2.8.7 5.5 2.1 7.9L.1 32l8.3-2.2c2.3 1.3 4.9 2 7.6 2 8.8 0 16-7.2 16-16S24.8 0 16 0zm0 29.3c-2.4 0-4.8-.6-6.9-1.8l-.5-.3-4.9 1.3 1.3-4.8-.3-.5c-1.2-2.1-1.9-4.5-1.9-7 0-7.3 6-13.3 13.3-13.3S29.3 8.7 29.3 16 23.3 29.3 16 29.3zm7.3-9.7c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.6-.2-.8.2-.2.4-.9 1.2-1.1 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.2 0-.5 0-.7-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.8-.6h-.7c-.2 0-.7.1-1 0-.4-.1-1.3.2-1.3 1.6 0 1.4 1.3 2.7 1.5 2.9.2.2 2.6 4 6.3 5.6.9.4 1.6.6 2.1.8.9.3 1.7.2 2.3.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.7-.5z"/></svg>
+          Chat WhatsApp Sekarang
+        </a>
+      </div>
+      <div class="footer-col">
+        <h4>Untuk Showroom</h4>
+        <ul>
+          <li><a href="https://wa.me/628979879518?text=Saya%20mau%20daftar%20showroom%20di%20OTO%20PADANG" target="_blank">→ Daftar Showroom Gratis</a></li>
+          <li><a href="login.html">→ Login Dashboard</a></li>
+          <li><a href="https://wa.me/628979879518?text=Mau%20tanya%20fitur%20OTO%20PADANG" target="_blank">→ Tanya Fitur</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontak Kami</h4>
+        <ul>
+          <li><a href="https://wa.me/628979879518" target="_blank">💬 WhatsApp: 0897-9879-518</a></li>
+          <li><a href="mailto:yandraofficial01@gmail.com">📧 Email: yandraofficial01@gmail.com</a></li>
+          <li><a href="#">📍 Padang, Sumatera Barat</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 <a href="https://oto-padang.vercel.app">OTO PADANG</a>. All Rights Reserved. Made with ❤️ di Padang.
+    </div>
+  </footer>
+</body>
+</html>
 </style>
 </head>
 <body data-theme="dark">
@@ -165,6 +943,41 @@
     <div class="dropdown-menu" id="showroomMenu"><a href="login.html">🔐 Login Showroom</a></div>
   </div>
   <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+</div>
+
+<div class="kalkulator-hero">
+  <div class="form-group">
+    <label>Harga Mobil</label>
+    <input id="hargaHome" type="text" value="110.000.000">
+  </div>
+  
+  <div class="form-group">
+    <label>DP</label>
+    <select id="dpHome">
+      <option value="10">10%</option>
+      <option value="20">20%</option>
+      <option value="30">30%</option>
+    </select>
+    <small id="dpTextHome"></small>
+  </div>
+  
+  <div class="form-group">
+    <label>Tenor</label>
+    <select id="tenorHome">
+      <option value="1">1 Tahun</option>
+      <option value="3">3 Tahun</option>
+      <option value="5">5 Tahun</option>
+    </select>
+  </div>
+
+  <div class="hasil-box">
+  <p>Estimasi Angsuran Per Bulan</p>
+  <h3 id="hasilHome">Rp 3.375.000</h3>
+  <button id="ctaHome">Konsultasi Cicilan 3 Jutaan</button>
+  
+  <!-- DISCLAIMER AMAN OJK 👇 -->
+  <p class="disclaimer">*Perhitungan bersifat simulasi & estimasi awal. Angsuran, bunga, dan tenor final ditentukan oleh perusahaan pembiayaan rekanan setelah analisa kredit. OTO PADANG tidak memberikan fasilitas kredit.</p>
+</div>
 </div>
 
 <div class="filter-bar">
@@ -196,25 +1009,15 @@
 </div>
 
 <div class="grid" id="list-mobil"><div class="loading">Loading data semua showroom...</div></div>
-<button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">Muat Lebih Banyak</button>
+<button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none">Muat Lebih Banyak</button></style>
+</head>
+<body data-theme="dark">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W5C3TD5R" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  <button class="lightbox-nav lightbox-prev" onclick="lightboxSlide(-1)">‹</button>
-  <img class="lightbox-img" id="lightboxImg" src="">
-  <button class="lightbox-nav lightbox-next" onclick="lightboxSlide(1)">›</button>
-  <div class="lightbox-counter" id="lightboxCounter"></div>
+<div class="banner">
+  <div class="logo"><img src="https://i.imgur.com/EqSPvwt.jpeg" alt="OTO PADANG"></div>
+  <div class="banner-text"><h1>OTO PADANG</h1><p>Kurator Mobil Bekas Terpercaya Sumatera Barat</p></div>
 </div>
-
-<div class="share-modal" id="shareModal" onclick="closeShareModal(event)">
-  <div class="share-sheet" onclick="event.stopPropagation()">
-    <div class="share-title">Bagikan Mobil Ini</div>
-    <div class="share-grid" id="shareGrid"></div>
-    <button class="share-close" onclick="closeShareModal()">Tutup</button>
-  </div>
-</div>
-
-<div class="toast" id="toast">Link berhasil disalin!</div>
 
 <script>
 const SHEET_ID = '1YpsM_hGM3RlzMVG7x-dIVe6BCA9STCfo5RlYX7mt7Rg';
@@ -818,5 +1621,51 @@ function loadTheme() {
       © 2026 <a href="https://oto-padang.vercel.app">OTO PADANG</a>. All Rights Reserved. Made with ❤️ di Padang.
     </div>
   </footer>
+<script>
+// KALKULATOR HOMEPAGE
+function hitungHome() {
+  const harga = parseInt(document.getElementById('hargaHome').value.replace(/\./g, '')) || 0;
+  const dpPersen = parseFloat(document.getElementById('dpHome').value) / 100;
+  const tenorBulan = parseInt(document.getElementById('tenorHome').value) * 12;
+  
+  const nominalDP = harga * dpPersen;
+  const pokokHutang = harga - nominalDP;
+  const totalBunga = pokokHutang * 0.05 * (tenorBulan / 12);
+  const angsuran = (pokokHutang + totalBunga) / tenorBulan;
+  
+  // Update hasil angsuran
+  document.getElementById('hasilHome').textContent = `Rp ${Math.round(angsuran).toLocaleString('id-ID')}`;
+  
+  // Update text DP otomatis: "Setara dengan DP 10% atau Rp 11.000.000"
+  document.getElementById('dpTextHome').textContent = `(Setara dengan DP ${(dpPersen * 100)}% atau Rp ${nominalDP.toLocaleString('id-ID')})`;
+  
+  // Update tombol CTA otomatis: "Lihat Mobil Cicilan 9 Jutaan"
+  const ctaBtn = document.getElementById('ctaHome');
+  if (ctaBtn) ctaBtn.innerText = `Lihat Mobil Cicilan ${Math.round(angsuran/1000000)} Jutaan`;
+  
+  // Update text dropdown DP biar real-time: "10% - Rp 11jt"
+  const dpSelect = document.getElementById('dpHome');
+  for (let option of dpSelect.options) {
+    const persen = parseInt(option.value);
+    const nominal = harga * persen / 100;
+    option.text = `${persen}% - Rp ${Math.round(nominal/1000000)}jt`;
+  }
+}
+
+function formatRupiah(input) {
+  let value = input.value.replace(/\D/g, '');
+  input.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+window.onload = function() {
+  document.getElementById('hargaHome').addEventListener('input', function() {
+    formatRupiah(this);
+    hitungHome();
+  });
+  document.getElementById('dpHome').addEventListener('change', hitungHome);
+  document.getElementById('tenorHome').addEventListener('change', hitungHome);
+  hitungHome(); // Hitung pertama kali
+}
+</script>
 </body>
 </html>
