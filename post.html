@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artikel - OtoPadang</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            line-height: 1.6; 
+        }
+        img { 
+            width: 100%; 
+            max-width: 700px; 
+            border-radius: 8px; 
+            margin: 20px 0;
+            height: auto;
+        }
+        h1 { 
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .meta { 
+            color: #666; 
+            font-size: 14px; 
+            margin-bottom: 30px;
+        }
+        .content p { 
+            margin-bottom: 15px;
+        }
+        .content h2, .content h3 {
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .content ul, .content ol {
+            margin-bottom: 15px;
+            padding-left: 25px;
+        }
+        .content li {
+            margin-bottom: 8px;
+        }
+        .content blockquote {
+            border-left: 4px solid #ddd;
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #555;
+        }
+        .loading { 
+            text-align: center; 
+            padding: 50px;
+            font-size: 18px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <a href="/blog.html" class="back-btn">← Kembali ke Blog</a>
+    <div id="post-sanity" class="loading">Loading artikel...</div>
+
+    <script type="module">
+    import {toHTML} from 'https://cdn.jsdelivr.net/npm/@portabletext/to-html@2.0.3/+esm';
+
+    async function loadPost() {
+        const slug = new URLSearchParams(window.location.search).get('slug');
+        if(!slug) {
+            document.getElementById('post-sanity').innerHTML = 'Slug tidak ada di URL';
+            return;
+        }
+
+        const PROJECT_ID = 'uzbsymrd';
+        const DATASET = 'production';
+        const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{
+            title, 
+            "imageUrl": mainImage.asset->url, 
+            body, 
+            publishedAt
+        }`);
+        const URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
+        
+        try {
+            const res = await fetch(URL);
+            const {result: post} = await res.json();
+            
+            if(!post) {
+                document.getElementById('post-sanity').innerHTML = 'Artikel tidak ditemukan';
+                return;
+            }
+
+            document.title = post.title + ' - OtoPadang';
+            
+            const tanggal = post.publishedAt 
+                ? new Date(post.publishedAt).toLocaleDateString('id-ID', {
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric'
+                }) 
+                : 'Tanggal tidak diset';
+                
+            const isiArtikel = post.body ? toHTML(post.body) : '<p>Isi artikel kosong.</p>';
+
+            document.getElementById('post-sanity').innerHTML = `
+                <h1>${post.title}</h1>
+                <p class="meta">Dipublish: ${tanggal}</p>
+                ${post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : ''}
+                <div class="content">${isiArtikel}</div>
+            `;
+        } catch (e) {
+            console.log(e);
+            document.getElementById('post-sanity').innerHTML = 'Gagal load artikel. Cek Console untuk detail error.';
+        }
+    }
+    
+    loadPost();
+    </script>
+</body>
+</html>
