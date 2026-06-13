@@ -11,7 +11,8 @@
         img { width:100%; border-radius:8px; margin: 20px 0; }
         .content p { margin-bottom: 15px; }
         .content h2, .content h3 { margin-top: 30px; }
-        .content ul, .content ol { padding-left: 25px; }
+        .content ul, .content ol { padding-left: 25px; margin-bottom: 15px; }
+        .content li { margin-bottom: 8px; }
         .content blockquote { border-left: 3px solid #ccc; padding-left: 15px; color: #666; margin-left: 0; }
         .loading, .error { text-align: center; padding: 50px; }
         .error { color: #c00; }
@@ -23,28 +24,56 @@
     <div id="post-content" class="loading">Loading artikel...</div>
 
     <script>
-    // Fungsi manual buat convert Portable Text ke HTML
+    // Fungsi convert Portable Text V2 - Support list & image
     function blockToHtml(blocks) {
       if (!blocks) return '';
-      return blocks.map(block => {
+      let html = '';
+      let listBuffer = [];
+      let listType = null;
+
+      const flushList = () => {
+        if (listBuffer.length > 0) {
+          html += `<${listType}>${listBuffer.join('')}</${listType}>`;
+          listBuffer = [];
+          listType = null;
+        }
+      };
+
+      blocks.forEach(block => {
         if (block._type === 'block') {
-          const style = block.style || 'normal';
           const text = block.children.map(child => {
             let html = child.text;
             if (child.marks?.includes('strong')) html = `<strong>${html}</strong>`;
             if (child.marks?.includes('em')) html = `<em>${html}</em>`;
             if (child.marks?.includes('underline')) html = `<u>${html}</u>`;
+            if (child.marks?.includes('code')) html = `<code>${html}</code>`;
             return html;
           }).join('');
-          
-          if (style === 'h1') return `<h1>${text}</h1>`;
-          if (style === 'h2') return `<h2>${text}</h2>`;
-          if (style === 'h3') return `<h3>${text}</h3>`;
-          if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
-          return `<p>${text}</p>`;
+
+          if (block.listItem === 'bullet') {
+            if (listType !== 'ul') flushList();
+            listType = 'ul';
+            listBuffer.push(`<li>${text}</li>`);
+          } else if (block.listItem === 'number') {
+            if (listType !== 'ol') flushList();
+            listType = 'ol';
+            listBuffer.push(`<li>${text}</li>`);
+          } else {
+            flushList();
+            const style = block.style || 'normal';
+            if (style === 'h1') html += `<h1>${text}</h1>`;
+            else if (style === 'h2') html += `<h2>${text}</h2>`;
+            else if (style === 'h3') html += `<h3>${text}</h3>`;
+            else if (style === 'blockquote') html += `<blockquote>${text}</blockquote>`;
+            else html += `<p>${text}</p>`;
+          }
+        } else if (block._type === 'image') {
+          flushList();
+          html += `<img src="${block.asset.url}?w=1200&auto=format" alt="">`;
         }
-        return '';
-      }).join('');
+      });
+      flushList();
+      return html;
     }
 
     async function loadPost() {
@@ -57,7 +86,7 @@
 
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{title, "imageUrl": mainImage.asset->url, publishedAt, body}`);
+      const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{title, "imageUrl": mainImage.asset->url, publishedAt, body[]{..., asset->}}`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
@@ -77,14 +106,14 @@
 
         document.title = post.title + ' - OtoPadang';
         const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
-        const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '';
+        const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Belum diset';
         const bodyHtml = blockToHtml(post.body);
 
         document.getElementById('post-content').innerHTML = `
           <h1>${post.title}</h1>
           <p class="meta">Dipublish: ${tgl}</p>
           ${img}
-          <div class="content">${bodyHtml}</div>
+          <div class="content">${bodyHtml || '<p>Belum ada isi artikel.</p>'}</div>
         `;
       } catch (e) {
         console.error(e);
