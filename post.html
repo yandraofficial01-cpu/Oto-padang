@@ -11,6 +11,8 @@
         img { width:100%; border-radius:8px; margin: 20px 0; }
         .content p { margin-bottom: 15px; }
         .content h2, .content h3 { margin-top: 30px; }
+        .content ul, .content ol { padding-left: 25px; }
+        .content blockquote { border-left: 3px solid #ccc; padding-left: 15px; color: #666; margin-left: 0; }
         .loading, .error { text-align: center; padding: 50px; }
         .error { color: #c00; }
     </style>
@@ -20,8 +22,31 @@
     <hr>
     <div id="post-content" class="loading">Loading artikel...</div>
 
-    <script src="https://unpkg.com/@portabletext/to-html@1/dist/index.browser.js"></script>
     <script>
+    // Fungsi manual buat convert Portable Text ke HTML
+    function blockToHtml(blocks) {
+      if (!blocks) return '';
+      return blocks.map(block => {
+        if (block._type === 'block') {
+          const style = block.style || 'normal';
+          const text = block.children.map(child => {
+            let html = child.text;
+            if (child.marks?.includes('strong')) html = `<strong>${html}</strong>`;
+            if (child.marks?.includes('em')) html = `<em>${html}</em>`;
+            if (child.marks?.includes('underline')) html = `<u>${html}</u>`;
+            return html;
+          }).join('');
+          
+          if (style === 'h1') return `<h1>${text}</h1>`;
+          if (style === 'h2') return `<h2>${text}</h2>`;
+          if (style === 'h3') return `<h3>${text}</h3>`;
+          if (style === 'blockquote') return `<blockquote>${text}</blockquote>`;
+          return `<p>${text}</p>`;
+        }
+        return '';
+      }).join('');
+    }
+
     async function loadPost() {
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('slug');
@@ -53,7 +78,7 @@
         document.title = post.title + ' - OtoPadang';
         const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
         const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '';
-        const bodyHtml = window.toHTML(post.body); // <-- INI YANG BENER
+        const bodyHtml = blockToHtml(post.body);
 
         document.getElementById('post-content').innerHTML = `
           <h1>${post.title}</h1>
