@@ -86,7 +86,8 @@
 
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{title, "imageUrl": mainImage.asset->url, publishedAt, body[]{..., asset->}}`);
+      // UDAH GUA GANTI: body -> content
+      const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{title, "imageUrl": mainImage.asset->url, publishedAt, content[]{..., asset->}}`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
@@ -107,7 +108,8 @@
         document.title = post.title + ' - OtoPadang';
         const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
         const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Belum diset';
-        const bodyHtml = blockToHtml(post.body);
+        // UDAH GUA GANTI: post.body -> post.content
+        const bodyHtml = blockToHtml(post.content);
 
         document.getElementById('post-content').innerHTML = `
           <h1>${post.title}</h1>
