@@ -15,6 +15,7 @@
         .post p { color:#666; font-size:14px }
         .loading, .error { text-align: center; padding: 50px; }
         .error { color: #c00; }
+        .empty { text-align: center; padding: 50px; color: #666; }
     </style>
 </head>
 <body>
@@ -28,7 +29,8 @@
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
+      // Filter post yg udah di-publish + ada slug + ada tanggal
+      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(publishedAt)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
@@ -39,11 +41,10 @@
         });
         
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        const result = data.result;
+        const { result } = await res.json();
         
         if(!result || result.length === 0) {
-            document.getElementById('blog-sanity').innerHTML = 'Belum ada artikel yang dipublish.';
+            document.getElementById('blog-sanity').innerHTML = '<div class="empty">Belum ada artikel yang dipublish.</div>';
             return;
         }
 
@@ -52,9 +53,7 @@
               ? `<a href="post.html?slug=${post.slug}"><img src="${post.imageUrl}?w=800&auto=format" alt="${post.title}"></a>` 
               : '';
             
-            const tgl = post.publishedAt 
-              ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) 
-              : 'Baru dipublish';
+            const tgl = new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
             
             return `
               <div class="post">
