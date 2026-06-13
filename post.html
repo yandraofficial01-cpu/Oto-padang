@@ -10,6 +10,7 @@
         .meta { color:#666; font-size:14px; margin-bottom: 20px; }
         img { width:100%; border-radius:8px; margin: 20px 0; }
         .content p { margin-bottom: 15px; }
+        .content h2, .content h3 { margin-top: 30px; }
         .loading, .error { text-align: center; padding: 50px; }
         .error { color: #c00; }
     </style>
@@ -19,7 +20,7 @@
     <hr>
     <div id="post-content" class="loading">Loading artikel...</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@portabletext/to-html@1.0.3/dist/index.browser.min.js"></script>
+    <script src="https://unpkg.com/@portabletext/to-html@1/dist/index.browser.js"></script>
     <script>
     async function loadPost() {
       const params = new URLSearchParams(window.location.search);
@@ -52,7 +53,7 @@
         document.title = post.title + ' - OtoPadang';
         const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
         const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '';
-        const bodyHtml = window.portableTextToHtml(post.body);
+        const bodyHtml = window.toHTML(post.body); // <-- INI YANG BENER
 
         document.getElementById('post-content').innerHTML = `
           <h1>${post.title}</h1>
