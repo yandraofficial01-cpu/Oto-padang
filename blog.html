@@ -9,8 +9,12 @@
         h1 { text-align: center; }
         .post { margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px }
         .post img { width:100%; max-width:600px; border-radius:8px; margin-bottom:15px }
-        .post h2 { margin:0 0 10px 0 }
+        .post h2 { margin:0 0 10px 0; line-height: 1.3; }
+        .post h2 a { color: #000; text-decoration: none; }
+        .post h2 a:hover { color: #0066cc; text-decoration: underline; }
         .post p { color:#666; font-size:14px }
+        .loading, .error { text-align: center; padding: 50px; }
+        .error { color: #c00; }
     </style>
 </head>
 <body>
@@ -18,28 +22,51 @@
     <a href="/">← Kembali ke Home</a>
     <hr>
     
-    <div id="blog-sanity">Loading artikel...</div>
+    <div id="blog-sanity" class="loading">Loading artikel...</div>
 
     <script>
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      const QUERY = encodeURIComponent(`*[_type == "post"]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
-      const URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
+      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
+      const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
-        const res = await fetch(URL);
-        const {result} = await res.json();
+        const res = await fetch(URL, { 
+          cache: 'no-store',
+          credentials: 'omit',
+          mode: 'cors'
+        });
         
-        document.getElementById('blog-sanity').innerHTML = result.map(post => `
-          <div class="post">
-            <img src="${post.imageUrl}?w=800" alt="${post.title}">
-            <h2>${post.title}</h2>
-            <p>Dipublish: ${new Date(post.publishedAt).toLocaleDateString('id-ID')}</p>
-          </div>
-        `).join('');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const result = data.result;
+        
+        if(!result || result.length === 0) {
+            document.getElementById('blog-sanity').innerHTML = 'Belum ada artikel yang dipublish.';
+            return;
+        }
+
+        document.getElementById('blog-sanity').innerHTML = result.map(post => {
+            const img = post.imageUrl 
+              ? `<a href="post.html?slug=${post.slug}"><img src="${post.imageUrl}?w=800&auto=format" alt="${post.title}"></a>` 
+              : '';
+            
+            const tgl = post.publishedAt 
+              ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) 
+              : 'Baru dipublish';
+            
+            return `
+              <div class="post">
+                ${img}
+                <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
+                <p>Dipublish: ${tgl}</p>
+              </div>
+            `;
+        }).join('');
       } catch (e) {
-        document.getElementById('blog-sanity').innerHTML = 'Gagal load artikel. Cek CORS udah bener belum.';
+        console.error(e);
+        document.getElementById('blog-sanity').innerHTML = `<div class="error">Gagal load artikel.<br>Error: ${e.message}</div>`;
       }
     }
     loadBlog();
