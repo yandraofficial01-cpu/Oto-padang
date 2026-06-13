@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - OtoPadang</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; }
+        .post { margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px }
+        .post img { width:100%; max-width:600px; border-radius:8px; margin-bottom:15px }
+        .post h2 { margin:0 0 10px 0 }
+        .post p { color:#666; font-size:14px }
+    </style>
+</head>
+<body>
+    <h1>Blog OtoPadang</h1>
+    <a href="/">← Kembali ke Home</a>
+    <hr>
+    
+    <div id="blog-sanity">Loading artikel...</div>
+
+    <script>
+    async function loadBlog() {
+      const PROJECT_ID = 'uzbsymrd';
+      const DATASET = 'production';
+      const QUERY = encodeURIComponent(`*[_type == "post"]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
+      const URL = `https://${PROJECT_ID}.api.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
+      
+      try {
+        const res = await fetch(URL);
+        const {result} = await res.json();
+        
+        document.getElementById('blog-sanity').innerHTML = result.map(post => `
+          <div class="post">
+            <img src="${post.imageUrl}?w=800" alt="${post.title}">
+            <h2>${post.title}</h2>
+            <p>Dipublish: ${new Date(post.publishedAt).toLocaleDateString('id-ID')}</p>
+          </div>
+        `).join('');
+      } catch (e) {
+        document.getElementById('blog-sanity').innerHTML = 'Gagal load artikel. Cek CORS udah bener belum.';
+      }
+    }
+    loadBlog();
+    </script>
+</body>
+</html>
