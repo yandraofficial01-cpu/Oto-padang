@@ -32,6 +32,7 @@
           position: sticky;
           top: 0;
           z-index: 10;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.05);
         }
         .header-inner {
           max-width: 720px;
@@ -96,7 +97,6 @@
         }
         .content h2 { font-size: 1.75rem; }
         .content h3 { font-size: 1.4rem; }
-        /* Paragraf pertama setelah H3 gak perlu jarak atas gede */
         .content h3 + p { margin-top: 0; }
         
         .content ul, .content ol { 
@@ -206,11 +206,11 @@
           // Auto convert **bold** jadi <strong>
           text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
           
-          // FIX UTAMA: Pecah "1. Judul" jadi H3 + paragraf baru
-          // Ini yang bikin jarak antara 1, 2, 3 jadi lega
-          text = text.replace(/(\d+\.\s+[^.]+\.)/g, '</p><h3>$1</h3><p>');
+          // FIX FINAL: Pecah "1. Judul apapun" jadi H3 + paragraf baru
+          // Gak peduli ada titik atau enggak di akhir
+          text = text.replace(/(\d+\.\s+[^\n<]+)/g, '</p><h3>$1</h3><p>');
           
-          // Hapus <p></p> kosong kalau ada di awal/akhir
+          // Hapus <p></p> kosong
           text = text.replace(/<p><\/p>/g, '');
           text = text.replace(/^<\/p>/, '');
           text = text.replace(/<p>$/, '');
