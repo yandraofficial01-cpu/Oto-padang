@@ -29,8 +29,8 @@
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      // Filter post yg udah di-publish + ada slug + ada tanggal
-      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(publishedAt)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, publishedAt}|order(publishedAt desc)`);
+      // UDAH GUA GANTI: publishedAt -> date
+      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(date)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, "publishedAt": date}|order(date desc)`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
@@ -53,7 +53,9 @@
               ? `<a href="post.html?slug=${post.slug}"><img src="${post.imageUrl}?w=800&auto=format" alt="${post.title}"></a>` 
               : '';
             
-            const tgl = new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'});
+            const tgl = post.publishedAt 
+              ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
+              : 'Baru dipublish';
             
             return `
               <div class="post">
