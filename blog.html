@@ -4,32 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - OtoPadang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1 { text-align: center; }
-        .post { margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px }
-        .post img { width:100%; max-width:600px; border-radius:8px; margin-bottom:15px }
-        .post h2 { margin:0 0 10px 0; line-height: 1.3; }
-        .post h2 a { color: #000; text-decoration: none; }
-        .post h2 a:hover { color: #0066cc; text-decoration: underline; }
-        .post p { color:#666; font-size:14px }
-        .loading, .error { text-align: center; padding: 50px; }
+        :root {
+          --brand: #0066cc;
+          --text: #1a1a1a;
+          --muted: #666;
+          --bg: #f8f9fa;
+          --card: #fff;
+        }
+        * { box-sizing: border-box; }
+        body { 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+          max-width: 1200px; 
+          margin: 0 auto; 
+          padding: 24px 16px;
+          background: var(--bg);
+          color: var(--text);
+        }
+        .header {
+          text-align: center;
+          margin-bottom: 40px;
+        }
+        h1 { 
+          font-size: 2.5rem; 
+          font-weight: 700;
+          margin: 0 0 8px 0;
+        }
+        .subtitle {
+          color: var(--muted);
+          font-size: 16px;
+          margin-bottom: 24px;
+        }
+        .back-link {
+          color: var(--brand);
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+          display: inline-block;
+          margin-bottom: 24px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        
+        /* GRID PREMIUM */
+        .blog-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 24px;
+        }
+        
+        /* CARD PREMIUM */
+        .post {
+          background: var(--card);
+          border-radius: 16px;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          transition: all 0.3s ease;
+          border: 1px solid #eee;
+        }
+        .post:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .post-thumb {
+          width: 100%;
+          height: 200px;
+          object-fit: cover;
+          display: block;
+          background: #f0f0f0;
+        }
+        .post-body {
+          padding: 20px;
+        }
+        .post h2 { 
+          margin: 0 0 8px 0; 
+          font-size: 1.25rem;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+        .post h2 a { 
+          color: var(--text); 
+          text-decoration: none; 
+        }
+        .post h2 a:hover { 
+          color: var(--brand); 
+        }
+        .post-meta { 
+          color: var(--muted); 
+          font-size: 13px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .post-meta::before {
+          content: '📅';
+          font-size: 12px;
+        }
+        
+        .loading, .error, .empty { 
+          text-align: center; 
+          padding: 80px 20px;
+          grid-column: 1 / -1;
+        }
         .error { color: #c00; }
-        .empty { text-align: center; padding: 50px; color: #666; }
+        .empty { color: var(--muted); }
+        
+        /* Mobile */
+        @media (max-width: 640px) {
+          h1 { font-size: 2rem; }
+          .blog-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
-    <h1>Blog OtoPadang</h1>
-    <a href="/">← Kembali ke Home</a>
-    <hr>
+    <div class="header">
+        <h1>Blog OtoPadang</h1>
+        <p class="subtitle">Tips, review, dan info dunia otomotif terpercaya</p>
+        <a href="/" class="back-link">← Kembali ke Home</a>
+    </div>
     
-    <div id="blog-sanity" class="loading">Loading artikel...</div>
+    <div id="blog-sanity" class="blog-grid">
+        <div class="loading">Loading artikel...</div>
+    </div>
 
     <script>
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      // UDAH GUA GANTI: publishedAt -> date
       const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(date)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, "publishedAt": date}|order(date desc)`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
@@ -50,19 +154,21 @@
 
         document.getElementById('blog-sanity').innerHTML = result.map(post => {
             const img = post.imageUrl 
-              ? `<a href="post.html?slug=${post.slug}"><img src="${post.imageUrl}?w=800&auto=format" alt="${post.title}"></a>` 
-              : '';
+              ? `<a href="post.html?slug=${post.slug}"><img class="post-thumb" src="${post.imageUrl}?w=600&h=400&fit=crop&auto=format" alt="${post.title}" loading="lazy"></a>` 
+              : `<a href="post.html?slug=${post.slug}"><div class="post-thumb" style="background:#e0e0e0"></div></a>`;
             
             const tgl = post.publishedAt 
               ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
               : 'Baru dipublish';
             
             return `
-              <div class="post">
+              <article class="post">
                 ${img}
-                <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
-                <p>Dipublish: ${tgl}</p>
-              </div>
+                <div class="post-body">
+                  <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
+                  <p class="post-meta">${tgl}</p>
+                </div>
+              </article>
             `;
         }).join('');
       } catch (e) {
