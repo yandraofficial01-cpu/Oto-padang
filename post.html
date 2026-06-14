@@ -4,27 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artikel - OtoPadang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        h1 { margin-bottom: 5px; }
-        .meta { color:#666; font-size:14px; margin-bottom: 20px; }
-        img { width:100%; border-radius:8px; margin: 20px 0; }
-        .content p { margin-bottom: 15px; }
-        .content h2, .content h3 { margin-top: 30px; }
-        .content ul, .content ol { padding-left: 25px; margin-bottom: 15px; }
-        .content li { margin-bottom: 8px; }
-        .content blockquote { border-left: 3px solid #ccc; padding-left: 15px; color: #666; margin-left: 0; }
-        .loading, .error { text-align: center; padding: 50px; }
+        :root {
+          --brand: #0066cc;
+          --text: #1a1a1a;
+          --muted: #666;
+        }
+        body { 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+          max-width: 720px; 
+          margin: 0 auto; 
+          padding: 24px 16px; 
+          line-height: 1.7;
+          color: var(--text);
+        }
+        h1 { 
+          font-size: 2rem; 
+          line-height: 1.2; 
+          margin-bottom: 8px;
+          font-weight: 700;
+        }
+        .meta { 
+          color: var(--muted); 
+          font-size: 14px; 
+          margin-bottom: 24px; 
+        }
+        img { 
+          width: 100%; 
+          border-radius: 12px; 
+          margin: 24px 0;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .content p { 
+          margin-bottom: 18px; 
+          font-size: 17px;
+        }
+        .content h2, .content h3 { 
+          margin-top: 40px;
+          margin-bottom: 16px;
+          font-weight: 700;
+        }
+        .content h2 { font-size: 1.5rem; }
+        .content h3 { font-size: 1.25rem; }
+        .content ul, .content ol { 
+          padding-left: 24px; 
+          margin-bottom: 18px; 
+        }
+        .content li { 
+          margin-bottom: 10px;
+          font-size: 17px;
+        }
+        .content strong {
+          font-weight: 600;
+          color: #000;
+        }
+        .content a {
+          color: var(--brand);
+          font-weight: 600;
+          text-decoration: none;
+        }
+        .content a:hover {
+          text-decoration: underline;
+        }
+        .back-link {
+          color: var(--brand);
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+        }
+        .back-link:hover { text-decoration: underline; }
+        hr { border: none; border-top: 1px solid #eee; margin: 20px 0; }
+        .loading, .error { text-align: center; padding: 50px; color: var(--muted); }
         .error { color: #c00; }
     </style>
 </head>
 <body>
-    <a href="/blog.html">← Kembali ke Blog</a>
+    <a href="/blog.html" class="back-link">← Kembali ke Blog</a>
     <hr>
     <div id="post-content" class="loading">Loading artikel...</div>
 
     <script>
-    // Fungsi convert Portable Text V2 - Support list & image
     function blockToHtml(blocks) {
       if (!blocks) return '';
       let html = '';
@@ -41,7 +103,7 @@
 
       blocks.forEach(block => {
         if (block._type === 'block') {
-          const text = block.children.map(child => {
+          let text = block.children.map(child => {
             let html = child.text;
             if (child.marks?.includes('strong')) html = `<strong>${html}</strong>`;
             if (child.marks?.includes('em')) html = `<em>${html}</em>`;
@@ -49,6 +111,12 @@
             if (child.marks?.includes('code')) html = `<code>${html}</code>`;
             return html;
           }).join('');
+          
+          // FIX 1: Auto convert **bold** jadi <strong>
+          text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          
+          // FIX 2: Auto link Otopadang.com jadi biru + bold + klik
+          text = text.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank">$1</a>');
 
           if (block.listItem === 'bullet') {
             if (listType !== 'ul') flushList();
@@ -86,17 +154,11 @@
 
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      // FIX: ganti publishedAt jadi "publishedAt": date
       const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{title, "imageUrl": mainImage.asset->url, "publishedAt": date, content[]{..., asset->}}`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
-        const res = await fetch(URL, { 
-          cache: 'no-store',
-          credentials: 'omit',
-          mode: 'cors'
-        });
-        
+        const res = await fetch(URL, { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const { result: post } = await res.json();
         
