@@ -26,11 +26,11 @@
           background: var(--bg);
         }
         
-        /* HEADER ITEM SAMA KAYAK LAINNYA */
+        /* HEADER SEJAJAR 1 BARIS */
         .site-header {
           background: var(--header-bg);
           border-bottom: 3px solid var(--header-yellow);
-          padding: 12px 16px;
+          padding: 10px 16px;
           position: sticky;
           top: 0;
           z-index: 10;
@@ -40,29 +40,44 @@
           margin: 0 auto;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
         }
-        .logo-img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
-        .logo-text { display: flex; flex-direction: column; }
-        .logo-title { font-weight: 700; font-size: 20px; color: var(--header-yellow); line-height: 1.1; }
-        .logo-subtitle { font-weight: 600; font-size: 11px; color: #fff; line-height: 1.2; }
+        .logo-img { 
+          width: 42px; 
+          height: 42px; 
+          object-fit: contain; 
+          flex-shrink: 0; 
+        }
+        .logo-title { 
+          font-weight: 700; 
+          font-size: 20px; 
+          color: var(--header-yellow); 
+          line-height: 1;
+          white-space: nowrap;
+        }
         .nav { margin-left: auto; }
-        .nav a { color: #fff; text-decoration: none; font-weight: 600; font-size: 15px; margin-left: 20px; }
+        .nav a { 
+          color: #fff; 
+          text-decoration: none; 
+          font-weight: 600; 
+          font-size: 15px; 
+          margin-left: 16px; 
+        }
         .nav a:hover { color: var(--header-yellow); }
         
         /* KONTEN */
         .container { max-width: 720px; margin: 0 auto; padding: 40px 16px; }
-        h1 { font-size: 2.25rem; line-height: 1.2; margin-bottom: 16px; font-weight: 700; }
-        .subtitle { font-size: 18px; color: var(--muted); margin-bottom: 40px; }
+        h1 { font-size: 2rem; line-height: 1.2; margin-bottom: 16px; font-weight: 700; }
+        .subtitle { font-size: 17px; color: var(--muted); margin-bottom: 40px; }
         
         .benefits { 
           background: #f8f9fa; 
           border: 1px solid var(--border);
           border-radius: 12px; 
-          padding: 32px; 
+          padding: 28px; 
           margin: 40px 0;
         }
-        .benefits h2 { font-size: 1.5rem; margin-bottom: 24px; }
+        .benefits h2 { font-size: 1.4rem; margin-bottom: 24px; }
         .benefit-item { display: flex; gap: 16px; margin-bottom: 20px; }
         .benefit-item:last-child { margin-bottom: 0; }
         .check { 
@@ -71,17 +86,17 @@
           width: 24px; height: 24px; 
           border-radius: 50%; 
           display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0; font-weight: 700;
+          flex-shrink: 0; font-weight: 700; font-size: 14px;
         }
         
         /* FORM */
         .form-box {
           border: 1px solid var(--border);
           border-radius: 12px;
-          padding: 32px;
+          padding: 28px;
           margin-top: 40px;
         }
-        .form-box h2 { font-size: 1.5rem; margin-bottom: 24px; }
+        .form-box h2 { font-size: 1.4rem; margin-bottom: 24px; }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 15px; }
         input, textarea {
@@ -130,9 +145,11 @@
           font-size: 14px;
         }
         @media (max-width: 640px) {
-          .logo-subtitle { display: none; }
-          .nav a { margin-left: 12px; font-size: 14px; }
-          .form-box, .benefits { padding: 24px 16px; }
+          .nav a { margin-left: 10px; font-size: 13px; }
+          .form-box, .benefits { padding: 20px 16px; }
+          .logo-title { font-size: 18px; }
+          .logo-img { width: 36px; height: 36px; }
+          h1 { font-size: 1.75rem; }
         }
     </style>
 </head>
@@ -140,15 +157,12 @@
     <!-- HEADER -->
     <header class="site-header">
       <div class="header-inner">
-        <img src="https://otopadang.com/logo.png" alt="Logo" class="logo-img">
-        <div class="logo-text">
-          <div class="logo-title">OTO PADANG</div>
-          <div class="logo-subtitle">Kurator Mobil Bekas Terpercaya Sumatera Barat</div>
-        </div>
+        <img src="/logo-oto-padang.png" alt="Logo OtoPadang" class="logo-img">
+        <div class="logo-title">OTO PADANG</div>
         <nav class="nav">
           <a href="/blog.html">Blog</a>
           <a href="/mitra.html">Jadi Mitra</a>
-          <a href="https://otopadang.com">Home</a>
+          <a href="/">Home</a>
         </nav>
       </div>
     </header>
@@ -180,6 +194,7 @@
             <strong>Leads Langsung ke WA Anda</strong><br>
             Tidak ada perantara. Pembeli chat langsung ke nomor showroom Anda.
           </div>
+        </div>
         <div class="benefit-item">
           <div class="check">✓</div>
           <div>
@@ -205,6 +220,10 @@
             <input type="tel" id="noWa" placeholder="Contoh: 08123456789" required>
           </div>
           <div class="form-group">
+            <label>Email Showroom *</label>
+            <input type="email" id="emailShowroom" placeholder="Contoh: admin@padangauto.com" required>
+          </div>
+          <div class="form-group">
             <label>Alamat Showroom</label>
             <input type="text" id="alamat" placeholder="Contoh: Jl. Khatib Sulaiman No. 123, Padang">
           </div>
@@ -213,7 +232,7 @@
             <input type="number" id="jumlahUnit" placeholder="Contoh: 15">
           </div>
           <button type="submit" class="btn-wa">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.2.46.3.06.11.04.61-.21 1.18-.2.56-1.24 1.1-1.7 1.12-.46.03-.47.36-1.77-.39-.28-.16-1.65-.59-2.9-1.74-.78-.8-1.59-1.97-1.59-2.4 0-.43.45-.66.6-.75.13-.08.28-.2.38-.31.1-.1.12-.17.18-.28.06-.11.03-.2-.01-.28-.04-.08-.39-.93-.53-1.28-.13-.35-.27-.3-.37-.3h-.32c-.11 0-.27.04-.41.2-.14.16-.53.52-.53 1.28 0 .75.55 1.48.62 1.58.07.1 1.07 1.64 2.6 2.3 1.53.66 1.53.44 1.8.41.28-.03.9-.37 1.03-.73.13-.36.13-.66.09-.73-.04-.07-.15-.11-.4-.24z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10-4.48 10-10S17.52 2 12 2zm4.9 14.38c-.23.66-1.15 1.21-1.88 1.37-.51.11-1.17.2-3.4-.72-2.86-1.18-4.69-4.07-4.83-4.26-.14-.19-1.16-1.54-1.16-2.95 0-1.4.72-2.09.98-2.37.26-.28.57-.35.76-.35h.55c.17 0 .4-.06.61.46.23.58.78 2.01.85 2.16.07.15.11.32.02.51-.1.19-.15.31-.29.47-.14.17-.3.37-.43.5-.14.13-.28.27-.12.53.16.26.71 1.18 1.53 1.91 1.05.93 1.93 1.22 2.2 1.36.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.21.58-.13.24.08 1.49.7 1.75.83.25.12.42.18.48.28.06.1.06.58-.17 1.24z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.75 13.96c.25.13.41.2.46.3.06.11.04.61-.21 1.18-.2.56-1.24 1.1-1.7 1.12-.46.03-.47.36-1.77-.39-.28-.16-1.65-.59-2.9-1.74-.78-.8-1.59-1.97-1.59-2.4 0-.43.45-.66.6-.75.13-.08.28-.2.38-.31.1-.1.12-.17.18-.28.06-.11.03-.2-.01-.28-.04-.08-.39-.93-.53-1.28-.13-.35-.27-.3-.37-.3h-.32c-.11 0-.27.04-.41.2-.14.16-.53.52-.53 1.28 0 .75.55 1.48.62 1.58.07.1 1.07 1.64 2.6 2.3 1.53.66 1.53.44 1.8.41.28-.03.9-.37 1.03-.73.13-.36.13-.66.09-.73-.04-.07-.15-.11-.4-.24z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10-4.48 10-10S17.52 2 12 2zm4.9 14.38c-.23.66-1.15 1.21-1.88 1.37-.51.11-1.17.2-3.4-.72-2.86-1.18-4.69-4.07-4.83-4.26-.14-.19-1.16-1.54-1.16-2.95 0-1.4.72-2.09.98-2.37.26-.28.57-.35.76-.35h.55c.17 0 .4-.06.61.46.23.58.78 2.01.85 2.16.07.15.11.32.02.51-.1.19-.15.31-.29.47-.14.17-.3.37-.43.5-.14.13-.28.27-.12.53.16.26.71 1.18 1.53 1.91 1.05.93 1.22 2.2 1.36.26.13.41.11.56-.07.15-.18.65-.76.82-1.02.17-.26.35-.21.58-.13.24.08 1.49.7 1.75.83.25.12.42.18.48.28.06.1.06.58-.17 1.24z"/></svg>
             Daftar via WhatsApp
           </button>
           <p class="note">Setelah klik, Anda akan diarahkan ke WhatsApp untuk konfirmasi data.</p>
@@ -235,13 +254,13 @@
       const namaShowroom = document.getElementById('namaShowroom').value;
       const namaOwner = document.getElementById('namaOwner').value;
       const noWa = document.getElementById('noWa').value;
+      const emailShowroom = document.getElementById('emailShowroom').value;
       const alamat = document.getElementById('alamat').value;
       const jumlahUnit = document.getElementById('jumlahUnit').value;
       
-      // GANTI NOMOR WA LU DI SINI
-      const nomorAdmin = '6281234567890';
+      const nomorAdmin = '628979879518';
       
-      const pesan = `Halo Admin OtoPadang, saya mau daftar jadi Mitra Showroom.%0A%0A*Nama Showroom:* ${namaShowroom}%0A*Nama Owner:* ${namaOwner}%0A*No WA:* ${noWa}%0A*Alamat:* ${alamat || '-'}%0A*Jumlah Unit:* ${jumlahUnit || '-'}%0A%0AMohon info selanjutnya. Terima kasih.`;
+      const pesan = `Halo Admin OtoPadang, saya mau daftar jadi Mitra Showroom.%0A%0A*Nama Showroom:* ${namaShowroom}%0A*Nama Owner:* ${namaOwner}%0A*No WA:* ${noWa}%0A*Email:* ${emailShowroom}%0A*Alamat:* ${alamat || '-'}%0A*Jumlah Unit:* ${jumlahUnit || '-'}%0A%0AMohon info selanjutnya. Terima kasih.`;
       
       const url = `https://wa.me/${nomorAdmin}?text=${pesan}`;
       window.open(url, '_blank');
