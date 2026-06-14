@@ -176,4 +176,22 @@
         }
 
         document.title = post.title + ' - OtoPadang';
-        const img = post.imageUrl ? `<img src="${post.imageUrl}?w=120
+        const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
+        const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Baru dipublish';
+        const bodyHtml = blockToHtml(post.content);
+
+        document.getElementById('post-content').innerHTML = `
+          <h1>${post.title}</h1>
+          <p class="meta">Dipublish: ${tgl}</p>
+          ${img}
+          <div class="content">${bodyHtml || '<p>Belum ada isi artikel.</p>'}</div>
+        `;
+      } catch (e) {
+        console.error(e);
+        document.getElementById('post-content').innerHTML = `<div class="error">Gagal load artikel.<br>Error: ${e.message}</div>`;
+      }
+    }
+    loadPost();
+    </script>
+</body>
+</html>
