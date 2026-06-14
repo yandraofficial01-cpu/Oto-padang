@@ -12,56 +12,102 @@
           --brand: #0066cc;
           --text: #1a1a1a;
           --muted: #666;
+          --bg: #fff;
+          --border: #eee;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-          max-width: 720px; 
-          margin: 0 auto; 
-          padding: 24px 16px; 
           line-height: 1.7;
           color: var(--text);
+          background: var(--bg);
           text-align: left;
         }
+        
+        /* HEADER */
+        .site-header {
+          border-bottom: 1px solid var(--border);
+          padding: 16px;
+          background: #fff;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+        }
+        .header-inner {
+          max-width: 720px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .logo {
+          font-weight: 700;
+          font-size: 20px;
+          color: var(--brand);
+          text-decoration: none;
+        }
+        .nav a {
+          color: var(--text);
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 15px;
+          margin-left: 20px;
+        }
+        .nav a:hover { color: var(--brand); }
+        
+        /* KONTEN */
+        .container {
+          max-width: 720px; 
+          margin: 0 auto; 
+          padding: 40px 16px;
+        }
         h1 { 
-          font-size: 2rem; 
+          font-size: 2.25rem; 
           line-height: 1.2; 
-          margin-bottom: 8px;
+          margin-bottom: 12px;
           font-weight: 700;
           text-align: left;
         }
         .meta { 
           color: var(--muted); 
           font-size: 14px; 
-          margin-bottom: 24px;
+          margin-bottom: 32px;
           text-align: left;
         }
         img { 
           width: 100%; 
           border-radius: 12px; 
-          margin: 24px 0;
+          margin: 32px 0;
           box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         .content { text-align: left; }
         .content p { 
-          margin-bottom: 18px; 
+          margin-bottom: 20px; 
           font-size: 17px;
           text-align: left;
         }
+        /* FIX SPACING SUB JUDUL */
         .content h2, .content h3 { 
-          margin-top: 40px;
-          margin-bottom: 16px;
+          margin-top: 48px; /* Jarak atas gede */
+          margin-bottom: 16px; /* Jarak bawah ke paragraf */
           font-weight: 700;
           text-align: left;
+          line-height: 1.3;
         }
-        .content h2 { font-size: 1.5rem; }
-        .content h3 { font-size: 1.25rem; }
+        .content h2 { font-size: 1.75rem; }
+        .content h3 { font-size: 1.4rem; }
+        /* FIX: Kalau h2/h3 langsung setelah paragraf, kasih space lebih */
+        .content p + h2, .content p + h3 { margin-top: 48px; }
+        .content ul + h2, .content ul + h3 { margin-top: 48px; }
+        .content ol + h2, .content ol + h3 { margin-top: 48px; }
+        
         .content ul, .content ol { 
           padding-left: 24px; 
-          margin-bottom: 18px;
+          margin-bottom: 20px;
           text-align: left;
         }
         .content li { 
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           font-size: 17px;
           text-align: left;
         }
@@ -74,25 +120,64 @@
           font-weight: 600;
           text-decoration: none;
         }
-        .content a:hover {
-          text-decoration: underline;
-        }
+        .content a:hover { text-decoration: underline; }
         .back-link {
           color: var(--brand);
           text-decoration: none;
           font-weight: 600;
           font-size: 15px;
+          display: inline-block;
+          margin-bottom: 24px;
         }
         .back-link:hover { text-decoration: underline; }
-        hr { border: none; border-top: 1px solid #eee; margin: 20px 0; }
-        .loading, .error { text-align: center; padding: 50px; color: var(--muted); }
+        .loading, .error { text-align: center; padding: 80px 20px; color: var(--muted); }
         .error { color: #c00; }
+        
+        /* FOOTER */
+        .site-footer {
+          border-top: 1px solid var(--border);
+          padding: 32px 16px;
+          margin-top: 60px;
+          background: #fafafa;
+        }
+        .footer-inner {
+          max-width: 720px;
+          margin: 0 auto;
+          text-align: center;
+          color: var(--muted);
+          font-size: 14px;
+        }
+        .footer-inner a {
+          color: var(--brand);
+          text-decoration: none;
+          font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <a href="/blog.html" class="back-link">← Kembali ke Blog</a>
-    <hr>
-    <div id="post-content" class="loading">Loading artikel...</div>
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="/" class="logo">OtoPadang</a>
+        <nav class="nav">
+          <a href="/blog.html">Blog</a>
+          <a href="https://otopadang.com">Jual Mobil</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- KONTEN -->
+    <main class="container">
+      <a href="/blog.html" class="back-link">← Kembali ke Blog</a>
+      <div id="post-content" class="loading">Loading artikel...</div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>© 2026 <a href="https://otopadang.com">OtoPadang.com</a> - Jual Beli Mobil Padang Terpercaya</p>
+      </div>
+    </footer>
 
     <script>
     function blockToHtml(blocks) {
@@ -120,10 +205,13 @@
             return html;
           }).join('');
           
-          // Auto convert **bold** jadi <strong>
+          // FIX 1: Auto convert **bold** jadi <strong>
           text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
           
-          // Auto link Otopadang.com jadi biru + bold + klik
+          // FIX 2: Auto convert "1. Judul" di awal paragraf jadi H3
+          text = text.replace(/^(\d+\.\s+[A-Z][^<]+)$/g, '<h3>$1</h3>');
+          
+          // FIX 3: Auto link Otopadang.com
           text = text.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank">$1</a>');
 
           if (block.listItem === 'bullet') {
@@ -137,7 +225,10 @@
           } else {
             flushList();
             const style = block.style || 'normal';
-            if (style === 'h1') html += `<h1>${text}</h1>`;
+            // Kalau udah jadi H3 dari regex di atas, skip
+            if (text.startsWith('<h3>')) {
+              html += text;
+            } else if (style === 'h1') html += `<h1>${text}</h1>`;
             else if (style === 'h2') html += `<h2>${text}</h2>`;
             else if (style === 'h3') html += `<h3>${text}</h3>`;
             else if (style === 'blockquote') html += `<blockquote>${text}</blockquote>`;
