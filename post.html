@@ -14,6 +14,8 @@
           --muted: #666;
           --bg: #fff;
           --border: #eee;
+          --header-bg: #000;
+          --header-yellow: #FFC107;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
@@ -24,37 +26,55 @@
           text-align: left;
         }
         
-        /* HEADER */
+        /* HEADER ITEM KAYAK HOMEPAGE */
         .site-header {
-          border-bottom: 1px solid var(--border);
-          padding: 16px;
-          background: #fff;
+          background: var(--header-bg);
+          border-bottom: 3px solid var(--header-yellow);
+          padding: 12px 16px;
           position: sticky;
           top: 0;
           z-index: 10;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.05);
         }
         .header-inner {
           max-width: 720px;
           margin: 0 auto;
           display: flex;
-          justify-content: space-between;
           align-items: center;
+          gap: 12px;
         }
-        .logo {
+        .logo-img {
+          width: 48px;
+          height: 48px;
+          object-fit: contain;
+          flex-shrink: 0;
+        }
+        .logo-text {
+          display: flex;
+          flex-direction: column;
+        }
+        .logo-title {
           font-weight: 700;
           font-size: 20px;
-          color: var(--brand);
-          text-decoration: none;
+          color: var(--header-yellow);
+          line-height: 1.1;
+        }
+        .logo-subtitle {
+          font-weight: 600;
+          font-size: 11px;
+          color: #fff;
+          line-height: 1.2;
+        }
+        .nav {
+          margin-left: auto;
         }
         .nav a {
-          color: var(--text);
+          color: #fff;
           text-decoration: none;
           font-weight: 600;
           font-size: 15px;
           margin-left: 20px;
         }
-        .nav a:hover { color: var(--brand); }
+        .nav a:hover { color: var(--header-yellow); }
         
         /* KONTEN */
         .container {
@@ -87,7 +107,6 @@
           font-size: 17px;
           text-align: left;
         }
-        /* FIX JARAK SUB JUDUL */
         .content h2, .content h3 { 
           margin-top: 48px;
           margin-bottom: 16px;
@@ -150,16 +169,24 @@
           text-decoration: none;
           font-weight: 600;
         }
+        @media (max-width: 640px) {
+          .logo-subtitle { display: none; }
+          .nav a { margin-left: 12px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
-    <!-- HEADER -->
+    <!-- HEADER ITEM -->
     <header class="site-header">
       <div class="header-inner">
-        <a href="/" class="logo">OtoPadang</a>
+        <img src="https://otopadang.com/logo.png" alt="Logo" class="logo-img">
+        <div class="logo-text">
+          <div class="logo-title">OTO PADANG</div>
+          <div class="logo-subtitle">Kurator Mobil Bekas Terpercaya Sumatera Barat</div>
+        </div>
         <nav class="nav">
           <a href="/blog.html">Blog</a>
-          <a href="https://otopadang.com">Jual Mobil</a>
+          <a href="https://otopadang.com">Home</a>
         </nav>
       </div>
     </header>
@@ -203,19 +230,11 @@
             return html;
           }).join('');
           
-          // Auto convert **bold** jadi <strong>
           text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-          
-          // FIX FINAL: Pecah "1. Judul apapun" jadi H3 + paragraf baru
-          // Gak peduli ada titik atau enggak di akhir
           text = text.replace(/(\d+\.\s+[^\n<]+)/g, '</p><h3>$1</h3><p>');
-          
-          // Hapus <p></p> kosong
           text = text.replace(/<p><\/p>/g, '');
           text = text.replace(/^<\/p>/, '');
           text = text.replace(/<p>$/, '');
-          
-          // Auto link Otopadang.com
           text = text.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank">$1</a>');
 
           if (block.listItem === 'bullet') {
