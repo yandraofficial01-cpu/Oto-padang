@@ -20,17 +20,20 @@
           padding: 24px 16px; 
           line-height: 1.7;
           color: var(--text);
+          text-align: left;
         }
         h1 { 
           font-size: 2rem; 
           line-height: 1.2; 
           margin-bottom: 8px;
           font-weight: 700;
+          text-align: left;
         }
         .meta { 
           color: var(--muted); 
           font-size: 14px; 
-          margin-bottom: 24px; 
+          margin-bottom: 24px;
+          text-align: left;
         }
         img { 
           width: 100%; 
@@ -38,24 +41,29 @@
           margin: 24px 0;
           box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
+        .content { text-align: left; }
         .content p { 
           margin-bottom: 18px; 
           font-size: 17px;
+          text-align: left;
         }
         .content h2, .content h3 { 
           margin-top: 40px;
           margin-bottom: 16px;
           font-weight: 700;
+          text-align: left;
         }
         .content h2 { font-size: 1.5rem; }
         .content h3 { font-size: 1.25rem; }
         .content ul, .content ol { 
           padding-left: 24px; 
-          margin-bottom: 18px; 
+          margin-bottom: 18px;
+          text-align: left;
         }
         .content li { 
           margin-bottom: 10px;
           font-size: 17px;
+          text-align: left;
         }
         .content strong {
           font-weight: 600;
@@ -112,10 +120,10 @@
             return html;
           }).join('');
           
-          // FIX 1: Auto convert **bold** jadi <strong>
+          // Auto convert **bold** jadi <strong>
           text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
           
-          // FIX 2: Auto link Otopadang.com jadi biru + bold + klik
+          // Auto link Otopadang.com jadi biru + bold + klik
           text = text.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank">$1</a>');
 
           if (block.listItem === 'bullet') {
@@ -168,22 +176,4 @@
         }
 
         document.title = post.title + ' - OtoPadang';
-        const img = post.imageUrl ? `<img src="${post.imageUrl}?w=1200&auto=format" alt="${post.title}">` : '';
-        const tgl = post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Baru dipublish';
-        const bodyHtml = blockToHtml(post.content);
-
-        document.getElementById('post-content').innerHTML = `
-          <h1>${post.title}</h1>
-          <p class="meta">Dipublish: ${tgl}</p>
-          ${img}
-          <div class="content">${bodyHtml || '<p>Belum ada isi artikel.</p>'}</div>
-        `;
-      } catch (e) {
-        console.error(e);
-        document.getElementById('post-content').innerHTML = `<div class="error">Gagal load artikel.<br>Error: ${e.message}</div>`;
-      }
-    }
-    loadPost();
-    </script>
-</body>
-</html>
+        const img = post.imageUrl ? `<img src="${post.imageUrl}?w=120
