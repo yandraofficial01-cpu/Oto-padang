@@ -48,14 +48,12 @@
         }
         .back-link:hover { text-decoration: underline; }
         
-        /* GRID PREMIUM */
         .blog-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 24px;
         }
         
-        /* CARD PREMIUM */
         .post {
           background: var(--card);
           border-radius: 16px;
@@ -122,7 +120,6 @@
         .error { color: #c00; }
         .empty { color: var(--muted); }
         
-        /* Mobile */
         @media (max-width: 640px) {
           h1 { font-size: 2rem; }
           .blog-grid { grid-template-columns: 1fr; }
@@ -144,52 +141,54 @@
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      // FIX: Tambahin "excerpt" di query. Kalo field lu namanya "subtitle" atau "description", ganti aja.
-      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(date)]{
-        title, 
-        "slug": slug.current, 
-        "imageUrl": mainImage.asset->url, 
-        "publishedAt": date,
-        excerpt
-      }|order(date desc)`);
       
+      // Ambil semua post yg udah published, semua field
+      const QUERY = encodeURIComponent(`*[_type == "post" && !(_id in path("drafts.**"))] | order(date desc)`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
-        const res = await fetch(URL, { 
-          cache: 'no-store',
-          credentials: 'omit',
-          mode: 'cors'
-        });
-        
+        const res = await fetch(URL, { cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const { result } = await res.json();
         
+        console.log('DATA SANITY:', result); 
+        
         if(!result || result.length === 0) {
-            document.getElementById('blog-sanity').innerHTML = '<div class="empty">Belum ada artikel yang dipublish.</div>';
+            document.getElementById('blog-sanity').innerHTML = '<div class="empty">Belum ada artikel yg dipublish. Publish dulu di Sanity Studio.</div>';
             return;
         }
 
         document.getElementById('blog-sanity').innerHTML = result.map(post => {
-            const img = post.imageUrl 
-              ? `<a href="post.html?slug=${post.slug}"><img class="post-thumb" src="${post.imageUrl}?w=600&h=400&fit=crop&auto=format" alt="${post.title}" loading="lazy"></a>` 
-              : `<a href="post.html?slug=${post.slug}"><div class="post-thumb" style="background:#e0e0e0"></div></a>`;
+            // 1. AMBIL GAMBAR: Cek semua kemungkinan nama field
+            const imgField = post.mainImage || post.cover || post.image || post.thumbnail || post.featuredImage;
             
-            const tgl = post.publishedAt 
-              ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
-              : 'Baru dipublish';
-
-            // FIX: Tampilkan excerpt kalo ada
-            const excerpt = post.excerpt 
-              ? `<p class="post-excerpt">${post.excerpt}</p>` 
+            let imageUrl = null;
+            if (imgField?.asset?._ref) {
+              const ref = imgField.asset._ref;
+              const [, id, dimension, format] = ref.split('-');
+              imageUrl = `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${id}-${dimension}.${format}`;
+            }
+            
+            const img = imageUrl 
+              ? `<a href="post.html?slug=${post.slug?.current}"><img class="post-thumb" src="${imageUrl}?w=600&h=400&fit=crop&auto=format" alt="${post.title}" loading="lazy"></a>` 
+              : `<a href="post.html?slug=${post.slug?.current}"><div class="post-thumb" style="background:#e0e0e0"></div></a>`;
+            
+            // 2. AMBIL TANGGAL
+            const tglRaw = post.date || post.publishedAt || post._createdAt;
+            const tgl = tglRaw 
+              ? new Date(tglRaw).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
               : '';
+
+            // 3. AMBIL SUB JUDUL
+            const excerpt = post.excerpt || post.subtitle || post.description || post.summary || '';
+            const excerptHTML = excerpt ? `<p class="post-excerpt">${excerpt}</p>` : '';
             
             return `
               <article class="post">
                 ${img}
                 <div class="post-body">
-                  <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
-                  ${excerpt}
+                  <h2><a href="post.html?slug=${post.slug?.current}">${post.title}</a></h2>
+                  ${excerptHTML}
                   <p class="post-meta">${tgl}</p>
                 </div>
               </article>
