@@ -39,7 +39,6 @@
           --border: #eee;
           --header-bg: #000;
           --header-yellow: #FFC107;
-          --code-bg: #f5f5f5;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
@@ -50,7 +49,6 @@
           background: var(--bg);
         }
         
-        /* HEADER */
         .site-header {
           background: var(--header-bg);
           border-bottom: 3px solid var(--header-yellow);
@@ -102,7 +100,6 @@
         }
         .nav a:hover { color: var(--header-yellow); }
         
-        /* LAYOUT */
         .container {
           max-width: 1140px;
           margin: 0 auto;
@@ -116,7 +113,6 @@
         }
         .article-wrapper { max-width: 720px; }
         
-        /* BREADCRUMB */
         .breadcrumb {
           font-size: 14px;
           color: var(--muted);
@@ -128,7 +124,6 @@
         }
         .breadcrumb a:hover { text-decoration: underline; }
         
-        /* ARTIKEL */
         h1 { 
           font-family: 'Merriweather', serif;
           font-size: 2.5rem; 
@@ -178,7 +173,6 @@
           box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
         
-        /* TYPOGRAPHY PREMIUM */
         .content {
           font-family: 'Merriweather', Georgia, serif;
           font-size: 18px;
@@ -219,15 +213,7 @@
           border-radius: 12px;
           margin: 32px 0;
         }
-        .content code {
-          background: var(--code-bg);
-          padding: 2px 6px;
-          border-radius: 4px;
-          font-family: monospace;
-          font-size: 0.9em;
-        }
         
-        /* SIDEBAR */
         .sidebar {
           position: sticky;
           top: 100px;
@@ -291,7 +277,6 @@
         .loading, .error { text-align: center; padding: 80px 20px; color: var(--muted); }
         .error { color: #c00; }
         
-        /* FOOTER */
         .site-footer {
           border-top: 1px solid var(--border);
           padding: 32px 16px;
@@ -326,7 +311,6 @@
     </style>
 </head>
 <body>
-    <!-- HEADER -->
     <header class="site-header">
       <div class="header-inner">
         <img src="/logo.png" alt="OtoPadang" class="logo-img" onerror="this.style.display='none'">
@@ -341,7 +325,6 @@
       </div>
     </header>
 
-    <!-- KONTEN -->
     <main class="container">
       <div class="article-wrapper">
         <div class="breadcrumb" id="breadcrumb"></div>
@@ -362,7 +345,6 @@
       </aside>
     </main>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-inner">
         <p>© 2026 <a href="https://otopadang.com">OtoPadang.com</a> - Jual Beli Mobil Padang Terpercaya</p>
@@ -374,6 +356,37 @@
     <script>
     const PROJECT_ID = 'uzbsymrd';
     const DATASET = 'production';
+    
+    // RENDER TEXT BIASA + MARKDOWN SEDERHANA
+    function renderContent(content) {
+      if (!content) return '';
+      
+      // Kalo content-nya array (Portable Text), pake cara lama
+      if (Array.isArray(content)) {
+        return blockToHtml(content);
+      }
+      
+      // Kalo content-nya string biasa, convert markdown sederhana
+      let html = content;
+      
+      // **bold** jadi <strong>
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+      // **1. Judul** jadi <h3>
+      html = html.replace(/\*\*(\d+\.\s+[^*]+)\*\*/g, '<h3>$1</h3>');
+      
+      // Link Otopadang.com
+      html = html.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank" rel="noopener">$1</a>');
+      
+      // Split per paragraf
+      const paragraphs = html.split('\n\n').filter(p => p.trim());
+      html = paragraphs.map(p => {
+        if (p.startsWith('<h3>')) return p;
+        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      }).join('');
+      
+      return html;
+    }
     
     function blockToHtml(blocks) {
       if (!blocks || !Array.isArray(blocks)) return '';
@@ -433,7 +446,7 @@
       const tocList = document.getElementById('toc-list');
       tocList.innerHTML = '';
       headings.forEach(h => {
-        if (!h.id) return;
+        if (!h.id) h.id = h.textContent.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         const li = document.createElement('li');
         li.innerHTML = `<a href="#${h.id}">${h.textContent}</a>`;
         if (h.tagName === 'H3') li.style.paddingLeft = '12px';
@@ -477,11 +490,11 @@
         return;
       }
 
-      // SUPPORT coverImage ATAU mainImage
+      // QUERY PALING FLEKSIBEL: SUPPORT body, content, coverImage, mainImage
       const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{
         _id, title, excerpt, date, 
         "coverUrl": coalesce(coverImage.asset->url, mainImage.asset->url), 
-        body[]{..., asset->}
+        "postBody": coalesce(body, content)
       }`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
@@ -513,7 +526,7 @@
         document.querySelector('meta[name="twitter:image"]').content = imageUrl;
         
         const tgl = post.date ? new Date(post.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Baru dipublish';
-        const bodyHtml = blockToHtml(post.body);
+        const bodyHtml = renderContent(post.postBody);
         const readingTime = getReadingTime(bodyHtml.replace(/<[^>]*>/g, ''));
         const shareUrl = encodeURIComponent(pageUrl);
         const shareTitle = encodeURIComponent(post.title);
@@ -532,7 +545,7 @@
             </div>
           </div>
           ${post.coverUrl ? `<img src="${post.coverUrl}?w=1200&auto=format&q=80" alt="${post.title}" class="post-cover">` : ''}
-          <div class="content">${bodyHtml || '<p>Belum ada isi artikel.</p>'}</div>
+          <div class="content">${bodyHtml || '<p><strong>Belum ada isi artikel.</strong><br>Isi dulu di Sanity Studio → field "Content" → Publish.</p>'}</div>
         `;
         
         setTimeout(generateTOC, 100);
