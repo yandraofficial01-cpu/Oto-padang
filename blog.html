@@ -91,6 +91,16 @@
         .post h2 a:hover { 
           color: var(--brand); 
         }
+        .post-excerpt {
+          color: var(--muted);
+          font-size: 14px;
+          line-height: 1.5;
+          margin: 0 0 12px 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
         .post-meta { 
           color: var(--muted); 
           font-size: 13px;
@@ -134,7 +144,15 @@
     async function loadBlog() {
       const PROJECT_ID = 'uzbsymrd';
       const DATASET = 'production';
-      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(date)]{title, "slug": slug.current, "imageUrl": mainImage.asset->url, "publishedAt": date}|order(date desc)`);
+      // FIX: Tambahin "excerpt" di query. Kalo field lu namanya "subtitle" atau "description", ganti aja.
+      const QUERY = encodeURIComponent(`*[_type == "post" && defined(slug.current) && defined(date)]{
+        title, 
+        "slug": slug.current, 
+        "imageUrl": mainImage.asset->url, 
+        "publishedAt": date,
+        excerpt
+      }|order(date desc)`);
+      
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
       try {
@@ -160,12 +178,18 @@
             const tgl = post.publishedAt 
               ? new Date(post.publishedAt).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
               : 'Baru dipublish';
+
+            // FIX: Tampilkan excerpt kalo ada
+            const excerpt = post.excerpt 
+              ? `<p class="post-excerpt">${post.excerpt}</p>` 
+              : '';
             
             return `
               <article class="post">
                 ${img}
                 <div class="post-body">
                   <h2><a href="post.html?slug=${post.slug}">${post.title}</a></h2>
+                  ${excerpt}
                   <p class="post-meta">${tgl}</p>
                 </div>
               </article>
