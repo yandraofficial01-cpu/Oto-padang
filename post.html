@@ -5,15 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading... - OtoPadang</title>
     
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="/favicon.png">
     
-    <!-- SEO DINAMIS - DIISI JS -->
+    <!-- SEO DINAMIS -->
     <meta name="description" content="">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="">
     
-    <!-- OPEN GRAPH DINAMIS -->
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="OtoPadang">
     <meta property="og:title" content="">
@@ -22,7 +20,6 @@
     <meta property="og:url" content="">
     <meta property="og:locale" content="id_ID">
     
-    <!-- TWITTER CARD DINAMIS -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="">
     <meta name="twitter:description" content="">
@@ -51,7 +48,6 @@
           line-height: 1.8;
           color: var(--text);
           background: var(--bg);
-          text-align: left;
         }
         
         /* HEADER */
@@ -75,6 +71,8 @@
           height: 48px;
           object-fit: contain;
           flex-shrink: 0;
+          background: #222;
+          border-radius: 8px;
         }
         .logo-text {
           display: flex;
@@ -108,25 +106,21 @@
         .container {
           max-width: 1140px;
           margin: 0 auto;
-          padding: 40px 16px;
+          padding: 32px 16px;
           display: grid;
           grid-template-columns: 1fr;
           gap: 40px;
         }
         @media (min-width: 1024px) {
-          .container {
-            grid-template-columns: 720px 1fr;
-          }
+          .container { grid-template-columns: 720px 1fr; }
         }
-        .article-wrapper {
-          max-width: 720px;
-        }
+        .article-wrapper { max-width: 720px; }
         
         /* BREADCRUMB */
         .breadcrumb {
           font-size: 14px;
           color: var(--muted);
-          margin-bottom: 24px;
+          margin-bottom: 16px;
         }
         .breadcrumb a {
           color: var(--brand);
@@ -180,19 +174,17 @@
         .post-cover { 
           width: 100%; 
           border-radius: 16px; 
-          margin: 0 32px 0;
+          margin: 24px 0 32px 0;
           box-shadow: 0 8px 32px rgba(0,0,0,0.1);
         }
         
-        /* TYPOGRAPHY KOMPAS STYLE */
+        /* TYPOGRAPHY PREMIUM */
         .content {
           font-family: 'Merriweather', Georgia, serif;
           font-size: 18px;
           line-height: 1.9;
         }
-        .content p { 
-          margin-bottom: 28px; 
-        }
+        .content p { margin-bottom: 28px; }
         .content h2, .content h3 { 
           font-family: 'Inter', sans-serif;
           margin-top: 48px;
@@ -202,25 +194,17 @@
         }
         .content h2 { font-size: 1.8rem; }
         .content h3 { font-size: 1.4rem; }
-        .content h3 + p { margin-top: 0; }
-        
         .content ul, .content ol { 
           padding-left: 28px; 
           margin-bottom: 28px;
         }
-        .content li { 
-          margin-bottom: 12px;
-        }
-        .content strong {
-          font-weight: 700;
-          color: #000;
-        }
+        .content li { margin-bottom: 12px; }
+        .content strong { font-weight: 700; color: #000; }
         .content a {
           color: var(--brand);
           font-weight: 600;
           text-decoration: underline;
         }
-        .content a:hover { color: var(--brand-dark); }
         .content blockquote {
           border-left: 4px solid var(--brand);
           padding: 16px 0 16px 24px;
@@ -287,6 +271,7 @@
           object-fit: cover;
           border-radius: 8px;
           flex-shrink: 0;
+          background: #eee;
         }
         .related-title {
           font-weight: 600;
@@ -300,7 +285,7 @@
           font-weight: 600;
           font-size: 15px;
           display: inline-block;
-          margin-bottom: 24px;
+          margin-bottom: 16px;
         }
         .back-link:hover { text-decoration: underline; }
         .loading, .error { text-align: center; padding: 80px 20px; color: var(--muted); }
@@ -335,7 +320,8 @@
           .content { font-size: 17px; }
           .logo-subtitle { display: none; }
           .nav a { margin-left: 12px; font-size: 14px; }
-          .share-buttons { margin-left: 0; }
+          .share-buttons { margin-left: 0; width: 100%; justify-content: flex-start; margin-top: 8px; }
+          .container { padding: 24px 16px; }
         }
     </style>
 </head>
@@ -343,7 +329,7 @@
     <!-- HEADER -->
     <header class="site-header">
       <div class="header-inner">
-        <img src="https://otopadang.com/logo.png" alt="Logo" class="logo-img">
+        <img src="/logo.png" alt="OtoPadang" class="logo-img" onerror="this.style.display='none'">
         <div class="logo-text">
           <div class="logo-title">OTO PADANG</div>
           <div class="logo-subtitle">Kurator Mobil Bekas Terpercaya Sumatera Barat</div>
@@ -383,7 +369,6 @@
       </div>
     </footer>
 
-    <!-- SCHEMA ARTICLE DINAMIS -->
     <script type="application/ld+json" id="article-schema"></script>
 
     <script>
@@ -391,7 +376,7 @@
     const DATASET = 'production';
     
     function blockToHtml(blocks) {
-      if (!blocks) return '';
+      if (!blocks || !Array.isArray(blocks)) return '';
       let html = '';
       let listBuffer = [];
       let listType = null;
@@ -410,12 +395,9 @@
             let t = child.text || '';
             if (child.marks?.includes('strong')) t = `<strong>${t}</strong>`;
             if (child.marks?.includes('em')) t = `<em>${t}</em>`;
-            if (child.marks?.includes('underline')) t = `<u>${t}</u>`;
-            if (child.marks?.includes('code')) t = `<code>${t}</code>`;
             return t;
           }).join('');
           
-          // Auto-link OtoPadang
           text = text.replace(/(Otopadang\.com)/gi, '<a href="https://otopadang.com" target="_blank" rel="noopener">$1</a>');
 
           if (block.listItem === 'bullet') {
@@ -429,9 +411,8 @@
           } else {
             flushList();
             const style = block.style || 'normal';
-            const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-            if (style === 'h1') html += `<h1 id="${id}">${text}</h1>`;
-            else if (style === 'h2') html += `<h2 id="${id}">${text}</h2>`;
+            const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            if (style === 'h2') html += `<h2 id="${id}">${text}</h2>`;
             else if (style === 'h3') html += `<h3 id="${id}">${text}</h3>`;
             else if (style === 'blockquote') html += `<blockquote>${text}</blockquote>`;
             else html += `<p>${text}</p>`;
@@ -452,6 +433,7 @@
       const tocList = document.getElementById('toc-list');
       tocList.innerHTML = '';
       headings.forEach(h => {
+        if (!h.id) return;
         const li = document.createElement('li');
         li.innerHTML = `<a href="#${h.id}">${h.textContent}</a>`;
         if (h.tagName === 'H3') li.style.paddingLeft = '12px';
@@ -468,7 +450,7 @@
 
     async function loadRelatedPosts(currentId) {
       const QUERY = encodeURIComponent(`*[_type == "post" && !(_id in path("drafts.**")) && _id != "${currentId}"] | order(date desc)[0...3]{
-        title, slug, "coverUrl": coverImage.asset->url
+        title, slug, "coverUrl": coalesce(coverImage.asset->url, mainImage.asset->url)
       }`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
@@ -479,7 +461,7 @@
         
         document.getElementById('related-posts').innerHTML = result.map(post => `
           <a href="post.html?slug=${post.slug.current}" class="related-item">
-            ${post.coverUrl ? `<img src="${post.coverUrl}?w=160&h=120&fit=crop&q=80" class="related-thumb" alt="">` : '<div class="related-thumb" style="background:#eee;"></div>'}
+            ${post.coverUrl ? `<img src="${post.coverUrl}?w=160&h=120&fit=crop&q=80" class="related-thumb" alt="" loading="lazy">` : '<div class="related-thumb"></div>'}
             <div class="related-title">${post.title}</div>
           </a>
         `).join('');
@@ -491,12 +473,15 @@
       const params = new URLSearchParams(window.location.search);
       const slug = params.get('slug');
       if (!slug) {
-        document.getElementById('post-content').innerHTML = '<div class="error">Artikel tidak ditemukan</div>';
+        document.getElementById('post-content').innerHTML = '<div class="error">Artikel tidak ditemukan. Slug kosong.</div>';
         return;
       }
 
+      // SUPPORT coverImage ATAU mainImage
       const QUERY = encodeURIComponent(`*[_type == "post" && slug.current == "${slug}"][0]{
-        _id, title, excerpt, date, "coverUrl": coverImage.asset->url, body[]{..., asset->}
+        _id, title, excerpt, date, 
+        "coverUrl": coalesce(coverImage.asset->url, mainImage.asset->url), 
+        body[]{..., asset->}
       }`);
       const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2021-10-21/data/query/${DATASET}?query=${QUERY}`;
       
@@ -505,12 +490,13 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const { result: post } = await res.json();
         
+        console.log('DATA POST:', post);
+        
         if(!post) {
-            document.getElementById('post-content').innerHTML = '<div class="error">Artikel tidak ditemukan</div>';
+            document.getElementById('post-content').innerHTML = '<div class="error">Artikel tidak ditemukan di Sanity</div>';
             return;
         }
 
-        // 1. UPDATE META TAGS
         const pageUrl = `https://otopadang.com/post.html?slug=${slug}`;
         const imageUrl = post.coverUrl ? `${post.coverUrl}?w=1200&h=630&fit=crop&auto=format&q=80` : 'https://otopadang.com/og-image.jpg';
         const desc = post.excerpt || post.title;
@@ -526,8 +512,7 @@
         document.querySelector('meta[name="twitter:description"]').content = desc;
         document.querySelector('meta[name="twitter:image"]').content = imageUrl;
         
-        // 2. RENDER CONTENT
-        const tgl = post.date ? new Date(post.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : '';
+        const tgl = post.date ? new Date(post.date).toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'}) : 'Baru dipublish';
         const bodyHtml = blockToHtml(post.body);
         const readingTime = getReadingTime(bodyHtml.replace(/<[^>]*>/g, ''));
         const shareUrl = encodeURIComponent(pageUrl);
@@ -550,13 +535,9 @@
           <div class="content">${bodyHtml || '<p>Belum ada isi artikel.</p>'}</div>
         `;
         
-        // 3. GENERATE TOC
         setTimeout(generateTOC, 100);
-        
-        // 4. LOAD RELATED POSTS
         loadRelatedPosts(post._id);
         
-        // 5. INJECT SCHEMA
         const schema = {
           "@context": "https://schema.org",
           "@type": "Article",
@@ -565,26 +546,15 @@
           "image": imageUrl,
           "datePublished": post.date,
           "dateModified": post.date,
-          "author": {
-            "@type": "Organization",
-            "name": "OtoPadang",
-            "url": "https://otopadang.com"
-          },
-          "publisher": {
-            "@type": "Organization",
-            "name": "OtoPadang",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://otopadang.com/logo.png"
-            }
-          },
+          "author": {"@type": "Organization","name": "OtoPadang","url": "https://otopadang.com"},
+          "publisher": {"@type": "Organization","name": "OtoPadang","logo": {"@type": "ImageObject","url": "https://otopadang.com/logo.png"}},
           "mainEntityOfPage": pageUrl
         };
         document.getElementById('article-schema').textContent = JSON.stringify(schema);
         
       } catch (e) {
         console.error(e);
-        document.getElementById('post-content').innerHTML = `<div class="error">Gagal load artikel.<br>Error: ${e.message}</div>`;
+        document.getElementById('post-content').innerHTML = `<div class="error">Gagal load artikel.<br>Error: ${e.message}<br><br>Buka Console [F12] buat liat detail error.</div>`;
       }
     }
     loadPost();
