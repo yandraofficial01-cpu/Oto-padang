@@ -159,8 +159,8 @@
         }
 
         document.getElementById('blog-sanity').innerHTML = result.map(post => {
-            // 1. AMBIL GAMBAR: Cek semua kemungkinan nama field
-            const imgField = post.mainImage || post.cover || post.image || post.thumbnail || post.featuredImage;
+            // 1. AMBIL GAMBAR: UDAH GUA TAMBAHIN coverImage PALING DEPAN
+            const imgField = post.coverImage || post.mainImage || post.cover || post.image || post.thumbnail || post.featuredImage;
             
             let imageUrl = null;
             if (imgField?.asset?._ref) {
